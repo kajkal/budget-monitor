@@ -18,6 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 group = 'kajkal'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -25,6 +26,7 @@ repositories {
 
 
 dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-security')
     implementation('org.springframework.session:spring-session-core')
