@@ -9,20 +9,20 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- USERS:
 CREATE TABLE users(
-  idUser           INTEGER(30)    NOT NULL AUTO_INCREMENT,
-  username         VARCHAR(191)   NOT NULL UNIQUE,
-  password         VARCHAR(255)   NOT NULL,
-  PRIMARY KEY (idUser)
+  username         VARCHAR(30)   NOT NULL,
+  password         VARCHAR(60)    NOT NULL,
+  email            VARCHAR(50)    NOT NULL,
+  role             VARCHAR(10)    NOT NULL,
+  PRIMARY KEY (username)
 ) ENGINE = InnoDB;
 
-
--- 'admin' -> 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg='
--- 'qwer' -> '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='
-INSERT INTO users (idUser, username, password) VALUES
-  (1, 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg='),
-  (2, 'mage1', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='),
-  (3, 'dragon1', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='),
-  (4, 'mage2', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='),
-  (5, 'elf2', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='),
-  (6, 'dragon2', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM='),
-  (7, 'soap_user', '9vLqj0XYoFfJVmoz+ZR02i5camYE1zYSFlDicwxvsKM=');
+-- USERS DATA:
+-- pass: 'qwer'
+INSERT INTO users (username, password, email, role) VALUES
+  ('user', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user@gmail.com', 'USER'),
+  ('user1', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user1@gmail.com', 'USER'),
+  ('user3', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user3@gmail.com', 'USER'),
+  ('user4', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user4@gmail.com', 'USER'),
+  ('user5', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user5@gmail.com', 'USER'),
+  ('user6', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user6@gmail.com', 'USER'),
+  ('user7', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user7@gmail.com', 'USER');

@@ -2,34 +2,25 @@ package budget_monitor.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idUser")
-    private Long idUser;
-
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    public Long getIdUser() {
-        return idUser;
-    }
+    @Column(name = "email")
+    private String email;
 
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
-    }
+    @Column(name = "role")
+    private String role;
 
     public String getUsername() {
         return username;
@@ -46,4 +37,25 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String toString() {
+        return String.format("User [username='%s', password='%s', email='%s', role='%s']", username, password, email, role);
+    }
+
 }
