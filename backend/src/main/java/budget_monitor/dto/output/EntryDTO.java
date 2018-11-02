@@ -1,4 +1,4 @@
-package budget_monitor.dto;
+package budget_monitor.dto.output;
 
 import budget_monitor.model.Entry;
 
@@ -17,6 +17,9 @@ public class EntryDTO {
     private String description;
     private byte[] photo;
     private Set<TagDTO> tags;
+
+    public EntryDTO() {
+    }
 
     public EntryDTO(Entry entry) {
         this.idEntry = entry.getIdEntry();
@@ -101,4 +104,5 @@ public class EntryDTO {
     public void setTags(Set<TagDTO> tags) {
         this.tags = tags;
     }
+
 }

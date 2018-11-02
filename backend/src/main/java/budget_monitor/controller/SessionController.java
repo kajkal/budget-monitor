@@ -1,7 +1,8 @@
 package budget_monitor.controller;
 
-import budget_monitor.dto.CredentialsFormDTO;
-import budget_monitor.dto.UserSessionDTO;
+import budget_monitor.aop.LogExecutionTime;
+import budget_monitor.dto.input.CredentialsFormDTO;
+import budget_monitor.dto.input.UserSessionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/app/session")
 public class SessionController {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private AuthenticationManager authenticationManager;
 
@@ -37,10 +38,10 @@ public class SessionController {
 
 
 
-
+    @LogExecutionTime
     @RequestMapping(method=POST)
     public UserSessionDTO login(@RequestBody CredentialsFormDTO credentialsFormDTO, HttpSession httpSession) {
-        logger.info("user: " + credentialsFormDTO.getUsername() + " logged");
+        log.info("user: '" + credentialsFormDTO.getUsername() + "' logged in");
         Authentication authentication = new UsernamePasswordAuthenticationToken(credentialsFormDTO.getUsername(), credentialsFormDTO.getPassword());
         SecurityContextHolder.getContext().setAuthentication(this.authenticationManager.authenticate(authentication));
         UserSessionDTO userSessionDTO = new UserSessionDTO(credentialsFormDTO.getUsername(), httpSession.getId(), true);

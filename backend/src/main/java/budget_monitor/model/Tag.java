@@ -2,20 +2,19 @@ package budget_monitor.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "tags")
 public class Tag {
 
     @Id
-    @Column(name = "idTag", nullable = false)
-    private Integer idTag;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "idTag")
+    private Long idTag;
 
     @Column(name = "owner")
     private String owner;
@@ -23,27 +22,16 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<Entry> entries = new HashSet<>();
+    @Column(name = "color")
+    private Integer color;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return Objects.equals(idTag, tag.idTag);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(idTag);
-    }
 
-    public Integer getIdTag() {
+    public Long getIdTag() {
         return idTag;
     }
 
-    public void setIdTag(Integer idTag) {
+    public void setIdTag(Long idTag) {
         this.idTag = idTag;
     }
 
@@ -63,11 +51,12 @@ public class Tag {
         this.name = name;
     }
 
-    public Set<Entry> getEntries() {
-        return entries;
+    public Integer getColor() {
+        return color;
     }
 
-    public void setEntries(Set<Entry> entries) {
-        this.entries = entries;
+    public void setColor(Integer color) {
+        this.color = color;
     }
+
 }

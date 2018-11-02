@@ -1,4 +1,4 @@
-package budget_monitor.dto;
+package budget_monitor.dto.input;
 
 public class CredentialsFormDTO {
 
@@ -6,7 +6,9 @@ public class CredentialsFormDTO {
 
     private String password;
 
-    public CredentialsFormDTO() {}
+
+    public CredentialsFormDTO() {
+    }
 
     public String getUsername() {
         return username;
@@ -15,4 +17,5 @@ public class CredentialsFormDTO {
     public String getPassword() {
         return password;
     }
+
 }

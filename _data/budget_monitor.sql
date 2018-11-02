@@ -38,6 +38,7 @@ CREATE TABLE tags (
   idTag            INTEGER(30)    NOT NULL AUTO_INCREMENT,
   owner            VARCHAR(30)    NOT NULL,
   name             VARCHAR(60)    NOT NULL,
+  color            INTEGER(2)     NOT NULL DEFAULT 0,
   PRIMARY KEY (idTag),
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
 ) ENGINE = InnoDB;
@@ -60,25 +61,25 @@ INSERT INTO users (username, password, email, role, currencies) VALUES
   ('user1', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user1@gmail.com', 'USER', '[PLN,EUR]'),
   ('user2', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user3@gmail.com', 'USER', '[PLN,EUR]');
 
-INSERT INTO tags (idTag, owner, name) VALUES
- (1, 'user', 'food'),
- (2, 'user', 'communication'),
- (3, 'user', 'entertainment'),
- (4, 'user', 'taxes'),
- (5, 'user', 'salary'),
- (6, 'user', 'learning'),
- (7, 'user1', 'food'),
- (8, 'user1', 'communication'),
- (9, 'user1', 'entertainment'),
- (10, 'user1', 'taxes'),
- (11, 'user1', 'salary'),
- (12, 'user1', 'tech'),
- (13, 'user2', 'food'),
- (14, 'user2', 'communication'),
- (15, 'user2', 'entertainment'),
- (16, 'user2', 'taxes'),
- (17, 'user2', 'salary'),
- (18, 'user2', 'animals');
+INSERT INTO tags (idTag, owner, name, color) VALUES
+  (1, 'user', 'food', 0),
+  (2, 'user', 'communication', 1),
+  (3, 'user', 'entertainment', 0),
+  (4, 'user', 'taxes', 3),
+  (5, 'user', 'salary', 6),
+  (6, 'user', 'learning', 2),
+  (7, 'user1', 'food', 0),
+  (8, 'user1', 'communication', 1),
+  (9, 'user1', 'entertainment', 2),
+  (10, 'user1', 'taxes', 0),
+  (11, 'user1', 'salary', 1),
+  (12, 'user1', 'tech', 2),
+  (13, 'user2', 'food', 3),
+  (14, 'user2', 'communication', 4),
+  (15, 'user2', 'entertainment', 5),
+  (16, 'user2', 'taxes', 8),
+  (17, 'user2', 'salary', 9),
+  (18, 'user2', 'animals', 1);
 
 INSERT INTO entries (idEntry, username, date, added, value, currency, description) VALUES
   (1, 'user', '2018-10-20 12:10:00', '2018-11-01 15:00:00', -1039, 'PLN', 'Zakupy w Biedronce'),

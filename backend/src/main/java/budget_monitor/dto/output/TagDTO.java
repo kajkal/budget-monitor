@@ -1,33 +1,29 @@
-package budget_monitor.dto;
+package budget_monitor.dto.output;
 
 import budget_monitor.model.Tag;
 
 public class TagDTO {
 
-    private Integer idTag;
-    private String owner;
+    private Long idTag;
     private String name;
+    private Integer color;
+
+
+    public TagDTO() {
+    }
 
     public TagDTO(Tag tag) {
         this.idTag = tag.getIdTag();
-        this.owner = tag.getOwner();
         this.name = tag.getName();
+        this.color = tag.getColor();
     }
 
-    public Integer getIdTag() {
+    public Long getIdTag() {
         return idTag;
     }
 
-    public void setIdTag(Integer idTag) {
+    public void setIdTag(Long idTag) {
         this.idTag = idTag;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getName() {
@@ -37,4 +33,13 @@ public class TagDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
+    }
+
 }

@@ -1,4 +1,4 @@
-package budget_monitor.dto;
+package budget_monitor.dto.input;
 
 public class UserSessionDTO {
 

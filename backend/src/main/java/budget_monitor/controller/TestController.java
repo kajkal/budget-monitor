@@ -1,8 +1,8 @@
 package budget_monitor.controller;
 
-import budget_monitor.dto.EntryDTO;
+import budget_monitor.dto.output.EntryDTO;
+import budget_monitor.dto.output.TagDTO;
 import budget_monitor.model.EntryTag;
-import budget_monitor.model.Tag;
 import budget_monitor.model.User;
 import budget_monitor.service.EntryService;
 import budget_monitor.service.TagService;
@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 public class TestController {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private UserService userService;
 
@@ -54,24 +55,50 @@ public class TestController {
     @RequestMapping(method = GET, path = "/t/entries")
     @ResponseBody
     public List<EntryDTO> getAllEntries() {
-        return entryService.findAll();
+        long start = System.nanoTime();
+
+        List<EntryDTO> entries = entryService.findAll();
+
+        log.info(format("%s: %.10f [s]", "getAllEntries", ((System.nanoTime() - start)/Math.pow(10,9))));
+        return entries;
+    }
+
+    @RequestMapping(method = GET, path = "/t/entries2")
+    @ResponseBody
+    public List<EntryDTO> getAllEntries2() {
+        long start = System.nanoTime();
+
+        List<EntryDTO> entries = entryService.findAll2();
+
+        log.info(format("%s: %.10f [s]", "getAllEntries H", ((System.nanoTime() - start)/Math.pow(10,9))));
+        return entries;
     }
 
     @RequestMapping(method = GET, path = "/t/entries/{username}")
     @ResponseBody
     public List<EntryDTO> getAllEntries(@PathVariable("username") String username) {
-        return entryService.findAllByUsername(username);
+        long start = System.nanoTime();
+
+        List<EntryDTO> entries = entryService.findAllByUsername(username);
+
+        log.info(format("%s: %.10f [s]", "getAllEntriesByUsername", ((System.nanoTime() - start)/Math.pow(10,9))));
+        return entries;
     }
 
-    @RequestMapping(method = GET, path = "/t/tags")
+    @RequestMapping(method = GET, path = "/t/entries2/{username}")
     @ResponseBody
-    public List<Tag> getAllTags() {
-        return tagService.findAll();
+    public List<EntryDTO> getAllEntries2(@PathVariable("username") String username) {
+        long start = System.nanoTime();
+
+        List<EntryDTO> entries = entryService.findAllByUsername2(username);
+
+        log.info(format("%s: %.10f [s]", "getAllEntriesByUsername H", ((System.nanoTime() - start)/Math.pow(10,9))));
+        return entries;
     }
 
     @RequestMapping(method = GET, path = "/t/tags/{username}")
     @ResponseBody
-    public List<Tag> getAllTags(@PathVariable("username") String username) {
+    public List<TagDTO> getAllTags(@PathVariable("username") String username) {
         return tagService.findAllByUsername(username);
     }
 
