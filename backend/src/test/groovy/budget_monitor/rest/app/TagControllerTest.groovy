@@ -42,7 +42,7 @@ class TagControllerTest extends AbstractMvcSpec {
     def 'user adds new tag'() {
         given:
         def newTag = [
-                name: 'shopping',
+                name : 'shopping',
                 color: '1'
         ]
 
@@ -89,7 +89,7 @@ class TagControllerTest extends AbstractMvcSpec {
     def 'user update tag'() {
         given:
         def updatedTag = [
-                name: 'Food',
+                name : 'Food',
                 color: '1'
         ]
 
@@ -136,7 +136,7 @@ class TagControllerTest extends AbstractMvcSpec {
     def 'user update non-existing tag'() {
         given:
         def updatedTag = [
-                name: 'Food',
+                name : 'Food',
                 color: '1'
         ]
 
@@ -151,7 +151,7 @@ class TagControllerTest extends AbstractMvcSpec {
     def 'user update not owned tag'() {
         given:
         def updatedTag = [
-                name: 'Food',
+                name : 'Food',
                 color: '1'
         ]
 

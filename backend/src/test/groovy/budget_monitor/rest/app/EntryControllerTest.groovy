@@ -42,9 +42,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user adds new entry'() {
         given:
         def newEntry = [
-                'date': '1541247841137',
-                'value': '-250',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-250',
+                'currency'   : 'PLN',
                 'description': 'Doughnut'
         ]
 
@@ -66,9 +66,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user adds new entry with invalid date'() {
         given:
         def newEntry = [
-                'date': '2018-11-01 15:00:00',
-                'value': '-250',
-                'currency': 'PLN',
+                'date'       : '2018-11-01 15:00:00',
+                'value'      : '-250',
+                'currency'   : 'PLN',
                 'description': ''
         ]
 
@@ -83,9 +83,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user adds new entry with invalid data'() {
         given:
         def newEntry = [
-                'date': '1541247841137',
-                'value': '-250',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-250',
+                'currency'   : 'PLN',
                 'description': ''
         ]
 
@@ -100,9 +100,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user update entry'() {
         given:
         def updatedEntry = [
-                'date': '1541247841137',
-                'value': '-200',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-200',
+                'currency'   : 'PLN',
                 'description': 'doughnut'
         ]
 
@@ -124,9 +124,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user update entry with invalid data'() {
         given:
         def updatedEntry = [
-                'date': '1541247841137',
-                'value': '-200',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-200',
+                'currency'   : 'PLN',
                 'description': ''
         ]
 
@@ -141,9 +141,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user update non-existing entry'() {
         given:
         def updatedEntry = [
-                'date': '1541247841137',
-                'value': '-200',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-200',
+                'currency'   : 'PLN',
                 'description': 'doughnut'
         ]
 
@@ -158,9 +158,9 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user update not owned entry'() {
         given:
         def updatedEntry = [
-                'date': '1541247841137',
-                'value': '-200',
-                'currency': 'PLN',
+                'date'       : '1541247841137',
+                'value'      : '-200',
+                'currency'   : 'PLN',
                 'description': 'doughnut'
         ]
 
