@@ -5,8 +5,10 @@ import budget_monitor.controller.util.SessionUtility;
 import budget_monitor.dto.input.EntryFormDTO;
 import budget_monitor.dto.output.EntryDTO;
 import budget_monitor.exception.type.EntryException;
+import budget_monitor.exception.type.EntryTagException;
 import budget_monitor.model.Entry;
 import budget_monitor.service.EntryService;
+import budget_monitor.service.EntryTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +36,14 @@ public class EntryController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private EntryService entryService;
+    private EntryTagService entryTagService;
 
     @Autowired
-    public EntryController(@Qualifier("entryService") EntryService entryService) {
+    public EntryController(@Qualifier("entryService") EntryService entryService,
+                           @Qualifier("entryTagService") EntryTagService entryTagService) {
 
         this.entryService = entryService;
+        this.entryTagService = entryTagService;
     }
 
 
@@ -90,6 +95,35 @@ public class EntryController {
             throw new EntryException("deleteEntry.error.unauthorised");
 
         entryService.deleteEntry(entryToDelete);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @LogExecutionTime
+    @RequestMapping(method = POST, path = "/app/entry/{idEntry}/{idTag}")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> addTag(@PathVariable("idEntry") Long idEntry,
+                                             @PathVariable("idTag") Long idTag,
+                                             HttpSession session) throws EntryTagException {
+
+        String loggedUser = SessionUtility.getLoggedUser(session);
+        int result = entryTagService.createEntryTag(idEntry, idTag, loggedUser);
+        if (result == 0) throw new EntryTagException("addTag.error.tagAlreadyAdded");
+        if (result < 0) throw new EntryTagException("addTag.error.unauthorised");
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @LogExecutionTime
+    @RequestMapping(method = DELETE, path = "/app/entry/{idEntry}/{idTag}")
+    @ResponseBody
+    public ResponseEntity<HttpStatus> removeTag(@PathVariable("idEntry") Long idEntry,
+                                                @PathVariable("idTag") Long idTag,
+                                                HttpSession session) throws EntryTagException {
+
+        String loggedUser = SessionUtility.getLoggedUser(session);
+        int result = entryTagService.deleteEntryTag(idEntry, idTag, loggedUser);
+        if (result < 0) throw new EntryTagException("removeTag.error.unauthorised");
+
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

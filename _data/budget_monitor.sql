@@ -51,7 +51,62 @@ CREATE TABLE entrytags (
   FOREIGN KEY (idTag) REFERENCES tags(idTag) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+# function addTagToEntry returns:
+#   1: when tag was added successfully
+#   -1: when user is not owner of the entry
+#   -2: when user is not owner of the tag
+#   0: when tag is already added
+CREATE FUNCTION addTagToEntry(
+  _idEntry INTEGER(30),
+  _idTag INTEGER(30),
+  _username VARCHAR(30)
+) RETURNS INTEGER(1) DETERMINISTIC
+  BEGIN
+    DECLARE ownEntry BOOLEAN;
+    DECLARE ownTag BOOLEAN;
+    DECLARE entryTagExists BOOLEAN;
 
+    SET ownEntry = (SELECT username FROM entries e WHERE e.idEntry = _idEntry) LIKE _username;
+    SET ownTag = (SELECT owner FROM tags t WHERE t.idTag = _idTag) LIKE _username;
+    SET entryTagExists = (SELECT 1 FROM entrytags WHERE idEntry = _idEntry AND idTag = _idTag);
+
+    IF NOT ownEntry THEN
+      RETURN -1;
+    ELSEIF NOT ownTag THEN
+      RETURN -2;
+    ELSEIF entryTagExists THEN
+      RETURN 0;
+    ELSE
+      INSERT INTO entryTags (idEntry, idTag) VALUES (_idEntry, _idTag);
+      RETURN 1;
+    END IF;
+  END;
+
+# function removeTagFromEntry returns:
+#   1: when tag was removed successfully
+#   -1: when user is not owner of the entry
+#   -2: when user is not owner of the tag
+CREATE FUNCTION removeTagFromEntry(
+  _idEntry INTEGER(30),
+  _idTag INTEGER(30),
+  _username VARCHAR(30)
+) RETURNS INTEGER(1) DETERMINISTIC
+  BEGIN
+    DECLARE ownEntry BOOLEAN;
+    DECLARE ownTag BOOLEAN;
+
+    SET ownEntry = (SELECT username FROM entries e WHERE e.idEntry = _idEntry) LIKE _username;
+    SET ownTag = (SELECT owner FROM tags t WHERE t.idTag = _idTag) LIKE _username;
+
+    IF NOT ownEntry THEN
+      RETURN -1;
+    ELSEIF NOT ownTag THEN
+      RETURN -2;
+    ELSE
+      DELETE FROM entrytags WHERE idEntry = _idEntry AND idTag = _idTag;
+      RETURN 1;
+    END IF;
+  END;
 
 
 -- USERS DATA:

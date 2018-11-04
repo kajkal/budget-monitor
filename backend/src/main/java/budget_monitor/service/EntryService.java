@@ -4,9 +4,7 @@ import budget_monitor.dto.input.EntryFormDTO;
 import budget_monitor.dto.output.EntryDTO;
 import budget_monitor.dto.output.TagDTO;
 import budget_monitor.model.Entry;
-import budget_monitor.model.EntryTag;
 import budget_monitor.repository.EntryRepository;
-import budget_monitor.repository.EntryTagRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +28,18 @@ import java.util.Optional;
 @Service("entryService")
 public class EntryService {
 
+    // TODO remove me
     private final Logger log = LoggerFactory.getLogger(getClass());
+
     private JdbcTemplate jdbcTemplate;
     private EntryRepository entryRepository;
-    private EntryTagRepository entryTagRepository;
 
     @Autowired
     public EntryService(JdbcTemplate jdbcTemplate,
-                        @Qualifier("entryRepository") EntryRepository entryRepository,
-                        @Qualifier("entryTagRepository") EntryTagRepository entryTagRepository) {
+                        @Qualifier("entryRepository") EntryRepository entryRepository) {
 
         this.jdbcTemplate = jdbcTemplate;
         this.entryRepository = entryRepository;
-        this.entryTagRepository = entryTagRepository;
     }
 
 
@@ -86,17 +83,6 @@ public class EntryService {
     public void deleteEntry(Entry entryToDelete) {
         entryRepository.deleteById(entryToDelete.getIdEntry());
     }
-
-
-    // ----------------------------------------------------------------------------------------------------
-    public List<EntryTag> findAllEntryTags() {
-        return entryTagRepository.findAll();
-    }
-
-    public List<EntryTag> findAllEntryTagsByIdEntry(Long idEntry) {
-        return entryTagRepository.findAllByIdEntry(idEntry);
-    }
-    // ----------------------------------------------------------------------------------------------------
 
 
     private class EntryWithTagsExtractor implements ResultSetExtractor<List<EntryDTO>> {

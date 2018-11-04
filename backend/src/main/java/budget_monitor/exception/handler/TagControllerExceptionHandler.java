@@ -20,7 +20,7 @@ public class TagControllerExceptionHandler {
     @ExceptionHandler(TagException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessageDTO handleTagException(TagException e) {
+    public ErrorMessageDTO handleControllerException(Exception e) {
         log.warn(e.getMessage());
         return new ErrorMessageDTO(e.getMessage());
     }

@@ -3,6 +3,7 @@ package budget_monitor.exception.handler;
 import budget_monitor.controller.EntryController;
 import budget_monitor.dto.output.ErrorMessageDTO;
 import budget_monitor.exception.type.EntryException;
+import budget_monitor.exception.type.EntryTagException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ public class EntryControllerExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(EntryException.class)
+    @ExceptionHandler({EntryException.class, EntryTagException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessageDTO handleEntryException(EntryException e) {
+    public ErrorMessageDTO handleControllerException(Exception e) {
         log.warn(e.getMessage());
         return new ErrorMessageDTO(e.getMessage());
     }
