@@ -36,10 +36,8 @@ public class SessionController {
     }
 
 
-
-
     @LogExecutionTime
-    @RequestMapping(method=POST)
+    @RequestMapping(method = POST)
     public UserSessionDTO login(@RequestBody CredentialsFormDTO credentialsFormDTO, HttpSession httpSession) {
         log.info("user: '" + credentialsFormDTO.getUsername() + "' logged in");
         Authentication authentication = new UsernamePasswordAuthenticationToken(credentialsFormDTO.getUsername(), credentialsFormDTO.getPassword());
@@ -50,12 +48,12 @@ public class SessionController {
         return userSessionDTO;
     }
 
-    @RequestMapping(method=GET)
+    @RequestMapping(method = GET)
     public UserSessionDTO session(HttpSession session) {
         return (UserSessionDTO) session.getAttribute("user");
     }
 
-    @RequestMapping(method=DELETE)
+    @RequestMapping(method = DELETE)
     public void logout(HttpSession session) {
         session.invalidate();
     }
