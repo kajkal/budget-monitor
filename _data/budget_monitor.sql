@@ -38,7 +38,7 @@ CREATE TABLE tags (
   idTag            INTEGER(30)    NOT NULL AUTO_INCREMENT,
   owner            VARCHAR(30)    NOT NULL,
   name             VARCHAR(60)    NOT NULL,
-  color            INTEGER(2)     NOT NULL DEFAULT 0,
+  color            INTEGER(2)     NOT NULL,
   PRIMARY KEY (idTag),
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
 ) ENGINE = InnoDB;

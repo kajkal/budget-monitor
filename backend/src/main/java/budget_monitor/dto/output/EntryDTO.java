@@ -3,13 +3,12 @@ package budget_monitor.dto.output;
 import budget_monitor.model.Entry;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EntryDTO {
 
     private Long idEntry;
-    private String username;
     private Timestamp date;
     private Timestamp added;
     private Integer value;
@@ -18,19 +17,19 @@ public class EntryDTO {
     private byte[] photo;
     private Set<TagDTO> tags;
 
+
     public EntryDTO() {
     }
 
     public EntryDTO(Entry entry) {
         this.idEntry = entry.getIdEntry();
-        this.username = entry.getUsername();
         this.date = entry.getDate();
         this.added = entry.getAdded();
         this.value = entry.getValue();
         this.currency = entry.getCurrency();
         this.description = entry.getDescription();
         this.photo = entry.getPhoto();
-        this.tags = entry.getTags().stream().map(TagDTO::new).collect(Collectors.toSet());
+        this.tags = new HashSet<>();
     }
 
     public Long getIdEntry() {
@@ -39,14 +38,6 @@ public class EntryDTO {
 
     public void setIdEntry(Long idEntry) {
         this.idEntry = idEntry;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Timestamp getDate() {

@@ -52,28 +52,6 @@ public class TestController {
         return userService.findAll();
     }
 
-    @RequestMapping(method = GET, path = "/t/entries")
-    @ResponseBody
-    public List<EntryDTO> getAllEntries() {
-        long start = System.nanoTime();
-
-        List<EntryDTO> entries = entryService.findAll();
-
-        log.info(format("%s: %.10f [s]", "getAllEntries", ((System.nanoTime() - start)/Math.pow(10,9))));
-        return entries;
-    }
-
-    @RequestMapping(method = GET, path = "/t/entries2")
-    @ResponseBody
-    public List<EntryDTO> getAllEntries2() {
-        long start = System.nanoTime();
-
-        List<EntryDTO> entries = entryService.findAll2();
-
-        log.info(format("%s: %.10f [s]", "getAllEntries H", ((System.nanoTime() - start)/Math.pow(10,9))));
-        return entries;
-    }
-
     @RequestMapping(method = GET, path = "/t/entries/{username}")
     @ResponseBody
     public List<EntryDTO> getAllEntries(@PathVariable("username") String username) {
@@ -82,17 +60,6 @@ public class TestController {
         List<EntryDTO> entries = entryService.findAllByUsername(username);
 
         log.info(format("%s: %.10f [s]", "getAllEntriesByUsername", ((System.nanoTime() - start)/Math.pow(10,9))));
-        return entries;
-    }
-
-    @RequestMapping(method = GET, path = "/t/entries2/{username}")
-    @ResponseBody
-    public List<EntryDTO> getAllEntries2(@PathVariable("username") String username) {
-        long start = System.nanoTime();
-
-        List<EntryDTO> entries = entryService.findAllByUsername2(username);
-
-        log.info(format("%s: %.10f [s]", "getAllEntriesByUsername H", ((System.nanoTime() - start)/Math.pow(10,9))));
         return entries;
     }
 

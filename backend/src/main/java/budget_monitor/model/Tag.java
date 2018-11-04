@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idTag")
     private Long idTag;
 
@@ -24,7 +24,6 @@ public class Tag {
 
     @Column(name = "color")
     private Integer color;
-
 
 
     public Long getIdTag() {

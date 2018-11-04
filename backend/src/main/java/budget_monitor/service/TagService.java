@@ -29,7 +29,7 @@ public class TagService {
     }
 
     public Optional<Tag> findByIdTag(Long idTag) {
-        return tagRepository.findByIdTag(idTag);
+        return tagRepository.findById(idTag);
     }
 
     public TagDTO createTag(TagFormDTO tagFormDTO, String username) {
@@ -42,8 +42,12 @@ public class TagService {
         return new TagDTO(savedTag);
     }
 
-    public TagDTO updateTag(Tag tagToUpdate) {
-        return new TagDTO(tagRepository.save(tagToUpdate));
+    public TagDTO updateTag(Tag tagToUpdate, TagFormDTO tagFormDTO) {
+        tagToUpdate.setName(tagFormDTO.getName());
+        tagToUpdate.setColor(tagFormDTO.getColor());
+
+        Tag updatedTag = tagRepository.save(tagToUpdate);
+        return new TagDTO(updatedTag);
     }
 
     public void deleteTag(Tag tagToDelete) {

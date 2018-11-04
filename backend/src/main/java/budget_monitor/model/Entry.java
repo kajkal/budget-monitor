@@ -1,23 +1,21 @@
 package budget_monitor.model;
 
-import javax.persistence.CascadeType;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "entries")
 public class Entry {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idEntry")
     private Long idEntry;
 
@@ -27,6 +25,7 @@ public class Entry {
     @Column(name = "date")
     private Timestamp date;
 
+    @CreationTimestamp
     @Column(name = "added")
     private Timestamp added;
 
@@ -42,28 +41,6 @@ public class Entry {
     @Column(name = "photo")
     private byte[] photo;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "entrytags",
-            joinColumns = @JoinColumn(name = "idEntry"),
-            inverseJoinColumns = @JoinColumn(name = "idTag")
-    )
-    private Set<Tag> tags = new HashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Entry entry = (Entry) o;
-        return Objects.equals(idEntry, entry.idEntry);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idEntry);
-    }
 
     public Long getIdEntry() {
         return idEntry;
@@ -129,11 +106,4 @@ public class Entry {
         this.photo = photo;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
 }

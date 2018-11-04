@@ -30,6 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class TagController {
 
+    // TODO remove me
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private TagService tagService;
@@ -72,9 +73,7 @@ public class TagController {
         if (!tagToUpdate.getOwner().equals(loggedUser))
             throw new TagException("updateTag.error.unauthorised");
 
-        tagToUpdate.setName(tagFormDTO.getName());
-        tagToUpdate.setColor(tagFormDTO.getColor());
-        TagDTO updatedTag = tagService.updateTag(tagToUpdate);
+        TagDTO updatedTag = tagService.updateTag(tagToUpdate, tagFormDTO);
         return ResponseEntity.ok(updatedTag);
     }
 
