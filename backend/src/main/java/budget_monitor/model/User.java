@@ -22,8 +22,9 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "currencies")
-    private String currencies;
+    @Column(name = "currency")
+    private String currency;
+
 
     public String getUsername() {
         return username;
@@ -57,16 +58,12 @@ public class User {
         this.role = role;
     }
 
-    public String getCurrencies() {
-        return currencies;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setCurrencies(String currencies) {
-        this.currencies = currencies;
-    }
-
-    public String toString() {
-        return String.format("User [username='%s', password='%s', email='%s', role='%s', currencies=%s]", username, password, email, role, currencies);
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
 }

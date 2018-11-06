@@ -7,7 +7,7 @@ import spock.lang.Shared
 import spock.lang.Stepwise
 
 @Stepwise
-class TagControllerTest extends AbstractMvcSpec {
+class CategoryControllerTest extends AbstractMvcSpec {
 
     @Shared
     String userToken

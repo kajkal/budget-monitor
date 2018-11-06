@@ -1,36 +1,37 @@
 package budget_monitor.dto.output;
 
-import budget_monitor.model.Entry;
+import budget_monitor.model.SubEntry;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class EntryDTO {
 
     private Long idEntry;
-    private Timestamp date;
-    private Timestamp added;
-    private Integer value;
-    private String currency;
+    private String owner;
+    private Long idCategory;
     private String description;
+    private Integer value;
+    private Timestamp date;
+    private Timestamp dateOfAddition;
+    private Timestamp dateOfLastModification;
     private byte[] photo;
-    private Set<TagDTO> tags;
+    private List<SubEntry> subEntries;
 
 
     public EntryDTO() {
     }
 
-    public EntryDTO(Entry entry) {
-        this.idEntry = entry.getIdEntry();
-        this.date = entry.getDate();
-        this.added = entry.getAdded();
-        this.value = entry.getValue();
-        this.currency = entry.getCurrency();
-        this.description = entry.getDescription();
-        this.photo = entry.getPhoto();
-        this.tags = new HashSet<>();
-    }
+//    public EntryDTO(Entry entry) {
+//        this.idEntry = entry.getIdEntry();
+//        this.date = entry.getDate();
+//        this.added = entry.getAdded();
+//        this.value = entry.getValue();
+//        this.currency = entry.getCurrency();
+//        this.description = entry.getDescription();
+//        this.photo = entry.getPhoto();
+//        this.tags = new HashSet<>();
+//    }
 
     public Long getIdEntry() {
         return idEntry;
@@ -40,36 +41,20 @@ public class EntryDTO {
         this.idEntry = idEntry;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public Timestamp getAdded() {
-        return added;
+    public Long getIdCategory() {
+        return idCategory;
     }
 
-    public void setAdded(Timestamp added) {
-        this.added = added;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setIdCategory(Long idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getDescription() {
@@ -80,6 +65,38 @@ public class EntryDTO {
         this.description = description;
     }
 
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public Timestamp getDateOfAddition() {
+        return dateOfAddition;
+    }
+
+    public void setDateOfAddition(Timestamp dateOfAddition) {
+        this.dateOfAddition = dateOfAddition;
+    }
+
+    public Timestamp getDateOfLastModification() {
+        return dateOfLastModification;
+    }
+
+    public void setDateOfLastModification(Timestamp dateOfLastModification) {
+        this.dateOfLastModification = dateOfLastModification;
+    }
+
     public byte[] getPhoto() {
         return photo;
     }
@@ -88,12 +105,12 @@ public class EntryDTO {
         this.photo = photo;
     }
 
-    public Set<TagDTO> getTags() {
-        return tags;
+    public List<SubEntry> getSubEntries() {
+        return subEntries;
     }
 
-    public void setTags(Set<TagDTO> tags) {
-        this.tags = tags;
+    public void setSubEntries(List<SubEntry> subEntries) {
+        this.subEntries = subEntries;
     }
 
 }

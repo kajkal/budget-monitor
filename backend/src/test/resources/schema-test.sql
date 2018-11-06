@@ -11,19 +11,19 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- USERS:
 CREATE TABLE users (
-  username         VARCHAR(30)    NOT NULL,
+  owner         VARCHAR(30)    NOT NULL,
   password         VARCHAR(60)    NOT NULL,
   email            VARCHAR(50)    NOT NULL,
   role             VARCHAR(10)    NOT NULL,
-  currencies       VARCHAR(255)   NOT NULL,
-  PRIMARY KEY (username)
+  currency       VARCHAR(255)   NOT NULL,
+  PRIMARY KEY (owner)
 ) ENGINE = InnoDB;
 
 
 -- APPLICATION MODEL
 CREATE TABLE entries (
   idEntry          INTEGER(30)    NOT NULL AUTO_INCREMENT,
-  username         VARCHAR(30)    NOT NULL,
+  owner         VARCHAR(30)    NOT NULL,
   date             DATETIME       NOT NULL,
   added            DATETIME       NOT NULL,
   value            INTEGER(9)     NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE entries (
   description      VARCHAR(255),
   photo            MEDIUMBLOB     DEFAULT NULL,
   PRIMARY KEY (idEntry),
-  FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
+  FOREIGN KEY (owner) REFERENCES users(owner) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE tags (
@@ -40,7 +40,7 @@ CREATE TABLE tags (
   name             VARCHAR(60)    NOT NULL,
   color            INTEGER(2)     NOT NULL,
   PRIMARY KEY (idTag),
-  FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
+  FOREIGN KEY (owner) REFERENCES users(owner) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE entrytags (

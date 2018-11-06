@@ -4,7 +4,10 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 
-public class TagFormDTO {
+public class CategoryFormDTO {
+
+    @Nullable
+    private Long idSuperCategory = 0L;
 
     @NotBlank
     private String name;
@@ -12,6 +15,14 @@ public class TagFormDTO {
     @Nullable
     private Integer color = 0;
 
+
+    public Long getIdSuperCategory() {
+        return idSuperCategory;
+    }
+
+    public void setIdSuperCategory(Long idSuperCategory) {
+        this.idSuperCategory = idSuperCategory;
+    }
 
     public String getName() {
         return name;

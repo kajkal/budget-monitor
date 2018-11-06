@@ -1,4 +1,4 @@
-INSERT INTO users (username, password, email, role, currencies) VALUES
+INSERT INTO users (owner, password, email, role, currency) VALUES
   ('user', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user@gmail.com', 'USER', '[PLN,EUR]'),
   ('user1', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user1@gmail.com', 'USER', '[PLN,EUR]'),
   ('user2', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user2@gmail.com', 'USER', '[PLN,EUR]');
@@ -23,7 +23,7 @@ INSERT INTO tags (idTag, owner, name, color) VALUES
   (17, 'user2', 'salary', 9),
   (18, 'user2', 'animals', 1);
 
-INSERT INTO entries (idEntry, username, date, added, value, currency, description) VALUES
+INSERT INTO entries (idEntry, owner, date, added, value, currency, description) VALUES
   (1, 'user', '2018-10-20 12:10:00', '2018-11-01 15:00:00', -1039, 'PLN', 'Zakupy w Biedronce'),
   (2, 'user', '2018-10-20 12:15:00', '2018-11-01 15:01:00', -400, 'PLN', 'Pączki'),
   (3, 'user', '2018-10-20 12:20:00', '2018-11-01 15:02:00', -190, 'PLN', 'Bilet w tramwaju'),
