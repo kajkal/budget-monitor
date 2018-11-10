@@ -2,7 +2,7 @@ package budget_monitor.controller;
 
 import budget_monitor.aop.LogExecutionTime;
 import budget_monitor.dto.input.CredentialsFormDTO;
-import budget_monitor.dto.input.UserSessionDTO;
+import budget_monitor.dto.output.UserSessionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -38,21 +39,23 @@ public class SessionController {
 
     @LogExecutionTime
     @RequestMapping(method = POST)
-    public UserSessionDTO login(@RequestBody CredentialsFormDTO credentialsFormDTO, HttpSession httpSession) {
-        log.info("user: '" + credentialsFormDTO.getUsername() + "' logged in");
+    public UserSessionDTO login(@Valid @RequestBody CredentialsFormDTO credentialsFormDTO, HttpSession httpSession) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(credentialsFormDTO.getUsername(), credentialsFormDTO.getPassword());
         SecurityContextHolder.getContext().setAuthentication(this.authenticationManager.authenticate(authentication));
         UserSessionDTO userSessionDTO = new UserSessionDTO(credentialsFormDTO.getUsername(), httpSession.getId(), true);
         httpSession.setAttribute("user", userSessionDTO);
 
+        log.info(String.format("User '%s' started new session", credentialsFormDTO.getUsername()));
         return userSessionDTO;
     }
 
+    @LogExecutionTime
     @RequestMapping(method = GET)
     public UserSessionDTO session(HttpSession session) {
         return (UserSessionDTO) session.getAttribute("user");
     }
 
+    @LogExecutionTime
     @RequestMapping(method = DELETE)
     public void logout(HttpSession session) {
         session.invalidate();

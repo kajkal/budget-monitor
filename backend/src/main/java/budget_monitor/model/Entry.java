@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 
@@ -19,28 +20,36 @@ public class Entry {
     @Column(name = "idEntry")
     private Long idEntry;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "owner")
+    private String owner;
+
+    @Column(name = "idCategory")
+    private Long idCategory;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "value")
+    private Integer value;
 
     @Column(name = "date")
     private Timestamp date;
 
     @CreationTimestamp
-    @Column(name = "added")
-    private Timestamp added;
+    @Column(name = "dateOfAddition")
+    private Timestamp dateOfAddition;
 
-    @Column(name = "value")
-    private Integer value;
-
-    @Column(name = "currency")
-    private String currency;
-
-    @Column(name = "description")
-    private String description;
+    @Column(name = "dateOfLastModification")
+    private Timestamp dateOfLastModification;
 
     @Column(name = "photo")
     private byte[] photo;
 
+
+    @PreUpdate
+    private void preUpdate() {
+        dateOfLastModification = new Timestamp(System.currentTimeMillis());
+    }
 
     public Long getIdEntry() {
         return idEntry;
@@ -50,28 +59,28 @@ public class Entry {
         this.idEntry = idEntry;
     }
 
-    public String getUsername() {
-        return username;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public Long getIdCategory() {
+        return idCategory;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setIdCategory(Long idCategory) {
+        this.idCategory = idCategory;
     }
 
-    public Timestamp getAdded() {
-        return added;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAdded(Timestamp added) {
-        this.added = added;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getValue() {
@@ -82,20 +91,28 @@ public class Entry {
         this.value = value;
     }
 
-    public String getCurrency() {
-        return currency;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
-    public String getDescription() {
-        return description;
+    public Timestamp getDateOfAddition() {
+        return dateOfAddition;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDateOfAddition(Timestamp dateOfAddition) {
+        this.dateOfAddition = dateOfAddition;
+    }
+
+    public Timestamp getDateOfLastModification() {
+        return dateOfLastModification;
+    }
+
+    public void setDateOfLastModification(Timestamp dateOfLastModification) {
+        this.dateOfLastModification = dateOfLastModification;
     }
 
     public byte[] getPhoto() {

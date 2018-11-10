@@ -1,28 +1,26 @@
-package budget_monitor.model;
+package budget_monitor.dto.input;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class RegisterUserFormDTO {
 
-    @Id
-    @Column(name = "username")
+    @NotNull
+    @Pattern(regexp = "^([a-zA-Z0-9]+[-_. ]?)*[a-zA-Z0-9]+$")
+    @Size(min = 3, max = 30)
     private String username;
 
-    @Column(name = "password")
+    @NotNull
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{6,30}")
     private String password;
 
-    @Column(name = "email")
+    @NotNull
+    @Pattern(regexp = "^[\\w\\d._%+-]+@[\\w\\d.-]+\\.[\\w]{2,6}$")
     private String email;
 
-    @Column(name = "role")
-    private String role;
-
-    @Column(name = "currency")
+    @NotNull
+    @Pattern(regexp = "^\\w{3}$")
     private String currency;
 
 
@@ -48,14 +46,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getCurrency() {

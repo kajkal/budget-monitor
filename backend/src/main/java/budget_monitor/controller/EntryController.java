@@ -5,12 +5,9 @@ import budget_monitor.controller.util.SessionUtility;
 import budget_monitor.dto.input.EntryFormDTO;
 import budget_monitor.dto.output.EntryDTO;
 import budget_monitor.exception.type.EntryException;
-import budget_monitor.exception.type.EntryTagException;
 import budget_monitor.model.Entry;
 import budget_monitor.service.EntryService;
-import budget_monitor.service.EntryTagService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import budget_monitor.service.SubEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,22 +25,20 @@ import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 public class EntryController {
 
-    // TODO remove me
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
     private EntryService entryService;
-    private EntryTagService entryTagService;
+    private SubEntryService subEntryService;
 
     @Autowired
     public EntryController(@Qualifier("entryService") EntryService entryService,
-                           @Qualifier("entryTagService") EntryTagService entryTagService) {
+                           @Qualifier("subEntryService") SubEntryService subEntryService) {
 
         this.entryService = entryService;
-        this.entryTagService = entryTagService;
+        this.subEntryService = subEntryService;
     }
 
 
@@ -62,11 +57,12 @@ public class EntryController {
 
         String loggedUser = SessionUtility.getLoggedUser(session);
         EntryDTO createdEntry = entryService.createEntry(entryFormDTO, loggedUser);
+        createdEntry.setSubEntries(subEntryService.createSubEntries(entryFormDTO.getSubEntries(), createdEntry));
         return ResponseEntity.ok(createdEntry);
     }
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/app/entry/{idEntry}")
+    @RequestMapping(method = PUT, path = "/app/entry/{idEntry}")
     @ResponseBody
     public ResponseEntity<EntryDTO> updateEntry(@PathVariable("idEntry") Long idEntry,
                                                 @Valid @RequestBody EntryFormDTO entryFormDTO,
@@ -75,10 +71,11 @@ public class EntryController {
         String loggedUser = SessionUtility.getLoggedUser(session);
         Entry entryToUpdate = entryService.findByIdEntry(idEntry).orElseThrow(
                 () -> new EntryException("updateEntry.error.entryNotFound"));
-        if (!entryToUpdate.getUsername().equals(loggedUser))
+        if (!entryToUpdate.getOwner().equals(loggedUser))
             throw new EntryException("updateEntry.error.unauthorised");
 
         EntryDTO updatedEntry = entryService.updateEntry(entryToUpdate, entryFormDTO);
+        updatedEntry.setSubEntries(subEntryService.createSubEntries(entryFormDTO.getSubEntries(), updatedEntry));
         return ResponseEntity.ok(updatedEntry);
     }
 
@@ -91,39 +88,10 @@ public class EntryController {
         String loggedUser = SessionUtility.getLoggedUser(session);
         Entry entryToDelete = entryService.findByIdEntry(idEntry).orElseThrow(
                 () -> new EntryException("deleteEntry.error.entryNotFound"));
-        if (!entryToDelete.getUsername().equals(loggedUser))
+        if (!entryToDelete.getOwner().equals(loggedUser))
             throw new EntryException("deleteEntry.error.unauthorised");
 
         entryService.deleteEntry(entryToDelete);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @LogExecutionTime
-    @RequestMapping(method = POST, path = "/app/entry/{idEntry}/{idTag}")
-    @ResponseBody
-    public ResponseEntity<HttpStatus> addTag(@PathVariable("idEntry") Long idEntry,
-                                             @PathVariable("idTag") Long idTag,
-                                             HttpSession session) throws EntryTagException {
-
-        String loggedUser = SessionUtility.getLoggedUser(session);
-        int result = entryTagService.createEntryTag(idEntry, idTag, loggedUser);
-        if (result == 0) throw new EntryTagException("addTag.error.tagAlreadyAdded");
-        if (result < 0) throw new EntryTagException("addTag.error.unauthorised");
-
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @LogExecutionTime
-    @RequestMapping(method = DELETE, path = "/app/entry/{idEntry}/{idTag}")
-    @ResponseBody
-    public ResponseEntity<HttpStatus> removeTag(@PathVariable("idEntry") Long idEntry,
-                                                @PathVariable("idTag") Long idTag,
-                                                HttpSession session) throws EntryTagException {
-
-        String loggedUser = SessionUtility.getLoggedUser(session);
-        int result = entryTagService.deleteEntryTag(idEntry, idTag, loggedUser);
-        if (result < 0) throw new EntryTagException("removeTag.error.unauthorised");
-
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

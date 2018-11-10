@@ -28,16 +28,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/app/session", "/app/register").permitAll()
-                .antMatchers("/t/**").permitAll()
                 .antMatchers("/app/**").authenticated()
                 .anyRequest().authenticated();
     }

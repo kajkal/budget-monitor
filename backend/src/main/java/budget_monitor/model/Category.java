@@ -8,13 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tags")
-public class Tag {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTag")
-    private Long idTag;
+    @Column(name = "idCategory")
+    private Long idCategory;
+
+    @Column(name = "idSuperCategory")
+    private Long idSuperCategory;
 
     @Column(name = "owner")
     private String owner;
@@ -26,12 +29,20 @@ public class Tag {
     private Integer color;
 
 
-    public Long getIdTag() {
-        return idTag;
+    public Long getIdCategory() {
+        return idCategory;
     }
 
-    public void setIdTag(Long idTag) {
-        this.idTag = idTag;
+    public void setIdCategory(Long idCategory) {
+        this.idCategory = idCategory;
+    }
+
+    public Long getIdSuperCategory() {
+        return idSuperCategory;
+    }
+
+    public void setIdSuperCategory(Long idSuperCategory) {
+        this.idSuperCategory = idSuperCategory;
     }
 
     public String getOwner() {

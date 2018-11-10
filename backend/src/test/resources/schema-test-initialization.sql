@@ -1,10 +1,11 @@
-# schema to be executed by the Hibernate every time when tests are started
+# Initialize test database - must be executed manually before run tests
+
+DROP DATABASE IF EXISTS budget_monitor_test;
+CREATE DATABASE budget_monitor_test
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
 
 USE budget_monitor_test;
-
-DROP TABLE IF EXISTS subEntries CASCADE;
-DROP TABLE IF EXISTS entries, categories CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE users (
   username                   VARCHAR(30)    NOT NULL,
@@ -51,3 +52,43 @@ CREATE TABLE subEntries (
   FOREIGN KEY (idEntry) REFERENCES entries(idEntry) ON DELETE CASCADE,
   FOREIGN KEY (idCategory) REFERENCES categories(idCategory) ON DELETE SET NULL
 ) ENGINE = InnoDB;
+
+CREATE VIEW entriesWithSubEntriesView AS
+  SELECT
+         idEntry,
+         e.owner,
+         e.idCategory,
+         e.description,
+         e.value,
+         e.date,
+         e.dateOfAddition,
+         e.dateOfLastModification,
+         e.photo,
+         se.idSubEntry,
+         se.idCategory AS subEntryIdCategory,
+         se.description AS subEntryDescription,
+         se.value AS subEntryValue
+  FROM entries e LEFT JOIN subEntries se USING (idEntry);
+
+CREATE TRIGGER entriesOnUpdate
+  BEFORE UPDATE ON entries
+  FOR EACH ROW
+  BEGIN
+    DELETE FROM subEntries WHERE idEntry = NEW.idEntry;
+  END;
+
+CREATE FUNCTION checkIfUserWithUsernameOrEmailExists(
+  _username VARCHAR(30),
+  _email VARCHAR(50)
+) RETURNS INTEGER(1) READS SQL DATA
+  BEGIN
+    # check if user with username exists, if so return 1
+    IF (SELECT count(*) FROM users WHERE username LIKE _username) > 0 THEN
+      RETURN 1;
+    # check if user with email exists, if so return 2
+    ELSEIF (SELECT count(*) FROM users WHERE email LIKE _email) > 0 THEN
+      RETURN 2;
+    ELSE
+      RETURN 0;
+    END IF;
+  END;

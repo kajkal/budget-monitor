@@ -1,6 +1,6 @@
 package budget_monitor.controller.util;
 
-import budget_monitor.dto.input.UserSessionDTO;
+import budget_monitor.dto.output.UserSessionDTO;
 
 import javax.servlet.http.HttpSession;
 
