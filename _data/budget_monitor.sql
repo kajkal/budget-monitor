@@ -8,15 +8,16 @@ USE budget_monitor;
 DROP TABLE IF EXISTS subEntries CASCADE;
 DROP TABLE IF EXISTS entries, categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP VIEW IF EXISTS entriesWithSubEntriesView CASCADE;
 
 -- USERS:
 CREATE TABLE users (
-  owner                   VARCHAR(30)    NOT NULL,
+  username                   VARCHAR(30)    NOT NULL,
   password                   VARCHAR(60)    NOT NULL,
-  email                      VARCHAR(50)    NOT NULL,
+  email                      VARCHAR(50)    NOT NULL UNIQUE,
   role                       VARCHAR(10)    NOT NULL,
-  currency                   VARCHAR(3)     DEFAULT 'PLN',
-  PRIMARY KEY (owner)
+  currency                   VARCHAR(3)     DEFAULT '---',
+  PRIMARY KEY (username)
 ) ENGINE = InnoDB;
 
 
@@ -26,47 +27,100 @@ CREATE TABLE categories (
   idSuperCategory            INTEGER(30)    DEFAULT NULL,
   owner                      VARCHAR(30)    NOT NULL,
   name                       VARCHAR(60)    NOT NULL,
-  color                      INTEGER(2)     DEFAULT 0,
+  color                      INTEGER(2)     DEFAULT NULL,
   PRIMARY KEY (idCategory),
   FOREIGN KEY (idSuperCategory) REFERENCES categories(idCategory) ON DELETE CASCADE,
-  FOREIGN KEY (owner) REFERENCES users(owner) ON DELETE CASCADE
+  FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE entries (
   idEntry                    INTEGER(30)    NOT NULL AUTO_INCREMENT,
   owner                      VARCHAR(30)    NOT NULL,
   idCategory                 INTEGER(30)    DEFAULT NULL,
-  description                VARCHAR(255),
+  description                VARCHAR(255)   NOT NULL,
   value                      INTEGER(9)     NOT NULL,
   date                       DATETIME       NOT NULL,
-  dateOfAddition             DATETIME       DEFAULT CURRENT_TIMESTAMP,
+  dateOfAddition             DATETIME       DEFAULT NULL,
   dateOfLastModification     DATETIME       DEFAULT NULL,
   photo                      MEDIUMBLOB     DEFAULT NULL,
   PRIMARY KEY (idEntry),
-  FOREIGN KEY (owner) REFERENCES users(owner) ON DELETE CASCADE,
+  FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE,
   FOREIGN KEY (idCategory) REFERENCES categories(idCategory) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE subEntries (
+  idSubEntry                 INTEGER(30)    NOT NULL AUTO_INCREMENT,
   idEntry                    INTEGER(30)    NOT NULL,
-  idSubEntry                 INTEGER(30)    NOT NULL,
   idCategory                 INTEGER(30)    DEFAULT NULL,
-  description                VARCHAR(255),
+  description                VARCHAR(255)   NOT NULL,
   value                      INTEGER(9)     NOT NULL,
-  PRIMARY KEY (idEntry, idSubEntry),
+  PRIMARY KEY (idSubEntry),
   FOREIGN KEY (idEntry) REFERENCES entries(idEntry) ON DELETE CASCADE,
   FOREIGN KEY (idCategory) REFERENCES categories(idCategory) ON DELETE SET NULL
 ) ENGINE = InnoDB;
+
+-- ----------------------------------------------------------------------------------------------------
+
+# VIEWS
+CREATE VIEW entriesWithSubEntriesView AS
+  SELECT
+         idEntry,
+         e.owner,
+         e.idCategory,
+         e.description,
+         e.value,
+         e.date,
+         e.dateOfAddition,
+         e.dateOfLastModification,
+         e.photo,
+         se.idSubEntry,
+         se.idCategory AS subEntryIdCategory,
+         se.description AS subEntryDescription,
+         se.value AS subEntryValue
+  FROM entries e LEFT JOIN subEntries se USING (idEntry);
+
+-- ----------------------------------------------------------------------------------------------------
+
+CREATE TRIGGER entriesOnUpdate
+  BEFORE UPDATE ON entries
+  FOR EACH ROW
+  BEGIN
+    DELETE FROM subEntries WHERE idEntry = NEW.idEntry;
+  END;
+-- ----------------------------------------------------------------------------------------------------
+
+# function checkIfUserWithUsernameOrEmailExists returns:
+#   0: when username and email are available
+#   1: user with username exists
+#   2: user with email exists
+CREATE FUNCTION checkIfUserWithUsernameOrEmailExists(
+  _username VARCHAR(30),
+  _email VARCHAR(50)
+) RETURNS INTEGER(1) READS SQL DATA
+  BEGIN
+    # check if user with username exists, if so return 1
+    IF (SELECT count(*) FROM users WHERE username LIKE _username) > 0 THEN
+      RETURN 1;
+    # check if user with email exists, if so return 2
+    ELSEIF (SELECT count(*) FROM users WHERE email LIKE _email) > 0 THEN
+      RETURN 2;
+    ELSE
+      RETURN 0;
+    END IF;
+  END;
+
+-- ----------------------------------------------------------------------------------------------------
+
 
 
 
 
 -- DATA:
--- pass: 'qwer'
-INSERT INTO users (owner, password, email, role, currency) VALUES
-  ('user', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user@gmail.com', 'USER', 'PLN'),
-  ('user1', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user1@gmail.com', 'USER', 'PLN'),
-  ('user2', '$2a$08$jWsna71MZtLWfk5CvXfjm.svxYQU6cW3Zq8CX9HwDB9MT.w.Dv0bK', 'user3@gmail.com', 'USER', 'PLN');
+-- pass: 'Qwer1234'
+INSERT INTO users (username, password, email, role, currency) VALUES
+  ('user', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user@gmail.com', 'USER', 'PLN'),
+  ('user1', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user1@gmail.com', 'USER', 'PLN'),
+  ('user2', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user2@gmail.com', 'USER', 'PLN');
 
 INSERT INTO categories (idCategory, idSuperCategory, owner, name, color) VALUES
   (1, NULL, 'user', 'Maintenance', 1),

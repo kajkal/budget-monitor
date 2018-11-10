@@ -1,8 +1,8 @@
 package budget_monitor.exception.handler;
 
-import budget_monitor.controller.CategoryController;
+import budget_monitor.controller.UserController;
 import budget_monitor.dto.output.ErrorMessageDTO;
-import budget_monitor.exception.type.CategoryException;
+import budget_monitor.exception.type.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.stream.Collectors;
 
-@ControllerAdvice(assignableTypes = CategoryController.class)
-public class CategoryControllerExceptionHandler {
+@ControllerAdvice(assignableTypes = UserController.class)
+public class UserControllerExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(CategoryException.class)
+    @ExceptionHandler({UserException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageDTO handleControllerException(Exception e) {
@@ -42,7 +42,7 @@ public class CategoryControllerExceptionHandler {
                 .collect(Collectors.joining(","));
 
         log.warn("validation error: [" + notValidFieldNames + "]");
-        return new ErrorMessageDTO("categoryData.error.notValid[" + notValidFieldNames + ']');
+        return new ErrorMessageDTO("userData.error.notValid[" + notValidFieldNames + ']');
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -50,7 +50,7 @@ public class CategoryControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageDTO handleMethodArgumentNotValidException(HttpMessageNotReadableException e) {
         log.warn(e.getMessage());
-        return new ErrorMessageDTO("categoryData.error.badRequest");
+        return new ErrorMessageDTO("userData.error.badRequest");
     }
 
     @ExceptionHandler(Exception.class)
@@ -58,7 +58,7 @@ public class CategoryControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessageDTO handleUnknownException(Exception e) {
         log.warn(e.getMessage());
-        return new ErrorMessageDTO("categoryData.error.unknownError");
+        return new ErrorMessageDTO("userData.error.unknownError");
     }
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 
@@ -44,6 +45,11 @@ public class Entry {
     @Column(name = "photo")
     private byte[] photo;
 
+
+    @PreUpdate
+    private void preUpdate() {
+        dateOfLastModification = new Timestamp(System.currentTimeMillis());
+    }
 
     public Long getIdEntry() {
         return idEntry;

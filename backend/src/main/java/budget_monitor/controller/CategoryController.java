@@ -24,6 +24,7 @@ import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 public class CategoryController {
@@ -56,7 +57,7 @@ public class CategoryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/app/category/{idCategory}")
+    @RequestMapping(method = PUT, path = "/app/category/{idCategory}")
     @ResponseBody
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable("idCategory") Long idCategory,
                                                       @Valid @RequestBody CategoryFormDTO categoryFormDTO,

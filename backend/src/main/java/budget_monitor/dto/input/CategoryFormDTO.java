@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 public class CategoryFormDTO {
 
     @Nullable
-    private Long idSuperCategory = 0L;
+    private Long idSuperCategory = null;
 
     @NotBlank
     private String name;

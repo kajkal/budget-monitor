@@ -6,20 +6,21 @@ import org.springframework.security.test.context.support.WithMockUser
 
 class AuthenticationTest extends AbstractMvcSpec {
 
-    def "unauthenticated users cannot get resource"() {
+    def 'unauthenticated users cannot get resource'() {
         when:
-        def res = get("/app/users")
+        def res = get('/dev/users')
 
         then:
         res.status == HttpStatus.FORBIDDEN
     }
 
     @WithMockUser
-    def "authenticated users can get resource"() {
+    def 'authenticated users can get resource'() {
         when:
-        def res = get("/app/users")
+        def res = get('/dev/users')
 
         then:
         res.status == HttpStatus.OK
     }
+
 }

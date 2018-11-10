@@ -1,14 +1,14 @@
 package budget_monitor.dto.output;
 
-import budget_monitor.model.SubEntry;
+import budget_monitor.model.Entry;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntryDTO {
 
     private Long idEntry;
-    private String owner;
     private Long idCategory;
     private String description;
     private Integer value;
@@ -16,22 +16,23 @@ public class EntryDTO {
     private Timestamp dateOfAddition;
     private Timestamp dateOfLastModification;
     private byte[] photo;
-    private List<SubEntry> subEntries;
+    private List<SubEntryDTO> subEntries;
 
 
     public EntryDTO() {
     }
 
-//    public EntryDTO(Entry entry) {
-//        this.idEntry = entry.getIdEntry();
-//        this.date = entry.getDate();
-//        this.added = entry.getAdded();
-//        this.value = entry.getValue();
-//        this.currency = entry.getCurrency();
-//        this.description = entry.getDescription();
-//        this.photo = entry.getPhoto();
-//        this.tags = new HashSet<>();
-//    }
+    public EntryDTO(Entry entry) {
+        idEntry = entry.getIdEntry();
+        idCategory = entry.getIdCategory();
+        description = entry.getDescription();
+        value = entry.getValue();
+        date = entry.getDate();
+        dateOfAddition = entry.getDateOfAddition();
+        dateOfLastModification = entry.getDateOfLastModification();
+        photo = entry.getPhoto();
+        subEntries = new ArrayList<>();
+    }
 
     public Long getIdEntry() {
         return idEntry;
@@ -39,14 +40,6 @@ public class EntryDTO {
 
     public void setIdEntry(Long idEntry) {
         this.idEntry = idEntry;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public Long getIdCategory() {
@@ -105,11 +98,11 @@ public class EntryDTO {
         this.photo = photo;
     }
 
-    public List<SubEntry> getSubEntries() {
+    public List<SubEntryDTO> getSubEntries() {
         return subEntries;
     }
 
-    public void setSubEntries(List<SubEntry> subEntries) {
+    public void setSubEntries(List<SubEntryDTO> subEntries) {
         this.subEntries = subEntries;
     }
 

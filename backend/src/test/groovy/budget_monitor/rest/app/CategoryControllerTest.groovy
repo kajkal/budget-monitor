@@ -10,183 +10,208 @@ import spock.lang.Stepwise
 class CategoryControllerTest extends AbstractMvcSpec {
 
     @Shared
-    String userToken
+    String testUserToken
+
+    @Shared
+    Long travelCategoryId
+
+    @Shared
+    Long souvenirCategoryId
+
 
     def 'user \'user\' log in to application'() {
         given:
         def credentials = [
                 username: 'user',
-                password: 'qwer'
+                password: 'Qwer1234'
         ]
 
         when:
         def response = post('/app/session', credentials)
-        userToken = response.json.token
+        testUserToken = response.json.token
 
         then:
         response.status == HttpStatus.OK
         response.json.username == 'user'
         response.json.authenticated == true
-        userToken != null
+        testUserToken != null
     }
 
-    def 'user gets his tags'() {
+    def 'user gets his categories'() {
         when:
-        def response = get('/app/tags', new RequestParams(authToken: userToken))
+        def response = get('/app/categories', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
         response.json.size == 6
     }
 
-    def 'user adds new tag'() {
+    def 'user adds new category'() {
         given:
-        def newTag = [
-                name : 'shopping',
-                color: '1'
+        def newCategory = [
+                idSuperCategory: null,
+                name           : 'travels',
+                color          : 1
         ]
 
         when:
-        def response = post('/app/tag', newTag, new RequestParams(authToken: userToken))
+        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
+        travelCategoryId = response.json.idCategory
 
         then:
         response.status == HttpStatus.OK
-        response.json.idTag > 0
-        response.json.name == 'shopping'
+        response.json.idCategory > 0
+        response.json.idSuperCategory == null
+        response.json.name == 'travels'
         response.json.color == 1
+        response.json.subCategories.size == 0
     }
 
-    def 'user adds new tag with no specific color'() {
+    def 'user adds new category with no specific color'() {
         given:
-        def newTag = [
-                name: 'shopping'
+        def newCategory = [
+                idSuperCategory: travelCategoryId,
+                name           : 'souvenirs'
         ]
 
         when:
-        def response = post('/app/tag', newTag, new RequestParams(authToken: userToken))
+        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
+        souvenirCategoryId = response.json.idCategory
 
         then:
         response.status == HttpStatus.OK
-        response.json.idTag > 0
-        response.json.name == 'shopping'
+        response.json.idCategory > 0
+        response.json.idSuperCategory == travelCategoryId
+        response.json.name == 'souvenirs'
         response.json.color == 0
+        response.json.subCategories.size == 0
     }
 
-    def 'user adds new tag with invalid data'() {
+    def 'user adds new category with invalid data'() {
         given:
-        def newTag = [
-                name: ""
+        def newCategory = [
+                idSuperCategory: souvenirCategoryId,
+                name           : '   ',
+                color          : 1
         ]
 
         when:
-        def response = post('/app/tag', newTag, new RequestParams(authToken: userToken))
+        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'tagData.error.badRequest'
+        response.json.messageKey.contains('categoryData.error.notValid')
     }
 
-    def 'user update tag'() {
+    def 'user update category'() {
         given:
-        def updatedTag = [
-                name : 'Food',
-                color: '1'
+        def updatedCategory = [
+                name : 'travels',
+                color: 9
         ]
 
         when:
-        def response = post('/app/tag/1', updatedTag, new RequestParams(authToken: userToken))
+        def response = put('/app/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
-        response.json.idTag == 1
-        response.json.name == 'Food'
-        response.json.color == 1
+        response.json.idCategory == travelCategoryId
+        response.json.idSuperCategory == null
+        response.json.name == 'travels'
+        response.json.color == 9
+        response.json.subCategories.size == 0
     }
 
-    def 'user update tag with no specific color'() {
+    def 'user update category with no specific color'() {
         given:
-        def updatedTag = [
-                name: 'Food'
+        def updatedCategory = [
+                name: 'travels'
         ]
 
         when:
-        def response = post('/app/tag/1', updatedTag, new RequestParams(authToken: userToken))
+        def response = put('/app/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
-        response.json.idTag == 1
-        response.json.name == 'Food'
+        response.json.idCategory == travelCategoryId
+        response.json.idSuperCategory == null
+        response.json.name == 'travels'
         response.json.color == 0
+        response.json.subCategories.size == 0
     }
 
-    def 'user update tag with invalid data'() {
+    def 'user update category with invalid data'() {
         given:
-        def updatedTag = [
-                name: ""
+        def updatedCategory = [
+                idSuperCategory: travelCategoryId,
+                name           : '   ',
+                color          : 1
         ]
 
         when:
-        def response = post('/app/tag/1', updatedTag, new RequestParams(authToken: userToken))
+        def response = put('/app/category/' + souvenirCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'tagData.error.badRequest'
+        response.json.messageKey.contains('categoryData.error.notValid')
     }
 
-    def 'user update non-existing tag'() {
+    def 'user update non-existing category'() {
         given:
-        def updatedTag = [
-                name : 'Food',
-                color: '1'
+        def updatedCategory = [
+                idSuperCategory: travelCategoryId,
+                name           : 'Food',
+                color          : '1'
         ]
 
         when:
-        def response = post('/app/tag/100', updatedTag, new RequestParams(authToken: userToken))
+        def response = put('/app/category/100', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateTag.error.tagNotFound'
+        response.json.messageKey == 'updateCategory.error.categoryNotFound'
     }
 
-    def 'user update not owned tag'() {
+    def 'user update not owned category'() {
         given:
-        def updatedTag = [
-                name : 'Food',
-                color: '1'
+        def updatedCategory = [
+                idSuperCategory: travelCategoryId,
+                name           : 'Food',
+                color          : '1'
         ]
 
         when:
-        def response = post('/app/tag/7', updatedTag, new RequestParams(authToken: userToken))
+        def response = put('/app/category/20', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateTag.error.unauthorised'
+        response.json.messageKey == 'updateCategory.error.unauthorised'
     }
 
-    def 'user removes tag'() {
+    def 'user removes category'() {
         when:
-        def response = delete('/app/tag/19', new RequestParams(authToken: userToken))
+        def response = delete('/app/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
     }
 
-    def 'user removes non-existing tag'() {
+    def 'user removes non-existing category'() {
         when:
-        def response = delete('/app/tag/19', new RequestParams(authToken: userToken))
+        def response = delete('/app/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteTag.error.tagNotFound'
+        response.json.messageKey == 'deleteCategory.error.categoryNotFound'
     }
 
-    def 'user removes not owned tag'() {
+    def 'user removes not owned category'() {
         when:
-        def response = delete('/app/tag/7', new RequestParams(authToken: userToken))
+        def response = delete('/app/category/20', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteTag.error.unauthorised'
+        response.json.messageKey == 'deleteCategory.error.unauthorised'
     }
 
 }

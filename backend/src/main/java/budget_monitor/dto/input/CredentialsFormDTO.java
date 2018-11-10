@@ -7,9 +7,6 @@ public class CredentialsFormDTO {
     private String password;
 
 
-    public CredentialsFormDTO() {
-    }
-
     public String getUsername() {
         return username;
     }
