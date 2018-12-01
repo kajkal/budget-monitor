@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.MvcResult
 
 class SpockMvcResult {
+
     private MvcResult result
 
     SpockMvcResult(MvcResult result) {
@@ -44,4 +45,5 @@ class SpockMvcResult {
             [(name): response.getHeaders(name).join(',')]
         }
     }
+
 }

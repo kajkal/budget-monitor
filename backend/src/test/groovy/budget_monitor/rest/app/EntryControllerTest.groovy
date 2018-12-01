@@ -27,19 +27,19 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/session', credentials)
+        def response = post('/api/login', credentials)
         testUserToken = response.json.token
 
         then:
         response.status == HttpStatus.OK
-        response.json.username == 'user'
-        response.json.authenticated == true
+        response.json.type == 'Bearer'
         testUserToken != null
+        testUserToken.length() > 7
     }
 
     def 'user gets his entries'() {
         when:
-        def response = get('/app/entries', new RequestParams(authToken: testUserToken))
+        def response = get('/api/entries', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -68,7 +68,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/entry', newEntry, new RequestParams(authToken: testUserToken))
+        def response = post('/api/entry', newEntry, new RequestParams(authToken: testUserToken))
         bakeryEntryId = response.json.idEntry
 
         then:
@@ -101,7 +101,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/entry', newEntry, new RequestParams(authToken: testUserToken))
+        def response = post('/api/entry', newEntry, new RequestParams(authToken: testUserToken))
         groceryEntryId = response.json.idEntry
 
         then:
@@ -128,7 +128,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/entry', newEntry, new RequestParams(authToken: testUserToken))
+        def response = post('/api/entry', newEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -146,7 +146,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/entry', newEntry, new RequestParams(authToken: testUserToken))
+        def response = post('/api/entry', newEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -180,7 +180,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/entry/' + bakeryEntryId, updatedEntry, new RequestParams(authToken: testUserToken))
+        def response = put('/api/entry/' + bakeryEntryId, updatedEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -217,7 +217,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/entry/' + bakeryEntryId, updatedEntry, new RequestParams(authToken: testUserToken))
+        def response = put('/api/entry/' + bakeryEntryId, updatedEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -235,7 +235,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/entry/100', updatedEntry, new RequestParams(authToken: testUserToken))
+        def response = put('/api/entry/100', updatedEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -253,7 +253,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/entry/5', updatedEntry, new RequestParams(authToken: testUserToken))
+        def response = put('/api/entry/5', updatedEntry, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -262,7 +262,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
     def 'user removes entry'() {
         when:
-        def response = delete('/app/entry/' + groceryEntryId, new RequestParams(authToken: testUserToken))
+        def response = delete('/api/entry/' + groceryEntryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -270,7 +270,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
     def 'user removes non-existing entry'() {
         when:
-        def response = delete('/app/entry/' + groceryEntryId, new RequestParams(authToken: testUserToken))
+        def response = delete('/api/entry/' + groceryEntryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -279,7 +279,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
     def 'user removes not owned entry'() {
         when:
-        def response = delete('/app/entry/5', new RequestParams(authToken: testUserToken))
+        def response = delete('/api/entry/5', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST

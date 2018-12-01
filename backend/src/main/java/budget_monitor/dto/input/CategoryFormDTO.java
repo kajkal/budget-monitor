@@ -12,6 +12,7 @@ public class CategoryFormDTO {
     @NotBlank
     private String name;
 
+    // TODO default color = null
     @Nullable
     private Integer color = 0;
 
@@ -20,24 +21,12 @@ public class CategoryFormDTO {
         return idSuperCategory;
     }
 
-    public void setIdSuperCategory(Long idSuperCategory) {
-        this.idSuperCategory = idSuperCategory;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getColor() {
         return color;
-    }
-
-    public void setColor(Integer color) {
-        this.color = color;
     }
 
 }

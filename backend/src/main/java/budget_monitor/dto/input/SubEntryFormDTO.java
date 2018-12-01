@@ -23,24 +23,12 @@ public class SubEntryFormDTO {
         return idCategory;
     }
 
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Integer getValue() {
         return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
     }
 
 }

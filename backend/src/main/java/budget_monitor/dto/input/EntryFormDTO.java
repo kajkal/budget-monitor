@@ -33,40 +33,20 @@ public class EntryFormDTO {
         return idCategory;
     }
 
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Integer getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
     public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
     public List<SubEntryFormDTO> getSubEntries() {
         return subEntries;
-    }
-
-    public void setSubEntries(List<SubEntryFormDTO> subEntries) {
-        this.subEntries = subEntries;
     }
 
 }

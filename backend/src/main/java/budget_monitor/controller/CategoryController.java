@@ -1,7 +1,7 @@
 package budget_monitor.controller;
 
+import budget_monitor.aop.CurrentUser;
 import budget_monitor.aop.LogExecutionTime;
-import budget_monitor.controller.util.SessionUtility;
 import budget_monitor.dto.input.CategoryFormDTO;
 import budget_monitor.dto.output.CategoryDTO;
 import budget_monitor.exception.type.CategoryException;
@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -39,34 +39,32 @@ public class CategoryController {
 
 
     @LogExecutionTime
-    @RequestMapping(method = GET, path = "/app/categories")
+    @RequestMapping(method = GET, path = "/api/categories")
     @ResponseBody
-    public List<CategoryDTO> getCategories(HttpSession session) {
-        return categoryService.findAllByUsername(SessionUtility.getLoggedUser(session));
+    public List<CategoryDTO> getCategories(@CurrentUser UserDetails user) {
+        return categoryService.findAllByUsername(user.getUsername());
     }
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/app/category")
+    @RequestMapping(method = POST, path = "/api/category")
     @ResponseBody
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryFormDTO categoryFormDTO,
-                                                      HttpSession session) {
+                                                      @CurrentUser UserDetails user) {
 
-        String loggedUser = SessionUtility.getLoggedUser(session);
-        CategoryDTO createdCategory = categoryService.createCategory(categoryFormDTO, loggedUser);
+        CategoryDTO createdCategory = categoryService.createCategory(categoryFormDTO, user.getUsername());
         return ResponseEntity.ok(createdCategory);
     }
 
     @LogExecutionTime
-    @RequestMapping(method = PUT, path = "/app/category/{idCategory}")
+    @RequestMapping(method = PUT, path = "/api/category/{idCategory}")
     @ResponseBody
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable("idCategory") Long idCategory,
                                                       @Valid @RequestBody CategoryFormDTO categoryFormDTO,
-                                                      HttpSession session) throws CategoryException {
+                                                      @CurrentUser UserDetails user) throws CategoryException {
 
-        String loggedUser = SessionUtility.getLoggedUser(session);
         Category categoryToUpdate = categoryService.findById(idCategory).orElseThrow(
                 () -> new CategoryException("updateCategory.error.categoryNotFound"));
-        if (!categoryToUpdate.getOwner().equals(loggedUser))
+        if (!categoryToUpdate.getOwner().equals(user.getUsername()))
             throw new CategoryException("updateCategory.error.unauthorised");
 
         CategoryDTO updatedCategory = categoryService.updateCategory(categoryToUpdate, categoryFormDTO);
@@ -74,15 +72,14 @@ public class CategoryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = DELETE, path = "/app/category/{idCategory}")
+    @RequestMapping(method = DELETE, path = "/api/category/{idCategory}")
     @ResponseBody
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("idCategory") Long idCategory,
-                                                     HttpSession session) throws CategoryException {
+                                                     @CurrentUser UserDetails user) throws CategoryException {
 
-        String loggedUser = SessionUtility.getLoggedUser(session);
         Category categoryToDelete = categoryService.findById(idCategory).orElseThrow(
                 () -> new CategoryException("deleteCategory.error.categoryNotFound"));
-        if (!categoryToDelete.getOwner().equals(loggedUser))
+        if (!categoryToDelete.getOwner().equals(user.getUsername()))
             throw new CategoryException("deleteCategory.error.unauthorised");
 
         categoryService.deleteCategory(categoryToDelete);

@@ -12,12 +12,12 @@ class UserControllerTest extends AbstractMvcSpec {
         def payload = [
                 username: 'testUser',
                 password: 'Qwer1234',
-                email: 'testUser@gmail.com',
+                email   : 'testUser@gmail.com',
                 currency: 'EUR',
         ]
 
         when:
-        def response = post('/app/register', payload)
+        def response = post('/api/user', payload)
 
         then:
         response.status == HttpStatus.OK
@@ -28,12 +28,12 @@ class UserControllerTest extends AbstractMvcSpec {
         def payload = [
                 username: 'user',
                 password: 'Qwer1234',
-                email: 'testUser1@gmail.com',
+                email   : 'testUser1@gmail.com',
                 currency: 'EUR',
         ]
 
         when:
-        def response = post('/app/register', payload)
+        def response = post('/api/user', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -45,12 +45,12 @@ class UserControllerTest extends AbstractMvcSpec {
         def payload = [
                 username: 'testUser1',
                 password: 'Qwer1234',
-                email: 'user@gmail.com',
+                email   : 'user@gmail.com',
                 currency: 'EUR',
         ]
 
         when:
-        def response = post('/app/register', payload)
+        def response = post('/api/user', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -66,7 +66,7 @@ class UserControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/register', payload)
+        def response = post('/api/user', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST

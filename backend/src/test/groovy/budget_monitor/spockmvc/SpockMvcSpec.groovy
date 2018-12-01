@@ -10,6 +10,7 @@ import spock.lang.Specification
 
 @WebAppConfiguration
 abstract class SpockMvcSpec extends Specification {
+
     @Delegate
     private SpockMvc spockMvc
 
@@ -21,4 +22,5 @@ abstract class SpockMvcSpec extends Specification {
     }
 
     abstract MockMvc buildMockMvc(WebApplicationContext wac)
+
 }

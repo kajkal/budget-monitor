@@ -27,19 +27,19 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/session', credentials)
+        def response = post('/api/login', credentials)
         testUserToken = response.json.token
 
         then:
         response.status == HttpStatus.OK
-        response.json.username == 'user'
-        response.json.authenticated == true
+        response.json.type == 'Bearer'
         testUserToken != null
+        testUserToken.length() > 7
     }
 
     def 'user gets his categories'() {
         when:
-        def response = get('/app/categories', new RequestParams(authToken: testUserToken))
+        def response = get('/api/categories', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -55,7 +55,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
+        def response = post('/api/category', newCategory, new RequestParams(authToken: testUserToken))
         travelCategoryId = response.json.idCategory
 
         then:
@@ -75,7 +75,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
+        def response = post('/api/category', newCategory, new RequestParams(authToken: testUserToken))
         souvenirCategoryId = response.json.idCategory
 
         then:
@@ -96,7 +96,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/app/category', newCategory, new RequestParams(authToken: testUserToken))
+        def response = post('/api/category', newCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -111,7 +111,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -129,7 +129,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/category/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -149,7 +149,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/category/' + souvenirCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/category/' + souvenirCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -165,7 +165,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/category/100', updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/category/100', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -181,7 +181,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = put('/app/category/20', updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/category/20', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -190,7 +190,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
     def 'user removes category'() {
         when:
-        def response = delete('/app/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
+        def response = delete('/api/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.OK
@@ -198,7 +198,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
     def 'user removes non-existing category'() {
         when:
-        def response = delete('/app/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
+        def response = delete('/api/category/' + souvenirCategoryId, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
@@ -207,7 +207,7 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
     def 'user removes not owned category'() {
         when:
-        def response = delete('/app/category/20', new RequestParams(authToken: testUserToken))
+        def response = delete('/api/category/20', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST

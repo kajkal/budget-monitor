@@ -1,6 +1,6 @@
 package budget_monitor.dto.input;
 
-public class CredentialsFormDTO {
+public class LoginFormDTO {
 
     private String username;
 

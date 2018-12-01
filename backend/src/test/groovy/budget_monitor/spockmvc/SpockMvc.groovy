@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 
 class SpockMvc {
+
     private MockMvc mvc
 
     SpockMvc(MockMvc mvc) {
@@ -41,7 +42,7 @@ class SpockMvc {
 
     private SpockMvcResult spockMvc(MockHttpServletRequestBuilder builder, RequestParams params, data = null) {
         if (params.authToken) {
-            builder.header('X-Auth-Token', params.authToken)
+            builder.header('Authorization', "Bearer " + params.authToken)
         }
         if (data) {
             builder
@@ -64,4 +65,5 @@ class SpockMvc {
         def resultActions = this.mvc.perform(builder)
         new SpockMvcResult(resultActions.andReturn())
     }
+
 }

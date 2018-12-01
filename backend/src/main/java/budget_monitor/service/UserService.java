@@ -1,6 +1,6 @@
 package budget_monitor.service;
 
-import budget_monitor.dto.input.RegisterUserFormDTO;
+import budget_monitor.dto.input.RegisterFormDTO;
 import budget_monitor.dto.input.UserFormDTO;
 import budget_monitor.model.User;
 import budget_monitor.repository.UserRepository;
@@ -46,10 +46,20 @@ public class UserService implements UserDetailsService {
         User user = this.userRepository.findById(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found"));
 
+        // TODO change string to list of strings
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+//        Set<GrantedAuthority> grantedAuthorities = user.getRoles()
+//                .stream()
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toSet());
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(grantedAuthorities)
+                .build();
     }
 
     public List<User> findAll() {
@@ -69,12 +79,12 @@ public class UserService implements UserDetailsService {
                 .getSingleResult();
     }
 
-    public void createUser(RegisterUserFormDTO registerUserFormDTO) {
+    public void createUser(RegisterFormDTO registerFormDTO) {
         User userToSave = new User();
-        userToSave.setUsername(registerUserFormDTO.getUsername());
-        userToSave.setPassword(passwordEncoder.encode(registerUserFormDTO.getPassword()));
-        userToSave.setEmail(registerUserFormDTO.getEmail());
-        userToSave.setCurrency(registerUserFormDTO.getCurrency());
+        userToSave.setUsername(registerFormDTO.getUsername());
+        userToSave.setPassword(passwordEncoder.encode(registerFormDTO.getPassword()));
+        userToSave.setEmail(registerFormDTO.getEmail());
+        userToSave.setCurrency(registerFormDTO.getCurrency());
         userToSave.setRole("USER");
 
         userRepository.save(userToSave);

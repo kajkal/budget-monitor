@@ -9,20 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@ControllerAdvice(assignableTypes = UserController.class)
+@RestControllerAdvice(assignableTypes = UserController.class)
 public class UserControllerExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler({UserException.class})
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageDTO handleControllerException(Exception e) {
         log.warn(e.getMessage());
@@ -30,7 +28,6 @@ public class UserControllerExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageDTO handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
@@ -46,7 +43,6 @@ public class UserControllerExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessageDTO handleMethodArgumentNotValidException(HttpMessageNotReadableException e) {
         log.warn(e.getMessage());
@@ -54,7 +50,6 @@ public class UserControllerExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessageDTO handleUnknownException(Exception e) {
         log.warn(e.getMessage());
