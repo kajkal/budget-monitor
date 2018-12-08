@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { Component } from 'react';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button/Button';
 import {PowerSettingsNew, Settings, Add, CallMade} from '@material-ui/icons';
 import DropdownMenu from './DropdownMenu';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 
 const newEntryOptions = [
     {
@@ -33,37 +35,45 @@ const userOptions = [
     },
 ];
 
-const Navbar = ({ user }) => {
-    return (
-        <AppBar position="static">
-            <Toolbar variant="dense">
+class Navbar extends Component {
 
-                <Typography variant="h5" color="inherit" className='flex-grow-1'>
-                    Budget Monitor
-                </Typography>
+    render() {
+        const { user } = this.props;
+        return (
+            <AppBar position="static">
+                <Toolbar variant="dense">
 
-                {/*TODO: remove buttons?*/}
-                {!user && (
-                    <React.Fragment>
-                        <Button component={NavLink} to={"/login"} color="inherit">
-                            Login
-                        </Button>
-                        <Button component={NavLink} to={"/register"} color="inherit">
-                            Register
-                        </Button>
-                    </React.Fragment>
-                )}
+                    <Typography variant="h5" color="inherit" className='flex-grow-1'>
+                        Budget Monitor
+                    </Typography>
 
-                {user && (
-                    <React.Fragment>
-                        <DropdownMenu label={<Add/>} items={newEntryOptions} />
-                        <DropdownMenu label={user.sub} items={userOptions} />
-                    </React.Fragment>
-                )}
+                    {/*TODO: remove buttons?*/}
+                    {!user && (
+                        <React.Fragment>
+                            <Button component={NavLink} to={"/login"} color="inherit">
+                                Login
+                            </Button>
+                            <Button component={NavLink} to={"/register"} color="inherit">
+                                Register
+                            </Button>
+                        </React.Fragment>
+                    )}
 
-            </Toolbar>
-        </AppBar>
-    );
+                    {user && (
+                        <React.Fragment>
+                            <DropdownMenu label={<Add/>} items={newEntryOptions} />
+                            <DropdownMenu label={user.sub} items={userOptions} />
+                        </React.Fragment>
+                    )}
+
+                </Toolbar>
+            </AppBar>
+        );
+    }
+}
+
+Navbar.propTypes = {
+    user: PropTypes.object
 };
 
 export default Navbar;

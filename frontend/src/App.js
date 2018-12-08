@@ -5,6 +5,7 @@ import auth from './services/authService';
 import AlertServiceComponent from './services/alertService';
 import AlertDemo from './components/_develop/AlertDemo';
 import Navbar from './components/navigation/Navbar';
+import Playground from './components/_develop/Playground';
 
 const theme = createMuiTheme({
     typography: {
@@ -22,8 +23,9 @@ class App extends Component {
     };
 
     componentDidMount() {
-        // const user = auth.getCurrentUser();
-        // this.setState({ user });
+        const user = auth.getCurrentUser();
+        console.log('current user: ', user);
+        this.setState({ user });
     }
 
     render() {
@@ -42,7 +44,9 @@ class App extends Component {
 
                 <main>
 
-                    <AlertDemo />
+                    <Playground />
+
+                    {/*<AlertDemo />*/}
                     {/*<SimpleCategoryListDemo/>*/}
                 </main>
 
