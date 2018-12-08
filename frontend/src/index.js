@@ -6,12 +6,14 @@ import App from './App';
 import './index.css';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-roboto';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
-    // TODO: wrap with <BrowserRouter>
-    <SnackbarProvider maxSnack={5}>
-        <App />
-    </SnackbarProvider>,
+    <BrowserRouter>
+        <SnackbarProvider maxSnack={3}>
+            <App />
+        </SnackbarProvider>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 
