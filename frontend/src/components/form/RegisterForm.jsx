@@ -3,36 +3,39 @@ import Joi from 'joi-browser';
 import Form from '../common/form/Form';
 import auth from '../../services/authService';
 import { register } from '../../services/entities-services/userService';
-import { translateErrorMessage } from '../../services/errorMessageTranslator';
+import { translateErrorMessage } from '../../services/errorMessageService';
+import {USERNAME, EMAIL, PASSWORD, CURRENCY} from '../../config/fieldNames';
+import Paper from '@material-ui/core/Paper/Paper';
+import { getCurrencies } from '../../services/entities-services/currencyService';
 
 class RegisterForm extends Form {
     state = {
         data: {
-            username: '',
-            email: '',
-            password: '',
-            currency: ''
+            [USERNAME]: '',
+            [EMAIL]: '',
+            [PASSWORD]: '',
+            [CURRENCY]: ''
         },
         errors: {}
     };
 
     schema = {
-        username: Joi.string()
+        [USERNAME]: Joi.string()
             .required()
             .min(3)
             .max(30)
             .regex(/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/, 'alphanumeric characters with exception of \'-\' and \'_\'')
             .label('Username'),
-        email: Joi.string()
+        [EMAIL]: Joi.string()
             .required()
             .email({ minDomainAtoms: 2 })
             .label('Email address'),
-        password: Joi.string()
+        [PASSWORD]: Joi.string()
             .required()
             .min(6)
             .max(30)
             .label('Password'),
-        currency: Joi.string()
+        [CURRENCY]: Joi.string()
             .required()
             .alphanum()
             .min(3)
@@ -62,19 +65,19 @@ class RegisterForm extends Form {
 
     render() {
         return (
-            <div className='form'>
+            <Paper className='form-container'>
 
                 <h1>Register</h1>
                 <form onSubmit={this.handleSubmit}>
-                    {this.renderTextInput('username', 'Username')}
-                    {this.renderTextInput('email', 'Email address')}
-                    {this.renderPasswordInput('password', 'Password',)}
-                    {/*TODO currency dropdown?*/}
-                    {this.renderTextInput('currency', 'Basic currency')}
-                    {this.renderGeneralErrorPanel()}
+                    {this.renderTextInput(USERNAME, 'Username', true)}
+                    {this.renderTextInput(EMAIL, 'Email address')}
+                    {this.renderPasswordInput(PASSWORD, 'Password',)}
+                    {this.renderSelectInput(CURRENCY, 'Basic currency', getCurrencies())}
+
                     {this.renderButton('Register')}
                 </form>
-            </div>
+
+            </Paper>
         );
     }
 }

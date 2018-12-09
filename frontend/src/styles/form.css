@@ -1,0 +1,17 @@
+@import '_constants.css';
+
+.form-container {
+    text-align: center;
+    padding: 14px;
+    background-color: var(--workspace-background-color) !important;
+    width: 400px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-button {
+    margin-top: 16px !important;
+}

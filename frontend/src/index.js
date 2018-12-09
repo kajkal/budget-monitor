@@ -3,17 +3,19 @@ import ReactDOM from 'react-dom';
 import { SnackbarProvider } from 'notistack';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import './index.css';
+import './styles/index.css';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
+
     <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
             <App />
         </SnackbarProvider>
     </BrowserRouter>,
+
     document.getElementById('root')
 );
 

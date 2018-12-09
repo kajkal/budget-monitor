@@ -1,0 +1,133 @@
+[
+  {
+    "idCategory": 1,
+    "idSuperCategory": 0,
+    "name": "Maintenance",
+    "color": 1,
+    "subCategories": [
+      {
+        "idCategory": 2,
+        "idSuperCategory": 1,
+        "name": "Home",
+        "color": 0,
+        "subCategories": [
+          {
+            "idCategory": 3,
+            "idSuperCategory": 2,
+            "name": "Cleaning",
+            "color": 0,
+            "subCategories": []
+          },
+          {
+            "idCategory": 4,
+            "idSuperCategory": 2,
+            "name": "Rent",
+            "color": 0,
+            "subCategories": []
+          }
+        ]
+      },
+      {
+        "idCategory": 5,
+        "idSuperCategory": 1,
+        "name": "Insurance",
+        "color": 0,
+        "subCategories": []
+      },
+      {
+        "idCategory": 42,
+        "idSuperCategory": 1,
+        "name": "Food",
+        "color": 0,
+        "subCategories": []
+      }
+    ]
+  },
+  {
+    "idCategory": 6,
+    "idSuperCategory": 0,
+    "name": "Communication",
+    "color": 2,
+    "subCategories": [
+      {
+        "idCategory": 7,
+        "idSuperCategory": 6,
+        "name": "Car maintenance",
+        "color": 0,
+        "subCategories": []
+      },
+      {
+        "idCategory": 8,
+        "idSuperCategory": 6,
+        "name": "Public transport",
+        "color": 0,
+        "subCategories": []
+      }
+    ]
+  },
+  {
+    "idCategory": 9,
+    "idSuperCategory": 0,
+    "name": "Entertainment",
+    "color": 3,
+    "subCategories": [
+      {
+        "idCategory": 10,
+        "idSuperCategory": 9,
+        "name": "Alcohol",
+        "color": 0,
+        "subCategories": []
+      },
+      {
+        "idCategory": 11,
+        "idSuperCategory": 9,
+        "name": "Cinema",
+        "color": 0,
+        "subCategories": []
+      }
+    ]
+  },
+  {
+    "idCategory": 12,
+    "idSuperCategory": 0,
+    "name": "Salary",
+    "color": 4,
+    "subCategories": []
+  },
+  {
+    "idCategory": 13,
+    "idSuperCategory": 0,
+    "name": "Sport",
+    "color": 5,
+    "subCategories": []
+  },
+  {
+    "idCategory": 14,
+    "idSuperCategory": 0,
+    "name": "Equipment",
+    "color": 5,
+    "subCategories": [
+      {
+        "idCategory": 15,
+        "idSuperCategory": 14,
+        "name": "Clothes",
+        "color": 5,
+        "subCategories": []
+      },
+      {
+        "idCategory": 16,
+        "idSuperCategory": 14,
+        "name": "Footwear",
+        "color": 5,
+        "subCategories": []
+      },
+      {
+        "idCategory": 17,
+        "idSuperCategory": 14,
+        "name": "Accessories",
+        "color": 5,
+        "subCategories": []
+      }
+    ]
+  }
+]

@@ -3,22 +3,26 @@ import Joi from 'joi-browser';
 import { Redirect } from 'react-router-dom';
 import Form from '../common/form/Form';
 import auth from '../../services/authService';
-import { translateErrorMessage } from '../../services/errorMessageTranslator';
+import { translateErrorMessage } from '../../services/errorMessageService';
+import {USERNAME, PASSWORD} from '../../config/fieldNames';
+import PropTypes from 'prop-types';
+import ProtectedRoute from '../common/route/ProtectedRoute';
+import Paper from '@material-ui/core/Paper/Paper';
 
 class LoginForm extends Form {
     state = {
         data: {
-            username: '',
-            password: ''
+            [USERNAME]: '',
+            [PASSWORD]: ''
         },
         errors: {}
     };
 
     schema = {
-        username: Joi.string()
+        [USERNAME]: Joi.string()
             .required()
             .label('Username'),
-        password: Joi.string()
+        [PASSWORD]: Joi.string()
             .required()
             .label('Password')
     };
@@ -27,7 +31,7 @@ class LoginForm extends Form {
         try {
             console.log('send request to login');
             const { data } = this.state;
-            await auth.login(data.username, data.password);
+            await auth.login(data[USERNAME], data[PASSWORD]);
 
             console.log('login with success!');
 
@@ -47,18 +51,23 @@ class LoginForm extends Form {
         if (auth.getCurrentUser()) return <Redirect to='/' />;
 
         return (
-            <div className='form'>
+            <Paper className='form-container'>
 
                 <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
-                    {this.renderTextInput('username', 'Username')}
-                    {this.renderPasswordInput('password', 'Password')}
-                    {this.renderGeneralErrorPanel()}
+                    {this.renderTextInput(USERNAME, 'Username', true)}
+                    {this.renderPasswordInput(PASSWORD, 'Password')}
+
                     {this.renderButton('Login')}
                 </form>
-            </div>
+
+            </Paper>
         );
     }
 }
+
+ProtectedRoute.propTypes = {
+    location: PropTypes.object,
+};
 
 export default LoginForm;

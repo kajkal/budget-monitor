@@ -20,7 +20,7 @@ const displayAlert = (message, variant) => {
                     <CloseIcon />
                 </IconButton>
             ),
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
         });
     else
         logger.log('enqueueAlertFunction not initialized.');

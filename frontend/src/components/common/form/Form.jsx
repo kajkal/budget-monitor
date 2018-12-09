@@ -3,7 +3,7 @@ import Joi from 'joi-browser';
 import Button from '@material-ui/core/Button/Button';
 import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
-import ErrorPanel from './ErrorPanel';
+import SelectInput from './inputs/SelectInput';
 
 class Form extends Component {
     state = {
@@ -39,7 +39,7 @@ class Form extends Component {
         this.doSubmit();
     };
 
-    handleChange = ({ currentTarget: input }) => {
+    handleChange = ({ target: input }) => {
         const errors = { ...this.state.errors };
         const errorMessage = this.validateProperty(input);
         if (errorMessage) errors[input.name] = errorMessage;
@@ -55,13 +55,13 @@ class Form extends Component {
     renderButton(label) {
         const disabled = this.validate() !== null;
         return (
-            <Button disabled={disabled} type='submit' color="primary" className='submit-button'>
+            <Button disabled={disabled} type='submit' color="secondary" className='submit-button'>
                 {label}
             </Button>
         );
     }
 
-    renderTextInput(name, label) {
+    renderTextInput(name, label, focus=false) {
         const { data, errors } = this.state;
 
         return (
@@ -71,11 +71,28 @@ class Form extends Component {
                 value={data[name]}
                 onChange={this.handleChange}
                 error={errors[name]}
+                autoFocus={focus}
             />
         );
     }
 
-    renderPasswordInput(name, label) {
+    renderSelectInput(name, label, options, focus=false) {
+        const { data, errors } = this.state;
+
+        return (
+            <SelectInput
+                name={name}
+                label={label}
+                options={options}
+                value={data[name]}
+                onChange={this.handleChange}
+                error={errors[name]}
+                autoFocus={focus}
+            />
+        );
+    }
+
+    renderPasswordInput(name, label, focus=false) {
         const { data, errors } = this.state;
 
         return (
@@ -85,16 +102,11 @@ class Form extends Component {
                 value={data[name]}
                 onChange={this.handleChange}
                 error={errors[name]}
+                autoFocus={focus}
             />
         );
     }
 
-    renderGeneralErrorPanel() {
-        const { generalError } = this.state.errors;
-        if (generalError) {
-            return <ErrorPanel message={generalError} />
-        }
-    }
 }
 
 export default Form;

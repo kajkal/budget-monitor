@@ -1,28 +1,19 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { blue } from '@material-ui/core/colors';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import auth from './services/authService';
 import AlertServiceComponent from './services/alertService';
-import AlertDemo from './components/_develop/AlertDemo';
+import AlertDemo from './components/___develop/AlertDemo';
 import Navbar from './components/navigation/Navbar';
-import Playground from './components/_develop/Playground';
+import Playground from './components/___develop/Playground';
 import LoginForm from './components/form/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
 import Home from './components/Home';
 import RegisterForm from './components/form/RegisterForm';
+import { theme } from './config/theme';
 
-const theme = createMuiTheme({
-    typography: {
-        useNextVariants: true,
-    },
-    palette: {
-        primary: blue,
-        secondary: blue,
-    },
-});
 
 class App extends Component {
     state = {
@@ -41,6 +32,7 @@ class App extends Component {
 
         return (
             <MuiThemeProvider theme={theme}>
+
                 <AlertServiceComponent />
                 <Navbar user={user} />
                 <main>

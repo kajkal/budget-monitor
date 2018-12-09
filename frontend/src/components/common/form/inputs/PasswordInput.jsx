@@ -5,6 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
+import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
 class PasswordInput extends Component {
@@ -21,15 +22,16 @@ class PasswordInput extends Component {
         return (
             <TextField
                 type={this.state.showPassword ? 'text' : 'password'}
+                autoComplete='on'
 
                 name={name}
                 label={label}
 
-                // fullWidth
-                margin="normal"
-
                 error={error !== undefined}
                 helperText={error}
+
+                fullWidth={formInputFullWidth}
+                margin={formInputMargin}
 
                 {...rest}
 
@@ -55,7 +57,7 @@ PasswordInput.propTypes = {
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    error: PropTypes.string,
+    error: PropTypes.string
 };
 
 export default PasswordInput;
