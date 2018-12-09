@@ -22,13 +22,11 @@ class App extends Component {
 
     componentDidMount() {
         const user = auth.getCurrentUser();
-        console.log('componentDidMount user: ', user);
         this.setState({ user });
     }
 
     render() {
         const { user } = this.state;
-        console.log('render user: ', user);
 
         return (
             <MuiThemeProvider theme={theme}>

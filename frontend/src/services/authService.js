@@ -31,7 +31,6 @@ function getCurrentUser() {
 
 function getJwtHeader() {
     const jwt = localStorage.getItem(tokenKey);
-    console.log('getJwtHeader: ',  jwt && `${tokenType} ${jwt}`);
     return jwt && `${tokenType} ${jwt}`;
 }
 

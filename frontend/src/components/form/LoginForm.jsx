@@ -54,7 +54,7 @@ class LoginForm extends Form {
             <Paper className='form-container'>
 
                 <h1>Login</h1>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} autoComplete='on'>
                     {this.renderTextInput(USERNAME, 'Username', true)}
                     {this.renderPasswordInput(PASSWORD, 'Password')}
 

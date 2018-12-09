@@ -6,7 +6,7 @@ import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 const TextInput = ({ name, label, error, ...rest }) => {
     return (
         <TextField
-            autoComplete='on'
+            autoComplete={name}
 
             name={name}
             label={label}

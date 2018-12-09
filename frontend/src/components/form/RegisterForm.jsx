@@ -68,7 +68,7 @@ class RegisterForm extends Form {
             <Paper className='form-container'>
 
                 <h1>Register</h1>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} autoComplete='on'>
                     {this.renderTextInput(USERNAME, 'Username', true)}
                     {this.renderTextInput(EMAIL, 'Email address')}
                     {this.renderPasswordInput(PASSWORD, 'Password',)}

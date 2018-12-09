@@ -22,7 +22,7 @@ class PasswordInput extends Component {
         return (
             <TextField
                 type={this.state.showPassword ? 'text' : 'password'}
-                autoComplete='on'
+                autoComplete={name}
 
                 name={name}
                 label={label}

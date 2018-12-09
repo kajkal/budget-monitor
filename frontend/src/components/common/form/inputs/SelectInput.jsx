@@ -9,7 +9,7 @@ const SelectInput = ({ name, label, options, error, ...rest }) => {
     return (
         <TextField
             select={true}
-            autoComplete='on'
+            autoComplete={name}
 
             name={name}
             label={label}
