@@ -16,7 +16,8 @@ axios.interceptors.response.use(null, error => {
 });
 
 function setJwt(jwt) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+    console.log('Set JWT in http service: ', jwt);
+    axios.defaults.headers.common['Authorization'] = jwt;
 }
 
 export default {

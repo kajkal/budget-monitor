@@ -12,12 +12,12 @@ public class RegisterFormDTO {
     private String username;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{6,30}")
-    private String password;
-
-    @NotNull
     @Pattern(regexp = "^[\\w\\d._%+-]+@[\\w\\d.-]+\\.[\\w]{2,6}$")
     private String email;
+
+    @NotNull
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{6,30}")
+    private String password;
 
     @NotNull
     @Pattern(regexp = "^\\w{3}$")
@@ -28,12 +28,12 @@ public class RegisterFormDTO {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getCurrency() {

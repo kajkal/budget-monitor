@@ -2,9 +2,10 @@ import jwtDecode from 'jwt-decode';
 import http from './httpService';
 
 const apiEndpoint = '/login';
+const tokenType = 'Bearer';
 const tokenKey = 'token';
 
-http.setJwt(getJwt());
+http.setJwt(getJwtHeader());
 
 async function login(username, password) {
     const { data: jwt } = await http.post(apiEndpoint, { username, password });
@@ -12,7 +13,7 @@ async function login(username, password) {
 }
 
 function loginWithJwt(jwt) {
-    localStorage.setItem(tokenKey, jwt);
+    localStorage.setItem(tokenKey, jwt.token);
 }
 
 function logout() {
@@ -22,15 +23,16 @@ function logout() {
 function getCurrentUser() {
     try {
         const jwt = localStorage.getItem(tokenKey);
-        // const jwt = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOiJVU0VSIiwiaWF0IjoxNTQzODYzMzMwLCJleHAiOjE1NDQ3MjczMzB9.1ZX9wAWVOxmqTtb4ZIyC_WepWoLBCiPTJgYw3P64LHfcZ4E3feHG4BzvZllwqa0GmSbvRzZHI_ExjLJBh6_gXw';
         return jwtDecode(jwt);
     } catch (e) {
         return null;
     }
 }
 
-function getJwt() {
-    return localStorage.getItem(tokenKey);
+function getJwtHeader() {
+    const jwt = localStorage.getItem(tokenKey);
+    console.log('getJwtHeader: ',  jwt && `${tokenType} ${jwt}`);
+    return jwt && `${tokenType} ${jwt}`;
 }
 
 export default {

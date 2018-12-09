@@ -12,6 +12,7 @@ import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
 import Home from './components/Home';
+import RegisterForm from './components/form/RegisterForm';
 
 const theme = createMuiTheme({
     typography: {
@@ -46,8 +47,7 @@ class App extends Component {
                     <Switch>
                         <Route path="/dev" component={Playground}/>
 
-                        {/*TODO change to register form*/}
-                        <Route path="/register" component={LoginForm}/>
+                        <Route path="/register" component={RegisterForm}/>
                         <Route path="/login" component={LoginForm}/>
                         <Route path="/logout" component={Logout}/>
 

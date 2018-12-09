@@ -3,6 +3,7 @@ import Joi from 'joi-browser';
 import Button from '@material-ui/core/Button/Button';
 import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
+import ErrorPanel from './ErrorPanel';
 
 class Form extends Component {
     state = {
@@ -86,6 +87,13 @@ class Form extends Component {
                 error={errors[name]}
             />
         );
+    }
+
+    renderGeneralErrorPanel() {
+        const { generalError } = this.state.errors;
+        if (generalError) {
+            return <ErrorPanel message={generalError} />
+        }
     }
 }
 

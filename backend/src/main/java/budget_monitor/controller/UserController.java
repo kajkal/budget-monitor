@@ -34,7 +34,7 @@ public class UserController {
 
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/api/user")
+    @RequestMapping(method = POST, path = "/api/users")
     @ResponseBody
     public ResponseEntity<JwtTokenDTO> createUser(@Valid @RequestBody RegisterFormDTO registerFormDTO) throws UserException {
 
@@ -50,7 +50,7 @@ public class UserController {
     }
 
 //    @LogExecutionTime
-//    @RequestMapping(method = PUT, path = "/api/user")
+//    @RequestMapping(method = PUT, path = "/api/users")
 //    @ResponseBody
 //    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserFormDTO userFormDTO,
 //                                                 HttpSession session) throws UserException {

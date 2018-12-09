@@ -2,15 +2,15 @@ package budget_monitor.dto.output;
 
 public class ErrorMessageDTO {
 
-    private String messageKey;
+    private String message;
 
 
-    public ErrorMessageDTO(String messageKey) {
-        this.messageKey = messageKey;
+    public ErrorMessageDTO(String message) {
+        this.message = message;
     }
 
-    public String getMessageKey() {
-        return messageKey;
+    public String getMessage() {
+        return message;
     }
 
 }
