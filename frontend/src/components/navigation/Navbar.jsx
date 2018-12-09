@@ -9,33 +9,32 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
-const newEntryOptions = [
-    {
-        label: 'Income',
-        icon: <CallMade className='positive'/>,
-        onClick: () => console.log('Income on click')
-    },
-    {
-        label: 'Expense',
-        icon: <CallMade className='negative mirrorY'/>,
-        onClick: () => console.log('Expense on click')
-    },
-];
-
-const userOptions = [
-    {
-        label: "Settings",
-        icon: <Settings />,
-        onClick: () => console.log('Settings on click')
-    },
-    {
-        label: "Logout",
-        icon: <PowerSettingsNew />,
-        onClick: () => console.log('Logout on click')
-    },
-];
-
 class Navbar extends Component {
+    newEntryOptions = [
+        {
+            label: 'Income',
+            icon: <CallMade className='positive'/>,
+            onClick: () => console.log('Income on click')
+        },
+        {
+            label: 'Expense',
+            icon: <CallMade className='negative mirrorY'/>,
+            onClick: () => console.log('Expense on click')
+        },
+    ];
+
+    userOptions = [
+        {
+            label: "Settings",
+            icon: <Settings />,
+            onClick: () => console.log('Settings on click')
+        },
+        {
+            label: "Logout",
+            icon: <PowerSettingsNew />,
+            redirect: '/logout'
+        },
+    ];
 
     render() {
         const { user } = this.props;
@@ -61,8 +60,8 @@ class Navbar extends Component {
 
                     {user && (
                         <React.Fragment>
-                            <DropdownMenu label={<Add/>} items={newEntryOptions} />
-                            <DropdownMenu label={user.sub} items={userOptions} />
+                            <DropdownMenu label={<Add/>} items={this.newEntryOptions} />
+                            <DropdownMenu label={user.sub} items={this.userOptions} />
                         </React.Fragment>
                     )}
 

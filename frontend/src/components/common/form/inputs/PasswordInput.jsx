@@ -25,7 +25,7 @@ class PasswordInput extends Component {
                 name={name}
                 label={label}
 
-                fullWidth
+                // fullWidth
                 margin="normal"
 
                 error={error !== undefined}

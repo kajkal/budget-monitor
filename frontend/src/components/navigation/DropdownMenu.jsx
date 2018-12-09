@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, PowerSettingsNew } from '@material-ui/icons';
 import Button from '@material-ui/core/Button/Button';
 import Grow from '@material-ui/core/Grow/Grow';
 import Paper from '@material-ui/core/Paper/Paper';
@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import Popper from '@material-ui/core/Popper/Popper';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
+import { NavLink } from 'react-router-dom';
 
 class DropdownMenu extends Component {
     state = {
@@ -62,8 +63,17 @@ class DropdownMenu extends Component {
                                 <ClickAwayListener onClickAway={this.handleClose}>
                                     <MenuList>
                                         {
-                                            items.map((item, index) =>
-                                                <MenuItem key={index} onClick={item.onClick}>
+                                            items.map((item, index) => {
+                                                const optionalLinkParameters = item.redirect && {
+                                                    component: NavLink,
+                                                    to: item.redirect
+                                                };
+                                                return (
+                                                <MenuItem
+                                                    key={index}
+                                                    onClick={item.onClick}
+                                                    {...optionalLinkParameters}
+                                                >
 
                                                     <ListItemIcon className='m-0'>
                                                         {item.icon}
@@ -72,7 +82,8 @@ class DropdownMenu extends Component {
                                                     <ListItemText inset primary={item.label} />
 
                                                 </MenuItem>
-                                            )
+                                                );
+                                            })
                                         }
                                     </MenuList>
                                 </ClickAwayListener>
@@ -95,7 +106,8 @@ DropdownMenu.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
         label: PropTypes.string.isRequired,
         icon: PropTypes.element.isRequired,
-        onClick: PropTypes.func.isRequired
+        onClick: PropTypes.func,
+        redirect: PropTypes.string,
     })).isRequired
 };
 

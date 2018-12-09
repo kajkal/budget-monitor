@@ -8,7 +8,7 @@ const TextInput = ({ name, label, error, ...rest }) => {
             name={name}
             label={label}
 
-            fullWidth
+            // fullWidth
             margin="normal" // TODO nessesary?
 
             error={error !== undefined}

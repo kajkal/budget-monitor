@@ -54,7 +54,7 @@ class Form extends Component {
     renderButton(label) {
         const disabled = this.validate() !== null;
         return (
-            <Button disabled={disabled} type='submit' color="primary">
+            <Button disabled={disabled} type='submit' color="primary" className='submit-button'>
                 {label}
             </Button>
         );

@@ -8,7 +8,7 @@ http.setJwt(getJwt());
 
 async function login(username, password) {
     const { data: jwt } = await http.post(apiEndpoint, { username, password });
-    localStorage.setItem(tokenKey, jwt);
+    localStorage.setItem(tokenKey, jwt.token);
 }
 
 function loginWithJwt(jwt) {

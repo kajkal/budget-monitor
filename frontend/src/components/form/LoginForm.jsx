@@ -1,5 +1,6 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { Redirect } from 'react-router-dom';
 import Form from '../common/form/Form';
 import auth from '../../services/authService';
 
@@ -42,10 +43,11 @@ class LoginForm extends Form {
     };
 
     render() {
-        // if (auth.getCurrentUser()) return <Redirect to='/' />;
+        if (auth.getCurrentUser()) return <Redirect to='/' />;
 
         return (
-            <div>
+            <div className='form'>
+
                 <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
                     {this.renderTextInput('username', 'Username')}
