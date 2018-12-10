@@ -19,3 +19,6 @@ export const theme = createMuiTheme({
 
 export const formInputMargin = 'normal';
 export const formInputFullWidth = false;
+
+export const tooltipEnterDelay = 500;
+export const tooltipLeaveDelay = 200;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ExpandLess, ExpandMore, PowerSettingsNew } from '@material-ui/icons';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import Button from '@material-ui/core/Button/Button';
 import Grow from '@material-ui/core/Grow/Grow';
 import Paper from '@material-ui/core/Paper/Paper';
@@ -11,6 +11,7 @@ import Popper from '@material-ui/core/Popper/Popper';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import { NavLink } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip/Tooltip';
 
 class DropdownMenu extends Component {
     state = {
@@ -34,18 +35,20 @@ class DropdownMenu extends Component {
 
         return (
             <React.Fragment>
-                <Button
-                    buttonRef={node => {
-                        this.anchorEl = node;
-                    }}
-                    aria-owns={open ? 'menu-list-grow' : undefined}
-                    aria-haspopup="true"
-                    onClick={this.handleToggle}
-                    color="inherit"
-                    style={{textTransform: 'none'}}
-                >
-                    {label} {open ? <ExpandLess /> : <ExpandMore />}
-                </Button>
+                <Tooltip title="Add" enterDelay={500} leaveDelay={200}>
+                    <Button
+                        buttonRef={node => {
+                            this.anchorEl = node;
+                        }}
+                        aria-owns={open ? 'menu-list-grow' : undefined}
+                        aria-haspopup="true"
+                        onClick={this.handleToggle}
+                        color="inherit"
+                        style={{ textTransform: 'none' }}
+                    >
+                        {label} {open ? <ExpandLess /> : <ExpandMore />}
+                    </Button>
+                </Tooltip>
 
                 <Popper
                     open={open}
@@ -69,19 +72,19 @@ class DropdownMenu extends Component {
                                                     to: item.redirect
                                                 };
                                                 return (
-                                                <MenuItem
-                                                    key={index}
-                                                    onClick={item.onClick}
-                                                    {...optionalLinkParameters}
-                                                >
+                                                    <MenuItem
+                                                        key={index}
+                                                        onClick={item.onClick}
+                                                        {...optionalLinkParameters}
+                                                    >
 
-                                                    <ListItemIcon className='m-0'>
-                                                        {item.icon}
-                                                    </ListItemIcon>
+                                                        <ListItemIcon className='m-0'>
+                                                            {item.icon}
+                                                        </ListItemIcon>
 
-                                                    <ListItemText inset primary={item.label} />
+                                                        <ListItemText inset primary={item.label} />
 
-                                                </MenuItem>
+                                                    </MenuItem>
                                                 );
                                             })
                                         }
@@ -89,7 +92,7 @@ class DropdownMenu extends Component {
                                 </ClickAwayListener>
                             </Paper>
                         </Grow>
-                        )}
+                    )}
                 </Popper>
 
             </React.Fragment>

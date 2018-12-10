@@ -6,6 +6,7 @@ import AlertServiceComponent from './services/alertService';
 import AlertDemo from './components/___develop/AlertDemo';
 import Navbar from './components/navigation/Navbar';
 import Playground from './components/___develop/Playground';
+import New from './components/___develop/New';
 import LoginForm from './components/form/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
@@ -36,6 +37,7 @@ class App extends Component {
                 <main>
                     <Switch>
                         <Route path="/dev" component={Playground}/>
+                        <Route path="/new" component={New}/>
 
                         <Route path="/register" component={RegisterForm}/>
                         <Route path="/login" component={LoginForm}/>

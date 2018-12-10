@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Test from './ReactSelect';
 import Paper from '@material-ui/core/Paper/Paper';
+import DialogDemo from './DialogDemo';
 
 class Playground extends Component {
 
@@ -8,9 +8,9 @@ class Playground extends Component {
         const {error} = this.props;
         return (
             <div>
-                <Paper style={{width: 350, padding: 20}}>
-                    <div style={{height: 50}}>hello</div>
-                    <Test/>
+                <Paper>
+                    {/*<TabsDemo/>*/}
+                    <DialogDemo/>
                 </Paper>
             </div>
         );

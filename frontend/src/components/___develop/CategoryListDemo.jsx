@@ -11,8 +11,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import fetchedData from '../___data/fetchedCategories.json';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction';
 import Checkbox from '@material-ui/core/Checkbox/Checkbox';
-import Radio from '@material-ui/core/Radio/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup/RadioGroup';
+// import Radio from '@material-ui/core/Radio/Radio';
+// import RadioGroup from '@material-ui/core/RadioGroup/RadioGroup';
 
 const styles = theme => ({
     root: {

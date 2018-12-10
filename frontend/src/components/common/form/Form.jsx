@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button/Button';
 import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
 import SelectInput from './inputs/SelectInput';
+import CurrencyInput from './inputs/CurrencyInput';
 
 class Form extends Component {
     state = {
@@ -39,6 +40,7 @@ class Form extends Component {
         this.doSubmit();
     };
 
+    // TODO change to handleChange = name => value => {}
     handleChange = ({ target: input }) => {
         const errors = { ...this.state.errors };
         const errorMessage = this.validateProperty(input);
@@ -66,6 +68,21 @@ class Form extends Component {
 
         return (
             <TextInput
+                name={name}
+                label={label}
+                value={data[name]}
+                onChange={this.handleChange}
+                error={errors[name]}
+                autoFocus={focus}
+            />
+        );
+    }
+
+    renderCurrencyInput(name, label, focus=false) {
+        const { data, errors } = this.state;
+
+        return (
+            <CurrencyInput
                 name={name}
                 label={label}
                 value={data[name]}
