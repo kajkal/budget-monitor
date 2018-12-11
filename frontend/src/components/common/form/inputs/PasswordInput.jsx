@@ -18,7 +18,7 @@ class PasswordInput extends Component {
     };
 
     render() {
-        const { name, label, error, ...rest } = this.props;
+        const { name, label, error, onChange, ...rest } = this.props;
         return (
             <TextField
                 type={this.state.showPassword ? 'text' : 'password'}
@@ -26,6 +26,8 @@ class PasswordInput extends Component {
 
                 name={name}
                 label={label}
+
+                onChange={({ target: { value } }) => onChange(value)}
 
                 error={error !== undefined}
                 helperText={error}
@@ -55,9 +57,9 @@ class PasswordInput extends Component {
 PasswordInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    error: PropTypes.string
+    value: PropTypes.string.isRequired,
+    error: PropTypes.string,
 };
 
 export default PasswordInput;

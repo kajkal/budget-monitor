@@ -5,7 +5,7 @@ import NewEntryForm from '../form/NewEntryForm';
 class New extends Component {
     render() {
         return (
-            <NewEntryForm />
+            <NewEntryForm currency='PLN' type='expense' />
         );
     }
 }

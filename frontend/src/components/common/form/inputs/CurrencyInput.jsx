@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from './TextInput';
-import NumberFormat from "react-number-format";
+import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment';
 import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
-const CurrencyInput = ({ name, label, error, ...rest }) => {
+
+const CurrencyInput = ({ name, label, currency, onChange, error, ...rest }) => {
     return (
         <NumberFormat
             autoComplete={name}
 
             name={name}
             label={label}
+
+            onValueChange={({ value }) => onChange(value)}
 
             error={error !== undefined}
             helperText={error}
@@ -21,15 +24,12 @@ const CurrencyInput = ({ name, label, error, ...rest }) => {
             margin={formInputMargin}
 
             {...rest}
-            // TODO: stay?
+
             InputProps={{
-                endAdornment: <InputAdornment position="end">PLN</InputAdornment>,
+                endAdornment: <InputAdornment position="end">{currency}</InputAdornment>,
             }}
 
             customInput={TextField}
-            // TODO change onChange to onValueChange
-            // onChange={({target}) => console.log('target', target.value)}
-            // onValueChange={values => console.log('values', values)}
             allowNegative={false}
             decimalScale={2}
             fixedDecimalScale={true}
@@ -40,8 +40,9 @@ const CurrencyInput = ({ name, label, error, ...rest }) => {
 TextInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    currency: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
     error: PropTypes.string,
 };
 

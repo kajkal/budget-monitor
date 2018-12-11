@@ -5,6 +5,8 @@ import Paper from '@material-ui/core/Paper/Paper';
 import Joi from 'joi-browser';
 import auth from '../../services/authService';
 import { translateErrorMessage } from '../../services/errorMessageService';
+import TextInput from '../common/form/inputs/TextInput';
+import PropTypes from 'prop-types';
 
 class NewEntryForm extends Form {
     state = {
@@ -21,6 +23,7 @@ class NewEntryForm extends Form {
         [VALUE]: Joi.number()
             .required()
             .positive()
+            .max(1000000)
             .precision(2)
             .label('Value'),
         [DESCRIPTION]: Joi.string()
@@ -29,6 +32,9 @@ class NewEntryForm extends Form {
     };
 
     doSubmit = async () => {
+        const {[VALUE]: value, [DESCRIPTION]: desc} = this.state.data;
+        const newVal = value * 100;
+        console.log(`New entry submit: [val: ${newVal}, desc: ${desc}]`);
         return;
         try {
             console.log('send request to login');
@@ -50,14 +56,15 @@ class NewEntryForm extends Form {
     };
 
     render() {
-        const type = 'expense';
+        const { currency, type } = this.props;
+
         return (
             <Paper className='form-container'>
 
                 <h1>Add new <mark className='positive' style={{backgroundColor: 'transparent'}}>{type}</mark></h1>
 
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    {this.renderCurrencyInput(VALUE, 'Value', true)}
+                    {this.renderCurrencyInput(VALUE, 'Value', currency, true)}
                     {this.renderTextInput(DESCRIPTION, 'Description')}
                     {this.renderButton('Login')}
                 </form>
@@ -66,5 +73,10 @@ class NewEntryForm extends Form {
         );
     }
 }
+
+NewEntryForm.propTypes = {
+    type: PropTypes.string.isRequired,
+    currency: PropTypes.string.isRequired,
+};
 
 export default NewEntryForm;
