@@ -3,7 +3,8 @@
     --basic-code-font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
     --default-font-weight: 300;
 
-    --workspace-background-color: #f9f9f9;
+    --workspace-background-color: #e3e3e3;
+    --workspace-color: #f9f9f9;
 
     --positive-color: #007300;
     --negative-color: #ff1e23;

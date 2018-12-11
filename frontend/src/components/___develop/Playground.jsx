@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper/Paper';
 import DialogDemo from './DialogDemo';
+import CategoryListDemo from './CategoryListDemo';
 
 class Playground extends Component {
 
     render() {
-        const {error} = this.props;
         return (
             <div>
                 <Paper>
                     {/*<TabsDemo/>*/}
-                    <DialogDemo/>
+                    {/*<DialogDemo/>*/}
+                    <CategoryListDemo/>
                 </Paper>
             </div>
         );

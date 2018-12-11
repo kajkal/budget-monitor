@@ -5,6 +5,7 @@ import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
 import SelectInput from './inputs/SelectInput';
 import CurrencyInput from './inputs/CurrencyInput';
+import DateTimeInput from './inputs/DateTimeInput';
 
 
 class Form extends Component {
@@ -113,6 +114,21 @@ class Form extends Component {
 
         return (
             <PasswordInput
+                name={name}
+                label={label}
+                value={data[name]}
+                onChange={this.handleChange(name)}
+                error={errors[name]}
+                autoFocus={focus}
+            />
+        );
+    }
+
+    renderDateTimeInput(name, label, focus = false) {
+        const { data, errors } = this.state;
+
+        return (
+            <DateTimeInput
                 name={name}
                 label={label}
                 value={data[name]}

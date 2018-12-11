@@ -1,11 +1,8 @@
 import React from 'react';
 import Form from '../common/form/Form';
-import { VALUE, DESCRIPTION, DATE, ID_CATEGORY } from '../../config/fieldNames';
+import { DATE, DESCRIPTION, VALUE, ID_CATEGORY } from '../../config/fieldNames';
 import Paper from '@material-ui/core/Paper/Paper';
 import Joi from 'joi-browser';
-import auth from '../../services/authService';
-import { translateErrorMessage } from '../../services/errorMessageService';
-import TextInput from '../common/form/inputs/TextInput';
 import PropTypes from 'prop-types';
 
 class NewEntryForm extends Form {
@@ -13,10 +10,10 @@ class NewEntryForm extends Form {
         data: {
             [VALUE]: '',
             [DESCRIPTION]: '',
-            // [DATE]: '',
-            // [ID_CATEGORY]: ''
+            [DATE]: '',
+            [ID_CATEGORY]: '',
         },
-        errors: {}
+        errors: {},
     };
 
     schema = {
@@ -28,44 +25,66 @@ class NewEntryForm extends Form {
             .label('Value'),
         [DESCRIPTION]: Joi.string()
             .required()
-            .label('Description')
+            .label('Description'),
+        [DATE]: Joi.date()
+            .required()
+            .min('1-1-2010')
+            .label('Date'),
+        [ID_CATEGORY]: Joi.string()
+            .label('Category'),
     };
 
+    componentDidMount() {
+        const data = { ...this.state.data };
+        data[DATE] = new Date().toISOString();
+        this.setState({ data });
+    }
+
     doSubmit = async () => {
-        const {[VALUE]: value, [DESCRIPTION]: desc} = this.state.data;
-        const newVal = value * 100;
-        console.log(`New entry submit: [val: ${newVal}, desc: ${desc}]`);
+        const {
+            [VALUE]: value,
+            [DESCRIPTION]: description,
+            [DATE]: date,
+            [ID_CATEGORY]: idCategory,
+        } = this.state.data;
+
+        console.log(`New entry submit: [val: ${value * 100}, description: ${description}, date: ${new Date(date).valueOf()}, idCategory: ${idCategory}]`);
         return;
-        try {
-            console.log('send request to login');
-            const { data } = this.state;
-            // await auth.login(data[USERNAME], data[PASSWORD]);
 
-            console.log('login with success!');
-
-            const {state} = this.props.location;
-            window.location = state ? state.from.pathname : '/';
-        } catch (e) {
-            if (e.response && [400, 401].includes(e.response.status)) {
-                console.log('messageKey: ', e.response.data.message);
-                const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
-                this.setState({ errors });
-            }
-        }
+        // try {
+        //     console.log('send request to login');
+        //     const { data } = this.state;
+        //     // await auth.login(data[USERNAME], data[PASSWORD]);
+        //
+        //     console.log('login with success!');
+        //
+        //     const { state } = this.props.location;
+        //     window.location = state ? state.from.pathname : '/';
+        // } catch (e) {
+        //     if (e.response && [400, 401].includes(e.response.status)) {
+        //         console.log('messageKey: ', e.response.data.message);
+        //         const errors = translateErrorMessage(e.response.data.message);
+        //         console.log('translated errors: ', errors);
+        //         this.setState({ errors });
+        //     }
+        // }
     };
 
     render() {
         const { currency, type } = this.props;
+        const headerClassName = type === 'income' ? 'positive' : 'negative';
 
         return (
             <Paper className='form-container'>
 
-                <h1>Add new <mark className='positive' style={{backgroundColor: 'transparent'}}>{type}</mark></h1>
+                <h1>Add new <span className={headerClassName}>{type}</span></h1>
 
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
                     {this.renderCurrencyInput(VALUE, 'Value', currency, true)}
                     {this.renderTextInput(DESCRIPTION, 'Description')}
+                    {this.renderDateTimeInput(DATE, 'Date')}
+                    {this.renderTextInput(ID_CATEGORY, 'Category')}
+
                     {this.renderButton('Login')}
                 </form>
 
@@ -75,7 +94,7 @@ class NewEntryForm extends Form {
 }
 
 NewEntryForm.propTypes = {
-    type: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['expense', 'income']).isRequired,
     currency: PropTypes.string.isRequired,
 };
 

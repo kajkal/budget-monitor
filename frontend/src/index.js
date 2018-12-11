@@ -7,16 +7,19 @@ import './styles/index.css';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import LuxonUtils from '@date-io/luxon';
 
 ReactDOM.render(
-
     <BrowserRouter>
-        <SnackbarProvider maxSnack={3}>
-            <App />
-        </SnackbarProvider>
+        <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <SnackbarProvider maxSnack={3}>
+                <App />
+            </SnackbarProvider>
+        </MuiPickersUtilsProvider>
     </BrowserRouter>,
 
-    document.getElementById('root')
+    document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

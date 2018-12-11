@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextInput from './TextInput';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment';
@@ -37,7 +36,7 @@ const CurrencyInput = ({ name, label, currency, onChange, error, ...rest }) => {
     );
 };
 
-TextInput.propTypes = {
+CurrencyInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     currency: PropTypes.string.isRequired,
