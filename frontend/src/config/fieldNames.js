@@ -7,3 +7,4 @@ export const VALUE = 'value';
 export const DESCRIPTION = 'description';
 export const DATE = 'date';
 export const ID_CATEGORY = 'idCategory';
+export const SUBENTRIES = 'subEntries';

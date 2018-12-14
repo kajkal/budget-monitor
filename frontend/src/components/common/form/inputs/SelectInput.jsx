@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField/TextField';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
-import PropTypes from 'prop-types';
 
 
 const SelectInput = ({ name, label, options, onChange, error, ...rest }) => {
@@ -44,6 +44,7 @@ SelectInput.propTypes = {
     ).isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    className: PropTypes.string,
     error: PropTypes.string,
 };
 

@@ -46,6 +46,7 @@ DateTimeInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    className: PropTypes.string,
     error: PropTypes.string,
 };
 

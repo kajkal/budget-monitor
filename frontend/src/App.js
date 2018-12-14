@@ -12,8 +12,8 @@ import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
 import Home from './components/Home';
-import RegisterForm from './components/form/RegisterForm';
 import { theme } from './config/theme';
+import RegisterForm from './components/form/RegisterForm';
 
 
 class App extends Component {

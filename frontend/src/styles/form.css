@@ -4,7 +4,14 @@
     text-align: center;
     padding: 14px;
     background-color: var(--workspace-color) !important;
-    width: 350px;
+    width: 100vw;
+
+}
+
+@media screen and (min-width: 800px) {
+    .form-container {
+        width: 800px;
+    }
 }
 
 form {
@@ -12,6 +19,55 @@ form {
     flex-direction: column;
 }
 
+form header {
+    font-size: 2em;
+}
+
+form div.form-content {
+}
+
+form footer {
+    margin-top: 14px;
+    display: flex;
+    align-content: stretch;
+}
+
+form footer * {
+    flex-grow: 1;
+}
+
 .submit-button {
-    margin-top: 16px !important;
+    /*margin-top: 16px !important;*/
+}
+
+form div.form-content.new-entry-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1em;
+
+    grid-template-areas:
+        'value category'
+        'description description'
+        'date date'
+        'subEntries subEntries'
+        'newSubEntry newSubEntry';
+}
+
+form div.form-content.new-entry-form .currency-input {
+    grid-area: value;
+}
+form div.form-content.new-entry-form .category-input {
+    grid-area: category;
+}
+form div.form-content.new-entry-form .description-input {
+    grid-area: description;
+}
+form div.form-content.new-entry-form .date-input {
+    grid-area: date;
+}
+form div.form-content.new-entry-form .subEntry-area {
+    grid-area: subEntries;
+}
+form div.form-content.new-entry-form .new-subEntry-btn {
+    grid-area: newSubEntry;
 }

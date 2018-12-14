@@ -4,18 +4,19 @@ import { Redirect } from 'react-router-dom';
 import Form from '../common/form/Form';
 import auth from '../../services/authService';
 import { translateErrorMessage } from '../../services/errorMessageService';
-import {USERNAME, PASSWORD} from '../../config/fieldNames';
+import { PASSWORD, USERNAME } from '../../config/fieldNames';
 import PropTypes from 'prop-types';
 import ProtectedRoute from '../common/route/ProtectedRoute';
 import Paper from '@material-ui/core/Paper/Paper';
+
 
 class LoginForm extends Form {
     state = {
         data: {
             [USERNAME]: '',
-            [PASSWORD]: ''
+            [PASSWORD]: '',
         },
-        errors: {}
+        errors: {},
     };
 
     schema = {
@@ -24,7 +25,7 @@ class LoginForm extends Form {
             .label('Username'),
         [PASSWORD]: Joi.string()
             .required()
-            .label('Password')
+            .label('Password'),
     };
 
     doSubmit = async () => {
@@ -35,7 +36,7 @@ class LoginForm extends Form {
 
             console.log('login with success!');
 
-            const {state} = this.props.location;
+            const { state } = this.props.location;
             window.location = state ? state.from.pathname : '/';
         } catch (e) {
             if (e.response && [400, 401].includes(e.response.status)) {
@@ -55,10 +56,10 @@ class LoginForm extends Form {
 
                 <h1>Login</h1>
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    {this.renderTextInput(USERNAME, 'Username', true)}
-                    {this.renderPasswordInput(PASSWORD, 'Password')}
+                    {this.renderTextInput([USERNAME], 'Username', 'TODO', true)}
+                    {this.renderPasswordInput([PASSWORD], 'Password', 'TODO')}
 
-                    {this.renderButton('Login')}
+                    {this.renderSubmitButton('Login')}
                 </form>
 
             </Paper>

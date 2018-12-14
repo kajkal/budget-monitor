@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import TextField from '@material-ui/core/TextField/TextField';
 import PropTypes from 'prop-types';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
-class PasswordInput extends Component {
+class PasswordInput extends PureComponent {
     state = {
         showPassword: false,
     };
@@ -59,6 +59,7 @@ PasswordInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    className: PropTypes.string,
     error: PropTypes.string,
 };
 

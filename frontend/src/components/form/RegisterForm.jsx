@@ -69,12 +69,12 @@ class RegisterForm extends Form {
 
                 <h1>Register</h1>
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    {this.renderTextInput(USERNAME, 'Username', true)}
-                    {this.renderTextInput(EMAIL, 'Email address')}
-                    {this.renderPasswordInput(PASSWORD, 'Password',)}
-                    {this.renderSelectInput(CURRENCY, 'Basic currency', getCurrencies())}
+                    {this.renderTextInput([USERNAME], 'Username', 'TODO', true)}
+                    {this.renderTextInput([EMAIL], 'Email address', 'TODO')}
+                    {this.renderPasswordInput([PASSWORD], 'Password', 'TODO')}
+                    {this.renderSelectInput([CURRENCY], 'Basic currency', getCurrencies(), 'TODO')}
 
-                    {this.renderButton('Register')}
+                    {this.renderSubmitButton('Register')}
                 </form>
 
             </Paper>
