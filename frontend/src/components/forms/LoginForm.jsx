@@ -1,13 +1,13 @@
 import React from 'react';
-import Joi from 'joi-browser';
 import { Redirect } from 'react-router-dom';
-import Form from '../common/form/Form';
-import auth from '../../services/authService';
-import { translateErrorMessage } from '../../services/errorMessageService';
-import { PASSWORD, USERNAME } from '../../config/fieldNames';
 import PropTypes from 'prop-types';
-import ProtectedRoute from '../common/route/ProtectedRoute';
+import Joi from 'joi-browser';
 import Paper from '@material-ui/core/Paper/Paper';
+import Form from '../common/forms/Form';
+import ProtectedRoute from '../common/route/ProtectedRoute';
+import { PASSWORD, USERNAME } from '../../config/fieldNames';
+import { translateErrorMessage } from '../../services/errorMessageService';
+import auth from '../../services/authService';
 
 
 class LoginForm extends Form {
@@ -30,11 +30,8 @@ class LoginForm extends Form {
 
     doSubmit = async () => {
         try {
-            console.log('send request to login');
             const { data } = this.state;
             await auth.login(data[USERNAME], data[PASSWORD]);
-
-            console.log('login with success!');
 
             const { state } = this.props.location;
             window.location = state ? state.from.pathname : '/';
@@ -54,12 +51,19 @@ class LoginForm extends Form {
         return (
             <Paper className='form-container'>
 
-                <h1>Login</h1>
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    {this.renderTextInput([USERNAME], 'Username', 'TODO', true)}
-                    {this.renderPasswordInput([PASSWORD], 'Password', 'TODO')}
+                    <header>
+                        Login
+                    </header>
 
-                    {this.renderSubmitButton('Login')}
+                    <div className='form-content login-form'>
+                        {this.renderTextInput([USERNAME], 'Username', 'username-input', true)}
+                        {this.renderPasswordInput([PASSWORD], 'Password', 'password-input')}
+                    </div>
+
+                    <footer>
+                        {this.renderSubmitButton('Login')}
+                    </footer>
                 </form>
 
             </Paper>

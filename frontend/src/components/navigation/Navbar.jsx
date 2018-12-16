@@ -7,19 +7,25 @@ import {PowerSettingsNew, Settings, Add, CallMade} from '@material-ui/icons';
 import DropdownMenu from './DropdownMenu';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import EntryFormDialog from '../dialogs/EntryFormDialog';
 
 
 class Navbar extends Component {
+    state = {
+        incomeFormDialogOpen: false,
+        expenseFormDialogOpen: false,
+    };
+
     newEntryOptions = [
         {
             label: 'Income',
             icon: <CallMade className='positive'/>,
-            onClick: () => console.log('Income on click')
+            onClick: () => this.setState({ incomeFormDialogOpen: true })
         },
         {
             label: 'Expense',
             icon: <CallMade className='negative mirrorY'/>,
-            onClick: () => console.log('Expense on click')
+            onClick: () => this.setState({ expenseFormDialogOpen: true })
         },
     ];
 
@@ -36,8 +42,16 @@ class Navbar extends Component {
         },
     ];
 
+    handleDialogClose = () => {
+        this.setState({
+            incomeFormDialogOpen: false,
+            expenseFormDialogOpen: false,
+        });
+    };
+
     render() {
         const { user } = this.props;
+        const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
         return (
             <AppBar position="static">
                 <Toolbar variant="dense">
@@ -62,6 +76,19 @@ class Navbar extends Component {
                         <React.Fragment>
                             <DropdownMenu label={<Add/>} items={this.newEntryOptions} />
                             <DropdownMenu label={user.sub} items={this.userOptions} />
+
+                            <EntryFormDialog
+                                type='income'
+                                currency={user.currency}
+                                open={incomeFormDialogOpen}
+                                onClose={this.handleDialogClose}
+                            />
+                            <EntryFormDialog
+                                type='expense'
+                                currency={user.currency}
+                                open={expenseFormDialogOpen}
+                                onClose={this.handleDialogClose}
+                            />
                         </React.Fragment>
                     )}
 

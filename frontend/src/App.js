@@ -7,13 +7,13 @@ import AlertDemo from './components/___develop/AlertDemo';
 import Navbar from './components/navigation/Navbar';
 import Playground from './components/___develop/Playground';
 import New from './components/___develop/New';
-import LoginForm from './components/form/LoginForm';
+import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
 import Home from './components/Home';
 import { theme } from './config/theme';
-import RegisterForm from './components/form/RegisterForm';
+import RegisterForm from './components/forms/RegisterForm';
 
 
 class App extends Component {
@@ -23,6 +23,7 @@ class App extends Component {
 
     componentDidMount() {
         const user = auth.getCurrentUser();
+        user.currency = 'EUR';
         this.setState({ user });
     }
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import NewEntryForm from '../form/NewEntryForm';
+import EntryForm from '../forms/EntryForm';
 
 
 class New extends Component {
     render() {
         return (
-            <NewEntryForm currency='PLN' type='expense' />
+            <EntryForm currency='PLN' type='expense'  onCancel={() => console.log('cancel')}/>
         );
     }
 }

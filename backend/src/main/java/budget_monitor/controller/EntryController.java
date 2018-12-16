@@ -50,7 +50,7 @@ public class EntryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/api/entry")
+    @RequestMapping(method = POST, path = "/api/entries")
     @ResponseBody
     public ResponseEntity<EntryDTO> createEntry(@Valid @RequestBody EntryFormDTO entryFormDTO,
                                                 @CurrentUser UserDetails user) {
@@ -61,7 +61,7 @@ public class EntryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = PUT, path = "/api/entry/{idEntry}")
+    @RequestMapping(method = PUT, path = "/api/entries/{idEntry}")
     @ResponseBody
     public ResponseEntity<EntryDTO> updateEntry(@PathVariable("idEntry") Long idEntry,
                                                 @Valid @RequestBody EntryFormDTO entryFormDTO,
@@ -78,7 +78,7 @@ public class EntryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = DELETE, path = "/api/entry/{idEntry}")
+    @RequestMapping(method = DELETE, path = "/api/entries/{idEntry}")
     @ResponseBody
     public ResponseEntity<HttpStatus> deleteEntry(@PathVariable("idEntry") Long idEntry,
                                                   @CurrentUser UserDetails user) throws EntryException {

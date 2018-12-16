@@ -1,9 +1,6 @@
 @import '_constants.css';
 
 .form-container {
-    text-align: center;
-    padding: 14px;
-    background-color: var(--workspace-color) !important;
     width: 100vw;
     min-height: 100vh;
 }
@@ -16,12 +13,15 @@
 }
 
 form {
+    background-color: var(--workspace-color) !important;
     display: flex;
     flex-direction: column;
+    padding: 14px;
 }
 
 form header {
     font-size: 2em;
+    text-align: center;
 }
 
 form div.form-content {
@@ -31,6 +31,7 @@ form footer {
     margin-top: 14px;
     display: flex;
     align-content: stretch;
+    text-align: center;
 }
 
 form footer * {
@@ -40,6 +41,25 @@ form footer * {
 .submit-button {
     /*margin-top: 16px !important;*/
 }
+
+
+/*LOGIN FORM*/
+
+form div.form-content.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*REGISTER FORM*/
+
+form div.form-content.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*NEW ENTRY FORM*/
 
 form div.form-content.new-entry-form {
     display: grid;

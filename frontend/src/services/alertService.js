@@ -7,7 +7,7 @@ import logger from './logService';
 
 let enqueueAlertFunction = null;
 
-const displayAlert = (message, variant) => {
+const displayAlert = (message, variant, duration = 4000) => {
     if (enqueueAlertFunction)
         enqueueAlertFunction(message, {
             variant: variant,
@@ -20,7 +20,7 @@ const displayAlert = (message, variant) => {
                     <CloseIcon />
                 </IconButton>
             ),
-            autoHideDuration: 4000,
+            autoHideDuration: duration,
         });
     else
         logger.log('enqueueAlertFunction not initialized.');
@@ -46,8 +46,8 @@ export default withSnackbar(AlertServiceComponent);
 
 export const alertService = {
     default: (message) => displayAlert(message, 'default'),
-    info: (message) => displayAlert(message, 'info'),
-    success: (message) => displayAlert(message, 'success'),
+    info: (message) => displayAlert(message, 'info', 2000),
+    success: (message) => displayAlert(message, 'success', 2000),
     warning: (message) => displayAlert(message, 'warning'),
-    error: (message) => displayAlert(message, 'error')
+    error: (message) => displayAlert(message, 'error', 6000)
 };

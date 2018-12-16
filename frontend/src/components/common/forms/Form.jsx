@@ -29,11 +29,13 @@ class Form extends PureComponent {
         let errors = { ...this.state.errors };
         const errorMessage = this.validateProperty(_.last(path), value);
 
-        if (errorMessage) errors = _.set(errors, path, errorMessage);
+        if (errorMessage) _.set(errors, path, errorMessage);
         else _.unset(errors, path);
 
         let data = { ...this.state.data };
-        data = _.set(data, path, value);
+        _.set(data, path, value);
+
+        this.extendedOnInputChange && this.extendedOnInputChange(path, data);
         this.setState({ data, errors });
     };
 
@@ -43,7 +45,7 @@ class Form extends PureComponent {
 
             _.forOwn(root, (value, key) => {
                 if (_.isObject(value)) {
-                    const subObjectErrors = validateLevel(value, [key]);
+                    const subObjectErrors = validateLevel(value);
                     if (subObjectErrors) errors[key] = subObjectErrors;
                 } else {
                     const errorMessage = this.validateProperty(key, value);
@@ -54,10 +56,7 @@ class Form extends PureComponent {
             return _.isEmpty(errors) ? null : errors;
         };
 
-        const errors = validateLevel(this.state.data);
-        // console.log('validateAll returns: ', errors);
-        // console.log('\n\n');
-        return errors;
+        return validateLevel(this.state.data);
     };
 
     handleSubmit = e => {
