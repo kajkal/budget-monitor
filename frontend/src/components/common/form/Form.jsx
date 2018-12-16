@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
 import Joi from 'joi-browser';
+import _ from 'lodash';
 import Button from '@material-ui/core/Button/Button';
+import Tooltip from '@material-ui/core/Tooltip/Tooltip';
+import IconButton from '@material-ui/core/IconButton/IconButton';
 import TextInput from './inputs/TextInput';
 import PasswordInput from './inputs/PasswordInput';
-import _ from 'lodash';
 import SelectInput from './inputs/SelectInput';
 import CurrencyInput from './inputs/CurrencyInput';
 import DateTimeInput from './inputs/DateTimeInput';
-import Tooltip from '@material-ui/core/Tooltip/Tooltip';
+import { formInputMargin } from '../../../config/theme';
 
 
 class Form extends PureComponent {
@@ -24,19 +26,11 @@ class Form extends PureComponent {
     };
 
     handleChange = path => value => {
-        const deleteError = (errors, path) => {
-            _.unset(errors, path);
-            _.forOwn(errors, (value, key) => {
-                if (_.isEmpty(value)) _.unset(errors, key);
-            });
-            return errors;
-        };
-
         let errors = { ...this.state.errors };
         const errorMessage = this.validateProperty(_.last(path), value);
 
         if (errorMessage) errors = _.set(errors, path, errorMessage);
-        else errors = deleteError(errors, path);
+        else _.unset(errors, path);
 
         let data = { ...this.state.data };
         data = _.set(data, path, value);
@@ -61,8 +55,8 @@ class Form extends PureComponent {
         };
 
         const errors = validateLevel(this.state.data);
-        console.log('validateAll returns: ', errors);
-        console.log('\n\n');
+        // console.log('validateAll returns: ', errors);
+        // console.log('\n\n');
         return errors;
     };
 
@@ -96,23 +90,37 @@ class Form extends PureComponent {
         else return renderButton();
     }
 
-    renderCancelButton() {
+    renderCancelButton(onClick) {
         return (
-            <Button color='secondary' className='cancel-button'>
+            <Button color='secondary' className='cancel-button' onClick={onClick}>
                 Cancel
             </Button>
         );
     }
 
-    renderTextInput(path, label, className, focus = false) {
-        console.log('path: ', path);
-        console.log('    data: ', this.state.data);
-        console.log('    error: ', this.state.error);
+    renderIconButton(icon, onClick, tooltip, className) {
+        return (
+            <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>
+                <IconButton className={className} onClick={onClick}>
+                    {icon}
+                </IconButton>
+            </Tooltip>
+        )
+    }
+
+    _getInfo(path, value, error) {
+        // console.log('path: ', path);
+        // console.log('    data: ', this.state.data);
+        // console.log('    error: ', this.state.error);
+        // console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
+        // console.log('--------------------------------------------------------------------------------');
+    }
+
+    renderTextInput(path, label, className, focus = false, margin = formInputMargin) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
-        console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        console.log('--------------------------------------------------------------------------------');
+        this._getInfo(path, value, error);
 
         return (
             <TextInput
@@ -123,19 +131,16 @@ class Form extends PureComponent {
                 error={error}
                 className={className}
                 autoFocus={focus}
+                margin={margin}
             />
         );
     }
 
-    renderPasswordInput(path, label, className, focus = false) {
-        console.log('path: ', path);
-        console.log('    data: ', this.state.data);
-        console.log('    error: ', this.state.error);
+    renderPasswordInput(path, label, className, focus = false, margin = formInputMargin) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
-        console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        console.log('--------------------------------------------------------------------------------');
+        this._getInfo(path, value, error);
 
         return (
             <PasswordInput
@@ -146,19 +151,16 @@ class Form extends PureComponent {
                 className={className}
                 error={error}
                 autoFocus={focus}
+                margin={margin}
             />
         );
     }
 
-    renderSelectInput(path, label, options, className, focus = false) {
-        console.log('path: ', path);
-        console.log('    data: ', this.state.data);
-        console.log('    error: ', this.state.error);
+    renderSelectInput(path, label, options, className, focus = false, margin = formInputMargin) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
-        console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        console.log('--------------------------------------------------------------------------------');
+        this._getInfo(path, value, error);
 
         return (
             <SelectInput
@@ -170,19 +172,16 @@ class Form extends PureComponent {
                 className={className}
                 error={error}
                 autoFocus={focus}
+                margin={margin}
             />
         );
     }
 
-    renderCurrencyInput(path, label, currency, className, focus = false) {
-        console.log('path: ', path);
-        console.log('    data: ', this.state.data);
-        console.log('    error: ', this.state.error);
+    renderCurrencyInput(path, label, currency, className, focus = false, margin = formInputMargin) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
-        console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        console.log('--------------------------------------------------------------------------------');
+        this._getInfo(path, value, error);
 
         return (
             <CurrencyInput
@@ -194,19 +193,16 @@ class Form extends PureComponent {
                 className={className}
                 autoFocus={focus}
                 currency={currency}
+                margin={margin}
             />
         );
     }
 
-    renderDateTimeInput(path, label, className, focus = false) {
-        console.log('path: ', path);
-        console.log('    data: ', this.state.data);
-        console.log('    error: ', this.state.error);
+    renderDateTimeInput(path, label, className, focus = false, margin = formInputMargin) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
-        console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        console.log('--------------------------------------------------------------------------------');
+        this._getInfo(path, value, error);
 
         return (
             <DateTimeInput
@@ -217,6 +213,7 @@ class Form extends PureComponent {
                 className={className}
                 error={error}
                 autoFocus={focus}
+                margin={margin}
             />
         );
     }

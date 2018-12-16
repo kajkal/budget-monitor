@@ -5,7 +5,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
-import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
 class PasswordInput extends PureComponent {
@@ -32,9 +31,6 @@ class PasswordInput extends PureComponent {
                 error={error !== undefined}
                 helperText={error}
 
-                fullWidth={formInputFullWidth}
-                margin={formInputMargin}
-
                 {...rest}
 
                 InputProps={{
@@ -59,6 +55,8 @@ PasswordInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    margin: PropTypes.string.isRequired,
+    autoFocus: PropTypes.bool.isRequired,
     className: PropTypes.string,
     error: PropTypes.string,
 };

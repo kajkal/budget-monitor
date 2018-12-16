@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField/TextField';
-import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
 const TextInput = ({ name, label, onChange, error, ...rest }) => {
@@ -17,9 +16,6 @@ const TextInput = ({ name, label, onChange, error, ...rest }) => {
             error={error !== undefined}
             helperText={error}
 
-            fullWidth={formInputFullWidth}
-            margin={formInputMargin}
-
             {...rest}
         />
     );
@@ -30,6 +26,8 @@ TextInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    margin: PropTypes.string.isRequired,
+    autoFocus: PropTypes.bool.isRequired,
     className: PropTypes.string,
     error: PropTypes.string,
 };

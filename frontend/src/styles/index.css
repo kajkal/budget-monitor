@@ -27,7 +27,7 @@ main {
     /*border: 1px solid #7f7f7f;*/
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 600px) {
     main {
         margin-top: 48px;
     }

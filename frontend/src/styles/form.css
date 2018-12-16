@@ -5,12 +5,13 @@
     padding: 14px;
     background-color: var(--workspace-color) !important;
     width: 100vw;
-
+    min-height: 100vh;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 600px) {
     .form-container {
-        width: 800px;
+        width: 500px;
+        min-height: 0;
     }
 }
 
@@ -70,4 +71,29 @@ form div.form-content.new-entry-form .subEntry-area {
 }
 form div.form-content.new-entry-form .new-subEntry-btn {
     grid-area: newSubEntry;
+}
+form div.form-content.new-entry-form .remove-subEntry-btn {
+    grid-area: removeSubEntry;
+    align-self: end;
+}
+
+form div.form-content.new-entry-form .subEntry-area .subEntry-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 48px;
+    grid-column-gap: 1em;
+
+    grid-template-areas:
+        'value category removeSubEntry'
+        'description description description';
+
+    margin-top: 16px;
+}
+
+@media screen and (min-width: 600px) {
+    form div.form-content.new-entry-form .subEntry-area .subEntry-row {
+        grid-template-columns: 1fr 1fr 1fr 48px;
+
+        grid-template-areas:
+            'value description category removeSubEntry';
+    }
 }

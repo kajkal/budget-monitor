@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DateTimePicker } from 'material-ui-pickers';
 import { CalendarToday, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
 const DateTimeInput = ({ name, label, onChange, error, ...rest }) => {
@@ -15,9 +14,6 @@ const DateTimeInput = ({ name, label, onChange, error, ...rest }) => {
 
             error={error !== undefined}
             helperText={error}
-
-            fullWidth={formInputFullWidth}
-            margin={formInputMargin}
 
             {...rest}
 
@@ -46,6 +42,8 @@ DateTimeInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    margin: PropTypes.string.isRequired,
+    autoFocus: PropTypes.bool.isRequired,
     className: PropTypes.string,
     error: PropTypes.string,
 };

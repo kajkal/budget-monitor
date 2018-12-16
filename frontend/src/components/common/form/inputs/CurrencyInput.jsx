@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment';
-import { formInputFullWidth, formInputMargin } from '../../../../config/theme';
 
 
 const CurrencyInput = ({ name, label, currency, onChange, error, ...rest }) => {
@@ -18,9 +17,6 @@ const CurrencyInput = ({ name, label, currency, onChange, error, ...rest }) => {
 
             error={error !== undefined}
             helperText={error}
-
-            fullWidth={formInputFullWidth}
-            margin={formInputMargin}
 
             {...rest}
 
@@ -42,6 +38,8 @@ CurrencyInput.propTypes = {
     currency: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
+    margin: PropTypes.string.isRequired,
+    autoFocus: PropTypes.bool.isRequired,
     className: PropTypes.string,
     error: PropTypes.string,
 };

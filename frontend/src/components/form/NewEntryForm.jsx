@@ -1,12 +1,12 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper/Paper';
-import Joi from 'joi-browser';
 import PropTypes from 'prop-types';
-import {Add, Remove} from '@material-ui/icons';
+import Joi from 'joi-browser';
+import _ from 'lodash';
+import { Add, Delete } from '@material-ui/icons';
+import Paper from '@material-ui/core/Paper/Paper';
 import Button from '@material-ui/core/Button/Button';
 import Form from '../common/form/Form';
 import { DATE, DESCRIPTION, ID_CATEGORY, SUBENTRIES, VALUE } from '../../config/fieldNames';
-import _ from 'lodash';
 
 class NewEntryForm extends Form {
     state = {
@@ -37,13 +37,6 @@ class NewEntryForm extends Form {
             .label('Date'),
         [ID_CATEGORY]: Joi.string()
             .label('Category'),
-        [SUBENTRIES]: Joi.any()
-            .label('Sub entries'),
-
-        // birthday is not required
-        // birthday must be a valid ISO-8601 date
-        // dates before Jan 1, 2014 are not allowed
-        // birthday: Joi.date().max('1-1-2004').iso(),
     };
 
     componentDidMount() {
@@ -63,7 +56,7 @@ class NewEntryForm extends Form {
 
         console.log(`New entry submit: [val: ${value * 100}, description: ${description}, date: ${new Date(date).valueOf()}, idCategory: ${idCategory}]`);
         const parsedSubEntries = [];
-        _.forOwn(subEntries, value => parsedSubEntries.push({value}));
+        _.forOwn(subEntries, value => parsedSubEntries.push({ value }));
         console.log('subentries: ', parsedSubEntries);
 
         return;
@@ -87,10 +80,59 @@ class NewEntryForm extends Form {
         // }
     };
 
-    render() {
-        const { currency, type } = this.props;
-        const { isSubEntriesValid } = this.state;
+    handleAddSubEntry = () => {
+        const data = { ...this.state.data };
+        data[SUBENTRIES][new Date().valueOf()] = {
+            [VALUE]: '',
+            [DESCRIPTION]: '',
+            [ID_CATEGORY]: '',
+        };
+        this.setState({ data });
+    };
+
+    handleRemoveSubEntry = id => () => {
+        const data = { ...this.state.data };
+        delete data[SUBENTRIES][id];
+        this.setState({ data });
+    };
+
+    renderNewSubEntryButton = () => {
+        return (
+            <Button size='small' className='new-subEntry-btn' onClick={this.handleAddSubEntry}>
+                <Add /> Add sub entry
+            </Button>
+        );
+    };
+
+    renderSubEntriesArea = () => {
+        const { currency } = this.props;
         const { [SUBENTRIES]: subEntries } = this.state.data;
+
+        if (subEntries) {
+            return (
+                <div className='subEntry-area'>
+                    {
+                        Object.keys(subEntries).map(id => {
+                            const path = [SUBENTRIES, id];
+                            return (
+                                <div key={id} className='subEntry-row'>
+                                    {this.renderCurrencyInput([...path, VALUE], 'Value', currency, 'currency-input', false, 'dense')}
+                                    {this.renderTextInput([...path, DESCRIPTION], 'Description', 'description-input', false, 'dense')}
+                                    {this.renderTextInput([...path, ID_CATEGORY], 'Category', 'category-input', false, 'dense')}
+                                    {this.renderIconButton(
+                                        <Delete />, this.handleRemoveSubEntry(id), 'Remove sub entry', 'remove-subEntry-btn'
+                                    )}
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+            );
+        }
+    };
+
+    render() {
+        const { currency, type, onCancel } = this.props;
         const headerClassName = type === 'income' ? 'positive' : 'negative';
 
         return (
@@ -109,72 +151,23 @@ class NewEntryForm extends Form {
 
                         {this.renderSubEntriesArea()}
                         {this.renderNewSubEntryButton()}
-
-                        {/*<div className='sub-entries-container' style={{*/}
-                        {/*display: 'flex',*/}
-                        {/*}}>*/}
-                        {/*/!*{this.renderCurrencyInput(`${0}_${VALUE}`, 'Value', currency)}*!/*/}
-                        {/*/!*{this.renderTextInput(`${0}_${DESCRIPTION}`, 'Description')}*!/*/}
-                        {/*/!*{this.renderTextInput(`${0}_${ID_CATEGORY}`, 'Category')}*!/*/}
-                        {/*/!*<Remove/>*!/*/}
-                        {/*</div>*/}
                     </div>
 
                     <footer>
+                        {this.renderCancelButton(onCancel)}
                         {this.renderSubmitButton('Add')}
-                        {this.renderCancelButton()}
                     </footer>
                 </form>
 
             </Paper>
         );
     }
-
-    addSubEntry = () => {
-        const data = { ...this.state.data };
-        data[SUBENTRIES][new Date().valueOf()] = {
-            [VALUE]: '',
-            [DESCRIPTION]: '',
-            [ID_CATEGORY]: '',
-        };
-        this.setState({ data });
-    };
-
-    renderNewSubEntryButton = () => {
-        return (
-            <Button size='small' className='new-subEntry-btn' onClick={this.addSubEntry}>
-                <Add /> Add sub entry
-            </Button>
-        )
-    };
-
-    renderSubEntriesArea = () => {
-        const { currency } = this.props;
-        const { [SUBENTRIES]: subEntries } = this.state.data;
-        if (subEntries) {
-            return (
-                <div className='subEntry-area'>
-                    {
-                        Object.entries(subEntries).map(([id, subEntry]) => {
-                            const path = [SUBENTRIES, id];
-                            return (
-                                <React.Fragment key={id}>
-                                    {this.renderCurrencyInput([...path, VALUE], 'Value', currency, 'TODO')}
-                                    {this.renderTextInput([...path, DESCRIPTION], 'Description', 'TODO')}
-                                    {this.renderTextInput([...path, ID_CATEGORY], 'Category', 'TODO')}
-                                </React.Fragment>
-                            )
-                        })
-                    }
-                </div>
-            );
-        }
-    }
 }
 
 NewEntryForm.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
     currency: PropTypes.string.isRequired,
+    onCancel: PropTypes.func.isRequired,
 };
 
 export default NewEntryForm;
