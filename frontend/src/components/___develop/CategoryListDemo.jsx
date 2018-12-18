@@ -63,9 +63,13 @@ class CategoryListDemo extends React.Component {
         console.log('length: ', subCategories.length);
         if (subCategories.length) {
             return (
-                <React.Fragment key={category.idCategory} >
+                <React.Fragment key={category.idCategory}>
 
-                    <ListItem button onDoubleClick={() => console.log('boudle click')} onClick={() => this.handleClick(category)}  key={category.idCategory} style={this.getIndent(indentTier + 1)}>
+                    <ListItem button
+                        onDoubleClick={() => console.log('boudle click')}
+                        onClick={() => this.handleClick(category)} key={category.idCategory}
+                        style={this.getIndent(indentTier + 1)}
+                    >
 
                         {category.open ? <ExpandLess /> : <ExpandMore />}
 
@@ -83,7 +87,7 @@ class CategoryListDemo extends React.Component {
                     <Collapse in={category.open} timeout="auto" unmountOnExit>
                         <List
                             dense={true} component="div" disablePadding>
-                            {subCategories.map(c => this.renderSubCategories(c, indentTier+1))}
+                            {subCategories.map(c => this.renderSubCategories(c, indentTier + 1))}
                         </List>
                     </Collapse>
 
@@ -91,8 +95,9 @@ class CategoryListDemo extends React.Component {
             );
         } else {
             return (
-                <ListItem onDoubleClick={() => console.log('boudle click')} key={category.idCategory} button style={this.getIndent(indentTier + 1)}>
-                    <ExpandLess style={{opacity: 0}}/>
+                <ListItem onDoubleClick={() => console.log('boudle click')} key={category.idCategory} button
+                    style={this.getIndent(indentTier + 1)}>
+                    <ExpandLess style={{ opacity: 0 }} />
                     <ListItemText inset primary={category.name} />
 
                     <ListItemSecondaryAction>
@@ -107,7 +112,7 @@ class CategoryListDemo extends React.Component {
         }
     };
     getIndent = (indentTier) => ({
-        paddingLeft: (indentTier * 40)
+        paddingLeft: (indentTier * 40),
     });
 
     render() {

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -41,8 +42,12 @@ public class CategoryController {
     @LogExecutionTime
     @RequestMapping(method = GET, path = "/api/categories")
     @ResponseBody
-    public List<CategoryDTO> getCategories(@CurrentUser UserDetails user) {
-        return categoryService.findAllByUsername(user.getUsername());
+    public ResponseEntity<CategoryDTO> getRootCategory(@CurrentUser UserDetails user) throws CategoryException {
+
+        CategoryDTO rootCategory = categoryService.getRootCategoryByUsername(user.getUsername()).orElseThrow(
+                () -> new CategoryException("getRootCategory.error.notFound")
+        );
+        return ResponseEntity.ok(rootCategory);
     }
 
     @LogExecutionTime

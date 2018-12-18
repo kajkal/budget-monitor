@@ -7,5 +7,6 @@ export const ID_ENTRY = 'idEntry';
 export const VALUE = 'value';
 export const DESCRIPTION = 'description';
 export const DATE = 'date';
+export const CATEGORY = 'category';
 export const ID_CATEGORY = 'idCategory';
 export const SUB_ENTRIES = 'subEntries';

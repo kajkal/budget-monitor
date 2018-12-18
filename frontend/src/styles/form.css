@@ -19,7 +19,7 @@ form {
     padding: 14px;
 }
 
-form header {
+.form-header {
     font-size: 2em;
     text-align: center;
 }
@@ -30,12 +30,11 @@ form div.form-content {
 form footer {
     margin-top: 14px;
     display: flex;
-    align-content: stretch;
-    text-align: center;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 form footer * {
-    flex-grow: 1;
 }
 
 .submit-button {

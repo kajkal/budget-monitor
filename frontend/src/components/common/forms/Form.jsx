@@ -10,6 +10,7 @@ import SelectInput from './inputs/SelectInput';
 import CurrencyInput from './inputs/CurrencyInput';
 import DateTimeInput from './inputs/DateTimeInput';
 import { formInputMargin } from '../../../config/theme';
+import CategoryInput from './inputs/CategoryInput';
 
 
 class Form extends PureComponent {
@@ -17,6 +18,8 @@ class Form extends PureComponent {
         data: {},
         errors: {},
     };
+
+    validationIgnoreList = [];
 
     validateProperty = (name, value) => {
         const obj = { [name]: value };
@@ -44,7 +47,7 @@ class Form extends PureComponent {
             const errors = {};
 
             _.forOwn(root, (value, key) => {
-                if (_.isObject(value)) {
+                if (_.isObject(value) && !this.validationIgnoreList.includes(key)) {
                     const subObjectErrors = validateLevel(value);
                     if (subObjectErrors) errors[key] = subObjectErrors;
                 } else {
@@ -59,9 +62,7 @@ class Form extends PureComponent {
         return validateLevel(this.state.data);
     };
 
-    handleSubmit = e => {
-        e.preventDefault();
-
+    handleSubmit = () => {
         const errors = this.validate();
         this.setState({ errors: errors || {} });
         if (errors) return;
@@ -71,7 +72,7 @@ class Form extends PureComponent {
 
     renderSubmitButton(label) {
         const renderButton = (disabled = false) => (
-            <Button disabled={disabled} type='submit' color='secondary' className='submit-button'>
+            <Button type='submit' disabled={disabled} color='primary' className='submit-button' onClick={this.handleSubmit}>
                 {label}
             </Button>
         );
@@ -91,7 +92,7 @@ class Form extends PureComponent {
 
     renderCancelButton(onClick) {
         return (
-            <Button color='secondary' className='cancel-button' onClick={onClick}>
+            <Button color='primary' className='cancel-button' onClick={onClick}>
                 Cancel
             </Button>
         );
@@ -115,9 +116,12 @@ class Form extends PureComponent {
         // console.log('--------------------------------------------------------------------------------');
     }
 
-    renderTextInput(path, label, className, focus = false, margin = formInputMargin) {
+    renderTextInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
+
+        // const {} = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
 
@@ -135,9 +139,12 @@ class Form extends PureComponent {
         );
     }
 
-    renderPasswordInput(path, label, className, focus = false, margin = formInputMargin) {
+    renderPasswordInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
+
+        // const {} = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
 
@@ -155,9 +162,12 @@ class Form extends PureComponent {
         );
     }
 
-    renderSelectInput(path, label, options, className, focus = false, margin = formInputMargin) {
+    renderSelectInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
+
+        const { options } = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
 
@@ -176,9 +186,12 @@ class Form extends PureComponent {
         );
     }
 
-    renderCurrencyInput(path, label, currency, className, focus = false, margin = formInputMargin) {
+    renderCurrencyInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
+
+        const { currency } = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
 
@@ -197,9 +210,12 @@ class Form extends PureComponent {
         );
     }
 
-    renderDateTimeInput(path, label, className, focus = false, margin = formInputMargin) {
+    renderDateTimeInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
+
+        // const {} = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
 
@@ -211,6 +227,34 @@ class Form extends PureComponent {
                 onChange={this.handleChange(path)}
                 className={className}
                 error={error}
+                autoFocus={focus}
+                margin={margin}
+            />
+        );
+    }
+
+    renderCategoryInput(path, label, inputDetails, inputOptions) {
+        const value = _.get(this.state.data, path); // whole category object
+        const error = _.get(this.state.errors, path);
+
+        const {rootCategory, onlySubCategories, header} = inputDetails;
+        const {className, focus = false, margin = formInputMargin} = inputOptions;
+
+        this._getInfo(path, value, error);
+
+        return (
+            <CategoryInput
+                name={_.last(path)}
+                label={label}
+                value={value}
+                onChange={this.handleChange(path)}
+                error={error}
+
+                rootCategory={rootCategory}
+                onlySubCategories={onlySubCategories}
+                header={header}
+
+                className={className}
                 autoFocus={focus}
                 margin={margin}
             />

@@ -1,6 +1,7 @@
 package budget_monitor.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,17 +40,13 @@ public class Entry {
     @Column(name = "dateOfAddition")
     private Timestamp dateOfAddition;
 
+    @UpdateTimestamp
     @Column(name = "dateOfLastModification")
     private Timestamp dateOfLastModification;
 
     @Column(name = "photo")
     private byte[] photo;
 
-
-    @PreUpdate
-    private void preUpdate() {
-        dateOfLastModification = new Timestamp(System.currentTimeMillis());
-    }
 
     public Long getIdEntry() {
         return idEntry;

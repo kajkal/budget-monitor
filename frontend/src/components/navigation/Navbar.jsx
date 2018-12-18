@@ -7,7 +7,9 @@ import {PowerSettingsNew, Settings, Add, CallMade} from '@material-ui/icons';
 import DropdownMenu from './DropdownMenu';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import EntryFormDialog from '../dialogs/EntryFormDialog';
+import _ from 'lodash';
+import EntryForm from '../forms/EntryForm';
+import { categoryRootShape } from '../../config/propTypesCommon';
 
 
 class Navbar extends Component {
@@ -50,7 +52,7 @@ class Navbar extends Component {
     };
 
     render() {
-        const { user } = this.props;
+        const { user, rootCategory } = this.props;
         const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
         return (
             <AppBar position="static">
@@ -72,20 +74,22 @@ class Navbar extends Component {
                         </React.Fragment>
                     )}
 
-                    {user && (
+                    {user && !_.isEmpty(rootCategory) && (
                         <React.Fragment>
                             <DropdownMenu label={<Add/>} items={this.newEntryOptions} />
                             <DropdownMenu label={user.sub} items={this.userOptions} />
 
-                            <EntryFormDialog
+                            <EntryForm
                                 type='income'
                                 currency={user.currency}
+                                rootCategory={rootCategory}
                                 open={incomeFormDialogOpen}
                                 onClose={this.handleDialogClose}
                             />
-                            <EntryFormDialog
+                            <EntryForm
                                 type='expense'
                                 currency={user.currency}
+                                rootCategory={rootCategory}
                                 open={expenseFormDialogOpen}
                                 onClose={this.handleDialogClose}
                             />
@@ -99,7 +103,8 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    rootCategory: categoryRootShape,
 };
 
 export default Navbar;

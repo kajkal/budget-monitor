@@ -64,19 +64,20 @@ class RegisterForm extends Form {
     };
 
     render() {
+        const options = getCurrencies();
         return (
             <Paper className='form-container'>
 
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    <header>
+                    <header className='form-header'>
                         Register
                     </header>
 
                     <div className='form-content register-form'>
-                        {this.renderTextInput([USERNAME], 'Username', 'TODO', true)}
-                        {this.renderTextInput([EMAIL], 'Email address', 'TODO')}
-                        {this.renderPasswordInput([PASSWORD], 'Password', 'TODO')}
-                        {this.renderSelectInput([CURRENCY], 'Basic currency', getCurrencies(), 'TODO')}
+                        {this.renderTextInput([USERNAME], 'Username', {}, {className: 'username-input', focus: true})}
+                        {this.renderTextInput([EMAIL], 'Email address', {}, {className: 'email-input'})}
+                        {this.renderPasswordInput([PASSWORD], 'Password', {}, {className: 'password-input'})}
+                        {this.renderSelectInput([CURRENCY], 'Basic currency', {options}, {className: 'currency-input'})}
                     </div>
 
                     <footer>

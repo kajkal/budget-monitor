@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class CategoryStructureExtractor implements ResultSetExtractor<List<CategoryDTO>> {
+public class CategoryStructureExtractor implements ResultSetExtractor<Optional<CategoryDTO>> {
 
     @Override
-    public List<CategoryDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public Optional<CategoryDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
         // key -> idSuperCategory, value: list of subCategories
         Map<Long, List<CategoryDTO>> listOfSubCategories = new HashMap<>();
-        List<CategoryDTO> categoryStructure = new ArrayList<>();
+        Optional<CategoryDTO> rootCategory = Optional.empty();
 
         while (rs.next()) {
             Long idCategory = rs.getLong("idCategory");
@@ -32,7 +32,7 @@ public class CategoryStructureExtractor implements ResultSetExtractor<List<Categ
             category.setSubCategories(new ArrayList<>());
 
             if (idSuperCategory == 0) {
-                categoryStructure.add(category);
+                rootCategory = Optional.of(category);
             } else {
                 listOfSubCategories
                         .computeIfAbsent(idSuperCategory, k -> new ArrayList<>())
@@ -40,14 +40,21 @@ public class CategoryStructureExtractor implements ResultSetExtractor<List<Categ
             }
         }
 
-        categoryStructure.forEach(s -> addSubCategories(s, listOfSubCategories));
-        return categoryStructure;
+        rootCategory.ifPresent(root -> addSubCategories(root, listOfSubCategories, new ArrayList<>()));
+        rootCategory.ifPresent(root -> root.setPath(new ArrayList<>()));
+        return rootCategory;
     }
 
-    private void addSubCategories(CategoryDTO category, Map<Long, List<CategoryDTO>> listOfSubCategories) {
+    private void addSubCategories(CategoryDTO category, Map<Long, List<CategoryDTO>> listOfSubCategories, List<Long> path) {
+        List<Long> newPath = new ArrayList<>(path);
+        newPath.add(category.getIdCategory());
+
         Optional.ofNullable(listOfSubCategories.remove(category.getIdCategory()))
                 .ifPresent(subCategories -> category.getSubCategories().addAll(subCategories));
-        category.getSubCategories().forEach(s -> addSubCategories(s, listOfSubCategories));
+        category.getSubCategories().forEach(s -> {
+            s.setPath(newPath);
+            addSubCategories(s, listOfSubCategories, newPath);
+        });
     }
 
 }

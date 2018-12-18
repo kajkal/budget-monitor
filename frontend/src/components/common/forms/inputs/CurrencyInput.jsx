@@ -35,13 +35,15 @@ const CurrencyInput = ({ name, label, currency, onChange, error, ...rest }) => {
 CurrencyInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    currency: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
-    margin: PropTypes.string.isRequired,
-    autoFocus: PropTypes.bool.isRequired,
-    className: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
     error: PropTypes.string,
+
+    autoFocus: PropTypes.bool.isRequired,
+    margin: PropTypes.string.isRequired,
+    className: PropTypes.string,
+
+    currency: PropTypes.string.isRequired,
 };
 
 export default CurrencyInput;

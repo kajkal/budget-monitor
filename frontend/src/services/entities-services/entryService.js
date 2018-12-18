@@ -1,6 +1,7 @@
 import http from '../httpService';
-import { DATE, DESCRIPTION, ID_CATEGORY, ID_ENTRY, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
+import { CATEGORY, DATE, DESCRIPTION, ID_CATEGORY, ID_ENTRY, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
 import DateTime from 'luxon/src/datetime';
+import _ from 'lodash';
 
 const apiEndpoint = '/entries';
 
@@ -14,11 +15,11 @@ function parseEntry(entry, type) {
         value: entry[VALUE] * factor,
         description: entry[[DESCRIPTION]],
         date: DateTime.fromISO(entry[DATE]).valueOf(),
-        idCategory: entry[ID_CATEGORY],
+        idCategory: _.get(entry, [CATEGORY, ID_CATEGORY]),
         subEntries: Object.values(entry[SUB_ENTRIES]).map(subEntry => ({
             value: subEntry[VALUE] * factor,
             description: subEntry[DESCRIPTION],
-            idCategory: subEntry[ID_CATEGORY],
+            idCategory: _.get(subEntry, [CATEGORY, ID_CATEGORY]),
         })),
     });
 }

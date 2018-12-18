@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
 
-    public List<CategoryDTO> findAllByUsername(String username) {
+    public Optional<CategoryDTO> getRootCategoryByUsername(String username) {
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("username", username);

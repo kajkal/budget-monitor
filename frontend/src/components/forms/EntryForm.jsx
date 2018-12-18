@@ -4,13 +4,19 @@ import Joi from 'joi-browser';
 import { DateTime } from 'luxon';
 import _ from 'lodash';
 import { Add, Delete } from '@material-ui/icons';
-import Paper from '@material-ui/core/Paper/Paper';
 import Button from '@material-ui/core/Button/Button';
 import { addEntry } from '../../services/entities-services/entryService';
 import Form from '../common/forms/Form';
-import { DATE, DESCRIPTION, ID_CATEGORY, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
+import { CATEGORY, DATE, DESCRIPTION, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
 import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
+import { categoryRootShape } from '../../config/propTypesCommon';
+import { getCategoriesByType } from '../../services/entities-services/categoryService';
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
+import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
+import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
+import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
 
 
 class EntryForm extends Form {
@@ -19,7 +25,7 @@ class EntryForm extends Form {
             [VALUE]: '',
             [DESCRIPTION]: '',
             [DATE]: '',
-            [ID_CATEGORY]: '',
+            [CATEGORY]: {},
             [SUB_ENTRIES]: {},
         },
         errors: {},
@@ -40,10 +46,11 @@ class EntryForm extends Form {
             .min('1-1-2010')
             .raw()
             .label('Date'),
-        [ID_CATEGORY]: Joi.string()
-            .empty('')
+        [CATEGORY]: Joi.object()
             .label('Category'),
     };
+
+    validationIgnoreList = [CATEGORY];
 
     componentDidMount() {
         const data = { ...this.state.data };
@@ -60,6 +67,20 @@ class EntryForm extends Form {
             if (Number(value) < sumOfSubEntriesValues)
                 data[VALUE] = sumOfSubEntriesValues.toString();
         }
+        if (_.isEqual(path, [CATEGORY])) {
+            const newMainCategory = data[CATEGORY];
+            const { [SUB_ENTRIES]: subEntries } = data;
+            if (newMainCategory) {
+                Object.values(subEntries)
+                    .filter(se => !_.isEmpty(se[CATEGORY]))
+                    .filter(se => !(se[CATEGORY].path && se[CATEGORY].path.includes(newMainCategory.idCategory)))
+                    .forEach(se => se[CATEGORY] = {});
+
+                Object.values(subEntries)
+                    .filter(se => _.isEmpty(se[CATEGORY]))
+                    .forEach(se => se[CATEGORY] = newMainCategory)
+            }
+        }
     };
 
     doSubmit = async () => {
@@ -68,7 +89,7 @@ class EntryForm extends Form {
 
             console.log('response from server: ', response);
             alertService.success('Entry successfully added.');
-            this.props.onCancel();
+            this.props.onClose();
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 console.log('messageKey: ', e.response.data.message);
@@ -84,14 +105,14 @@ class EntryForm extends Form {
         data[SUB_ENTRIES][new Date().valueOf()] = {
             [VALUE]: '',
             [DESCRIPTION]: '',
-            [ID_CATEGORY]: '',
+            [CATEGORY]: data[CATEGORY],
         };
         this.setState({ data });
     };
 
     handleRemoveSubEntry = id => () => {
         const data = { ...this.state.data };
-        const newEntryValue = data[VALUE] - Number(data[SUB_ENTRIES][id][VALUE]);
+        const newEntryValue = data[VALUE] ? data[VALUE] - Number(data[SUB_ENTRIES][id][VALUE]) : data[VALUE];
         data[VALUE] = newEntryValue.toString();
         delete data[SUB_ENTRIES][id];
         this.setState({ data });
@@ -106,8 +127,8 @@ class EntryForm extends Form {
     };
 
     renderSubEntriesArea = () => {
-        const { currency } = this.props;
-        const { [SUB_ENTRIES]: subEntries } = this.state.data;
+        const { currency, type, rootCategory } = this.props;
+        const { [SUB_ENTRIES]: subEntries, [CATEGORY]: category } = this.state.data;
 
         if (subEntries) {
             return (
@@ -115,15 +136,23 @@ class EntryForm extends Form {
                     {
                         Object.keys(subEntries).map(id => {
                             const path = [SUB_ENTRIES, id];
+                            const categoryDetails = {
+                                rootCategory: _.isEmpty(category) ? getCategoriesByType(rootCategory, type) : category,
+                                onlySubCategories: _.isEmpty(category),
+                                header: null,
+                            };
                             return (
-                                <Paper key={id} className='subEntry-row'>
-                                    {this.renderCurrencyInput([...path, VALUE], 'Value', currency, 'currency-input', false, 'dense')}
-                                    {this.renderTextInput([...path, DESCRIPTION], 'Description', 'description-input', false, 'dense')}
-                                    {this.renderTextInput([...path, ID_CATEGORY], 'Sub category', 'category-input', false, 'dense')}
+                                <div key={id} className='subEntry-row'>
+                                    {this.renderCurrencyInput([...path, VALUE], 'Value', {currency},
+                                        {className: 'currency-input', margin: 'dense'})}
+                                    {this.renderTextInput([...path, DESCRIPTION], 'Description', {},
+                                        {className: 'description-input', margin: 'dense'})}
+                                    {this.renderCategoryInput([...path, CATEGORY], 'Sub category', categoryDetails,
+                                        {className: 'category-input', margin: 'dense'})}
                                     {this.renderIconButton(
                                         <Delete />, this.handleRemoveSubEntry(id), 'Remove sub entry', 'remove-subEntry-btn'
                                     )}
-                                </Paper>
+                                </div>
                             );
                         })
                     }
@@ -133,38 +162,66 @@ class EntryForm extends Form {
     };
 
     render() {
-        const { currency, type, onCancel } = this.props;
+        const { currency, type, rootCategory, open, onClose, fullScreen } = this.props;
         const headerClassName = type === 'income' ? 'positive' : 'negative';
 
+        const categoryDetails = {
+            rootCategory: getCategoriesByType(rootCategory, type),
+            onlySubCategories: true,
+            header: null,
+        };
+
         return (
-            <form onSubmit={this.handleSubmit} autoComplete='on'>
-                <header>
+            <Dialog
+                disableBackdropClick={true}
+                fullScreen={fullScreen}
+                open={open}
+                onClose={onClose}
+                aria-labelledby='entry-form-dialog'
+            >
+
+                <DialogTitle
+                    id='entry-form-dialog'
+                    className='form-header'
+                    disableTypography={true}
+                >
                     Add new <span className={headerClassName}>{type}</span>
-                </header>
+                </DialogTitle>
 
-                <div className='form-content new-entry-form'>
-                    {this.renderCurrencyInput([VALUE], 'Value', currency, 'currency-input', true)}
-                    {this.renderTextInput([ID_CATEGORY], 'Category', 'category-input')}
-                    {this.renderTextInput([DESCRIPTION], 'Description', 'description-input')}
-                    {this.renderDateTimeInput([DATE], 'Date', 'date-input')}
+                <DialogContent>
+                    <form onSubmit={this.handleSubmit} autoComplete='on'>
 
-                    {this.renderSubEntriesArea()}
-                    {this.renderNewSubEntryButton()}
-                </div>
+                        <div className='form-content new-entry-form'>
+                            {this.renderCurrencyInput([VALUE], 'Value', {currency}, {className: 'currency-input', focus: true})}
+                            {this.renderCategoryInput([CATEGORY], 'Category', categoryDetails, {className: 'category-input'})}
+                            {this.renderTextInput([DESCRIPTION], 'Description', {}, {className: 'description-input'})}
+                            {this.renderDateTimeInput([DATE], 'Date', {}, {className: 'date-input'})}
 
-                <footer>
-                    {this.renderCancelButton(onCancel)}
+                            {this.renderSubEntriesArea()}
+                            {this.renderNewSubEntryButton()}
+                        </div>
+
+                    </form>
+                </DialogContent>
+
+                <DialogActions>
+                    {this.renderCancelButton(onClose)}
                     {this.renderSubmitButton('Add')}
-                </footer>
-            </form>
+                </DialogActions>
+
+            </Dialog>
         );
     }
 }
 
 EntryForm.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
+    rootCategory: categoryRootShape.isRequired,
     currency: PropTypes.string.isRequired,
-    onCancel: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+
+    open: PropTypes.bool.isRequired,
+    fullScreen: PropTypes.bool.isRequired,
 };
 
-export default EntryForm;
+export default withMobileDialog()(EntryForm);

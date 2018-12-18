@@ -32,18 +32,20 @@ const SelectInput = ({ name, label, options, onChange, error, ...rest }) => {
 SelectInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    error: PropTypes.string,
+
+    autoFocus: PropTypes.bool.isRequired,
+    margin: PropTypes.string.isRequired,
+    className: PropTypes.string,
+
     options: PropTypes.arrayOf(
         PropTypes.shape({
             value: PropTypes.string.isRequired,
             label: PropTypes.string.isRequired,
         }),
     ).isRequired,
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
-    margin: PropTypes.string.isRequired,
-    autoFocus: PropTypes.bool.isRequired,
-    className: PropTypes.string,
-    error: PropTypes.string,
 };
 
 export default SelectInput;

@@ -176,10 +176,10 @@ class Test extends Component {
             }),
         };
 
-        const {margin} = this.props;
-        let style = {marginTop: 16, marginBottom: 8};
-        if (margin === 'dense')
-            style = {marginTop: 8, marginBottom: 4};
+        // const {margin} = this.props;
+        // let style = {marginTop: 16, marginBottom: 8};
+        // if (margin === 'dense')
+        //     style = {marginTop: 8, marginBottom: 4};
 
         return (
             <Select

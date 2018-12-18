@@ -52,13 +52,13 @@ class LoginForm extends Form {
             <Paper className='form-container'>
 
                 <form onSubmit={this.handleSubmit} autoComplete='on'>
-                    <header>
+                    <header className='form-header'>
                         Login
                     </header>
 
                     <div className='form-content login-form'>
-                        {this.renderTextInput([USERNAME], 'Username', 'username-input', true)}
-                        {this.renderPasswordInput([PASSWORD], 'Password', 'password-input')}
+                        {this.renderTextInput([USERNAME], 'Username', {}, {className: 'username-input', focus: true})}
+                        {this.renderPasswordInput([PASSWORD], 'Password', {}, {className: 'password-input'})}
                     </div>
 
                     <footer>
