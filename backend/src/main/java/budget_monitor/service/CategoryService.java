@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service("categoryService")
@@ -30,7 +29,7 @@ public class CategoryService {
     }
 
 
-    public Optional<CategoryDTO> getRootCategoryByUsername(String username) {
+    public CategoryDTO getRootCategoryByUsername(String username) {
         NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("username", username);

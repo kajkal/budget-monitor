@@ -34,7 +34,7 @@ public class JwtProvider {
 
 
     public String generateJwtToken(Authentication authentication) {
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        JwtUser user = (JwtUser) authentication.getPrincipal();
 
         Date issuedAt = new Date();
         Date expireAfter = new Date(issuedAt.getTime() + TimeUnit.MINUTES.toMillis(jwtExpireAfter));
@@ -44,6 +44,8 @@ public class JwtProvider {
 //        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
 //            claims.put("isAdmin", true);
 //        }
+        claims.put("email", user.getEmail());
+        claims.put("currency", user.getCurrency());
 
         return Jwts.builder()
                 .setClaims(claims)

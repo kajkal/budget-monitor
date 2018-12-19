@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -42,16 +40,14 @@ public class CategoryController {
     @LogExecutionTime
     @RequestMapping(method = GET, path = "/api/categories")
     @ResponseBody
-    public ResponseEntity<CategoryDTO> getRootCategory(@CurrentUser UserDetails user) throws CategoryException {
+    public ResponseEntity<CategoryDTO> getRootCategory(@CurrentUser UserDetails user) {
 
-        CategoryDTO rootCategory = categoryService.getRootCategoryByUsername(user.getUsername()).orElseThrow(
-                () -> new CategoryException("getRootCategory.error.notFound")
-        );
+        CategoryDTO rootCategory = categoryService.getRootCategoryByUsername(user.getUsername());
         return ResponseEntity.ok(rootCategory);
     }
 
     @LogExecutionTime
-    @RequestMapping(method = POST, path = "/api/category")
+    @RequestMapping(method = POST, path = "/api/categories")
     @ResponseBody
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryFormDTO categoryFormDTO,
                                                       @CurrentUser UserDetails user) {
@@ -61,7 +57,7 @@ public class CategoryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = PUT, path = "/api/category/{idCategory}")
+    @RequestMapping(method = PUT, path = "/api/categories/{idCategory}")
     @ResponseBody
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable("idCategory") Long idCategory,
                                                       @Valid @RequestBody CategoryFormDTO categoryFormDTO,
@@ -77,7 +73,7 @@ public class CategoryController {
     }
 
     @LogExecutionTime
-    @RequestMapping(method = DELETE, path = "/api/category/{idCategory}")
+    @RequestMapping(method = DELETE, path = "/api/categories/{idCategory}")
     @ResponseBody
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("idCategory") Long idCategory,
                                                      @CurrentUser UserDetails user) throws CategoryException {

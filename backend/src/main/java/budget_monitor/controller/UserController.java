@@ -4,6 +4,7 @@ import budget_monitor.aop.LogExecutionTime;
 import budget_monitor.dto.input.RegisterFormDTO;
 import budget_monitor.dto.output.JwtTokenDTO;
 import budget_monitor.exception.type.UserException;
+import budget_monitor.model.User;
 import budget_monitor.service.AuthenticationService;
 import budget_monitor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -38,9 +40,13 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<JwtTokenDTO> createUser(@Valid @RequestBody RegisterFormDTO registerFormDTO) throws UserException {
 
-        int result = userService.checkIfUserWithUsernameOrEmailExists(registerFormDTO.getUsername(), registerFormDTO.getEmail());
-        if (result == 1) throw new UserException("register.error.usernameExists");
-        if (result == 2) throw new UserException("register.error.emailExists");
+        List<User> users = userService.findByUsernameOrEmail(registerFormDTO.getUsername(), registerFormDTO.getEmail());
+        users.stream().filter(user -> user.getUsername().equals(registerFormDTO.getUsername())).findAny().ifPresent(
+                user -> { throw new UserException("register.error.usernameExists"); }
+        );
+        users.stream().filter(user -> user.getEmail().equals(registerFormDTO.getEmail())).findAny().ifPresent(
+                user -> { throw new UserException("register.error.emailExists"); }
+        );
 
         userService.createUser(registerFormDTO);
 

@@ -11,15 +11,27 @@ CREATE TABLE users (
   username                   VARCHAR(30)    NOT NULL,
   password                   VARCHAR(60)    NOT NULL,
   email                      VARCHAR(50)    NOT NULL UNIQUE,
-  role                       VARCHAR(10)    NOT NULL,
   currency                   VARCHAR(3)     DEFAULT '---',
   PRIMARY KEY (username)
+) ENGINE = InnoDB;
+
+CREATE TABLE roles (
+  rolename                   VARCHAR(30)   NOT NULL,
+  PRIMARY KEY (rolename)
+) ENGINE = InnoDB;
+
+CREATE TABLE userRoles (
+  username                   VARCHAR(30)    NOT NULL,
+  rolename                   VARCHAR(30)    NOT NULL,
+  PRIMARY KEY (username, rolename),
+  FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+  FOREIGN KEY (rolename) REFERENCES roles(rolename) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE categories (
   idCategory                 INTEGER(30)    NOT NULL AUTO_INCREMENT,
   idSuperCategory            INTEGER(30)    DEFAULT NULL,
-  owner                      VARCHAR(30)    NOT NULL,
+  owner                      VARCHAR(30)    DEFAULT NULL,
   name                       VARCHAR(60)    NOT NULL,
   color                      INTEGER(2)     DEFAULT NULL,
   PRIMARY KEY (idCategory),
@@ -70,6 +82,15 @@ CREATE VIEW entriesWithSubEntriesView AS
          se.value AS subEntryValue
   FROM entries e LEFT JOIN subEntries se USING (idEntry);
 
+CREATE VIEW usersWithRoles AS
+  SELECT
+         username,
+         password,
+         email,
+         currency,
+         rolename
+  FROM users NATURAL JOIN userroles;
+
 CREATE TRIGGER entriesOnUpdate
   BEFORE UPDATE ON entries
   FOR EACH ROW
@@ -77,18 +98,31 @@ CREATE TRIGGER entriesOnUpdate
     DELETE FROM subEntries WHERE idEntry = NEW.idEntry;
   END;
 
-CREATE FUNCTION checkIfUserWithUsernameOrEmailExists(
-  _username VARCHAR(30),
-  _email VARCHAR(50)
-) RETURNS INTEGER(1) READS SQL DATA
+CREATE TRIGGER newUserSetup
+  AFTER INSERT ON users
+  FOR EACH ROW
   BEGIN
-    # check if user with username exists, if so return 1
-    IF (SELECT count(*) FROM users WHERE username LIKE _username) > 0 THEN
-      RETURN 1;
-    # check if user with email exists, if so return 2
-    ELSEIF (SELECT count(*) FROM users WHERE email LIKE _email) > 0 THEN
-      RETURN 2;
-    ELSE
-      RETURN 0;
-    END IF;
+    DECLARE id INTEGER(30);
+
+    # create role:
+    INSERT INTO userRoles (username, rolename) VALUE (NEW.username, 'USER');
+    # create default category structure:
+    INSERT INTO categories (idSuperCategory, owner, name, color)
+    VALUES (2, NEW.username, 'Salary', 0),
+           (2, NEW.username, 'Presents', 0);
+
+    INSERT INTO categories (idSuperCategory, owner, name, color)
+    VALUES (3, NEW.username, 'Communication', 0),
+           (3, NEW.username, 'Entertainment', 0),
+           (3, NEW.username, 'Maintenance', 0);
+    SET id = LAST_INSERT_ID();
+
+    INSERT INTO categories (idSuperCategory, owner, name, color)
+    VALUES (id, NEW.username, 'Food', 0),
+           (id, NEW.username, 'Home', 0);
+    SET id = LAST_INSERT_ID();
+
+    INSERT INTO categories (idSuperCategory, owner, name, color)
+    VALUES (id, NEW.username, 'Rent', 0),
+           (id, NEW.username, 'Cleaning', 0);
   END;

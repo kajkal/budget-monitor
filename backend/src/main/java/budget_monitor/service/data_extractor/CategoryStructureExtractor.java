@@ -7,18 +7,48 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class CategoryStructureExtractor implements ResultSetExtractor<Optional<CategoryDTO>> {
+public class CategoryStructureExtractor implements ResultSetExtractor<CategoryDTO> {
+
+    private CategoryDTO getRootCategory() {
+        CategoryDTO incomeCategory = new CategoryDTO();
+        incomeCategory.setIdCategory(2L);
+        incomeCategory.setIdSuperCategory(1L);
+        incomeCategory.setName("INCOME_CATEGORY");
+        incomeCategory.setColor(0);
+        incomeCategory.setSubCategories(new ArrayList<>());
+        incomeCategory.setPath(Collections.singletonList(1L));
+
+        CategoryDTO expenseCategory = new CategoryDTO();
+        expenseCategory.setIdCategory(3L);
+        expenseCategory.setIdSuperCategory(1L);
+        expenseCategory.setName("EXPENSE_CATEGORY");
+        expenseCategory.setColor(0);
+        expenseCategory.setSubCategories(new ArrayList<>());
+        expenseCategory.setPath(Collections.singletonList(1L));
+
+        CategoryDTO rootCategory = new CategoryDTO();
+        rootCategory.setIdCategory(1L);
+        rootCategory.setIdSuperCategory(0L);
+        rootCategory.setName("ROOT_CATEGORY");
+        rootCategory.setColor(0);
+        rootCategory.setSubCategories(Arrays.asList(incomeCategory, expenseCategory));
+        rootCategory.setPath(new ArrayList<>());
+
+        return rootCategory;
+    }
 
     @Override
-    public Optional<CategoryDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public CategoryDTO extractData(ResultSet rs) throws SQLException, DataAccessException {
         // key -> idSuperCategory, value: list of subCategories
         Map<Long, List<CategoryDTO>> listOfSubCategories = new HashMap<>();
-        Optional<CategoryDTO> rootCategory = Optional.empty();
+        CategoryDTO rootCategory = getRootCategory();
 
         while (rs.next()) {
             Long idCategory = rs.getLong("idCategory");
@@ -31,17 +61,14 @@ public class CategoryStructureExtractor implements ResultSetExtractor<Optional<C
             category.setColor(rs.getInt("color"));
             category.setSubCategories(new ArrayList<>());
 
-            if (idSuperCategory == 0) {
-                rootCategory = Optional.of(category);
-            } else {
-                listOfSubCategories
-                        .computeIfAbsent(idSuperCategory, k -> new ArrayList<>())
-                        .add(category);
-            }
+            listOfSubCategories
+                    .computeIfAbsent(idSuperCategory, k -> new ArrayList<>())
+                    .add(category);
         }
 
-        rootCategory.ifPresent(root -> addSubCategories(root, listOfSubCategories, new ArrayList<>()));
-        rootCategory.ifPresent(root -> root.setPath(new ArrayList<>()));
+        rootCategory.getSubCategories().forEach(
+                category -> addSubCategories(category, listOfSubCategories, Collections.singletonList(1L))
+        );
         return rootCategory;
     }
 

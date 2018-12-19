@@ -17,7 +17,7 @@ class UserControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/api/user', payload)
+        def response = post('/api/users', payload)
 
         then:
         response.status == HttpStatus.OK
@@ -33,11 +33,11 @@ class UserControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/api/user', payload)
+        def response = post('/api/users', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'register.error.usernameExists'
+        response.json.message == 'register.error.usernameExists'
     }
 
     def 'create new account with email that already exists'() {
@@ -50,11 +50,11 @@ class UserControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/api/user', payload)
+        def response = post('/api/users', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'register.error.emailExists'
+        response.json.message == 'register.error.emailExists'
     }
 
     def 'create account without required fields'() {
@@ -66,11 +66,11 @@ class UserControllerTest extends AbstractMvcSpec {
         ]
 
         when:
-        def response = post('/api/user', payload)
+        def response = post('/api/users', payload)
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey.contains('userData.error.notValid')
+        response.json.message.contains('userData.error.notValid')
     }
 
 }

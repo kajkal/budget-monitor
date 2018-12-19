@@ -9,6 +9,8 @@ import spock.lang.Stepwise
 @Stepwise
 class EntryControllerTest extends AbstractMvcSpec {
 
+    Long foodCategoryIdForUser = 18
+
     @Shared
     String testUserToken
 
@@ -32,7 +34,6 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.OK
-        response.json.type == 'Bearer'
         testUserToken != null
         testUserToken.length() > 7
     }
@@ -49,7 +50,7 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user adds new entry'() {
         given:
         def newEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': 'Bakery',
                 'value'      : -450,
                 'date'       : 1541247841137,
@@ -74,12 +75,12 @@ class EntryControllerTest extends AbstractMvcSpec {
         then:
         response.status == HttpStatus.OK
         response.json.idEntry > 0
-        response.json.idCategory == 42
+        response.json.idCategory == foodCategoryIdForUser
         response.json.description == 'Bakery'
         response.json.value == -450
         response.json.date == '2018-11-03T12:24:01.137+0000'
         response.json.dateOfAddition != null
-        response.json.dateOfLastModification == null
+        response.json.dateOfLastModification != null
         response.json.photo == null
         response.json.subEntries.get(0).idSubEntry > 0
         response.json.subEntries.get(0).idCategory == 6
@@ -112,7 +113,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         response.json.value == -850
         response.json.date == '2018-11-03T12:24:01.137+0000'
         response.json.dateOfAddition != null
-        response.json.dateOfLastModification == null
+        response.json.dateOfLastModification != null
         response.json.photo == null
         response.json.subEntries.size == 0
     }
@@ -120,7 +121,7 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user adds new entry with invalid date'() {
         given:
         def newEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': 'Grocery',
                 'value'      : -850,
                 'date'       : '2018-11-01 15:00:00',
@@ -132,13 +133,13 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'entryData.error.badRequest'
+        response.json.message == 'entryData.error.badRequest'
     }
 
     def 'user adds new entry with invalid data'() {
         given:
         def newEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': '    ',
                 'value'      : -850,
                 'date'       : 1541247841137,
@@ -150,13 +151,13 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey.contains('entryData.error.notValid')
+        response.json.message.contains('entryData.error.notValid')
     }
 
     def 'user update entry'() {
         given:
         def updatedEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': 'Updated Bakery',
                 'value'      : -650,
                 'date'       : 1541247841137,
@@ -185,7 +186,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         then:
         response.status == HttpStatus.OK
         response.json.idEntry > 0
-        response.json.idCategory == 42
+        response.json.idCategory == foodCategoryIdForUser
         response.json.description == 'Updated Bakery'
         response.json.value == -650
         response.json.date == '2018-11-03T12:24:01.137+0000'
@@ -209,7 +210,7 @@ class EntryControllerTest extends AbstractMvcSpec {
     def 'user update entry with invalid data'() {
         given:
         def updatedEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': '  ',
                 'value'      : -650,
                 'date'       : 1541247841137,
@@ -221,13 +222,13 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey.contains('entryData.error.notValid')
+        response.json.message.contains('entryData.error.notValid')
     }
 
     def 'user update non-existing entry'() {
         given:
         def updatedEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': 'Desc',
                 'value'      : -650,
                 'date'       : 1541247841137,
@@ -239,13 +240,13 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateEntry.error.entryNotFound'
+        response.json.message == 'updateEntry.error.entryNotFound'
     }
 
     def 'user update not owned entry'() {
         given:
         def updatedEntry = [
-                'idCategory' : 42,
+                'idCategory' : foodCategoryIdForUser,
                 'description': 'Desc',
                 'value'      : -650,
                 'date'       : 1541247841137,
@@ -257,7 +258,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateEntry.error.unauthorised'
+        response.json.message == 'updateEntry.error.unauthorised'
     }
 
     def 'user removes entry'() {
@@ -274,7 +275,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteEntry.error.entryNotFound'
+        response.json.message == 'deleteEntry.error.entryNotFound'
     }
 
     def 'user removes not owned entry'() {
@@ -283,7 +284,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteEntry.error.unauthorised'
+        response.json.message == 'deleteEntry.error.unauthorised'
     }
 
 }
