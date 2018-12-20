@@ -10,7 +10,7 @@ import Button from '@material-ui/core/es/Button/Button';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import { categoryRootShape } from '../../../../config/propTypesCommon';
 import { getCategoryName } from '../../../../services/entities-services/categoryService';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../../../config/theme';
 
 
 class CategoryInput extends PureComponent {
@@ -69,8 +69,8 @@ class CategoryInput extends PureComponent {
 
                 <Dialog
                     fullScreen={fullScreen}
-                    maxWidth={mobileDialogBreakpoint}
-                    PaperProps={dialogPaperProps}
+                    maxWidth={desktopDialogMaxWidth}
+                    fullWidth={true}
 
                     open={this.state.open}
                     onClose={this.handleClose}

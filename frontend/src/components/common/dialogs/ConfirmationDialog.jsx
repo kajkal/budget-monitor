@@ -7,15 +7,15 @@ import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
 import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import Button from '@material-ui/core/es/Button/Button';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../../config/theme';
 
 
 const ConfirmationDialog = ({ header, content, onOk, open, onClose, fullScreen }) => {
     return (
         <Dialog
             fullScreen={fullScreen}
-            maxWidth={mobileDialogBreakpoint}
-            PaperProps={dialogPaperProps}
+            maxWidth={desktopDialogMaxWidth}
+            fullWidth={true}
 
             open={open}
             onClose={onClose}

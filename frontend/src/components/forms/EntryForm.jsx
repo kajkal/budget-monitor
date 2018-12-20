@@ -17,7 +17,7 @@ import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 
 
 class EntryForm extends Form {
@@ -175,8 +175,8 @@ class EntryForm extends Form {
         return (
             <Dialog
                 fullScreen={fullScreen}
-                maxWidth={mobileDialogBreakpoint}
-                PaperProps={dialogPaperProps}
+                maxWidth={desktopDialogMaxWidth}
+                fullWidth={true}
 
                 open={open}
                 onClose={onClose}

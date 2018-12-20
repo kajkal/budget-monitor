@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { categoryRootShape } from '../../config/propTypesCommon';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import Tabs from '@material-ui/core/es/Tabs/Tabs';
 import Tab from '@material-ui/core/es/Tab/Tab';
@@ -40,8 +40,8 @@ class CategoryOptionDialog extends PureComponent {
         return (
             <Dialog
                 fullScreen={fullScreen}
-                maxWidth={mobileDialogBreakpoint}
-                PaperProps={dialogPaperProps}
+                maxWidth={desktopDialogMaxWidth}
+                fullWidth={true}
 
                 open={open}
                 onClose={onClose}

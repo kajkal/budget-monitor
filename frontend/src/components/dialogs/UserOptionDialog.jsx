@@ -4,7 +4,7 @@ import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDi
 import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import Tabs from '@material-ui/core/es/Tabs/Tabs';
 import Tab from '@material-ui/core/es/Tab/Tab';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 
 
 class UserOptionDialog extends PureComponent {
@@ -23,8 +23,8 @@ class UserOptionDialog extends PureComponent {
         return (
             <Dialog
                 fullScreen={fullScreen}
-                maxWidth={mobileDialogBreakpoint}
-                PaperProps={dialogPaperProps}
+                maxWidth={desktopDialogMaxWidth}
+                fullWidth={true}
 
                 open={open}
                 onClose={onClose}

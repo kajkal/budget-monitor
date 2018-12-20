@@ -11,7 +11,7 @@ import Form from '../common/forms/Form';
 import { addCategory, getCategoriesByType, getCategoryParent, updateCategory, } from '../../services/entities-services/categoryService';
 import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
-import { dialogPaperProps, mobileDialogBreakpoint } from '../../config/theme';
+import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 import { CATEGORY, ID_CATEGORY, NAME } from '../../config/fieldNames';
 import { categoryRootShape } from '../../config/propTypesCommon';
 
@@ -103,8 +103,8 @@ class CategoryForm extends Form {
         return (
             <Dialog
                 fullScreen={fullScreen}
-                maxWidth={mobileDialogBreakpoint}
-                PaperProps={dialogPaperProps}
+                maxWidth={desktopDialogMaxWidth}
+                fullWidth={true}
 
                 open={open}
                 onClose={onClose}

@@ -24,9 +24,6 @@ export const tooltipEnterDelay = 500;
 export const tooltipLeaveDelay = 200;
 
 
-// xs: 600
-// sm: 960
-// md: 1280
-// lg: 1920
-export const mobileDialogBreakpoint = 'xs';
-export const dialogPaperProps = { style: { minWidth: '600px', minHeight: '400px' } };
+// [xs, sm, md, lg] 600, 960, 1280, 1920
+export const mobileDialogBreakpoint = 'xs'; // 600px
+export const desktopDialogMaxWidth = 'sm'; // 600px
