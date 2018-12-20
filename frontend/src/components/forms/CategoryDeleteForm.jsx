@@ -7,7 +7,7 @@ import { deleteCategory } from '../../services/entities-services/categoryService
 import { categoryRootShape } from '../../config/propTypesCommon';
 
 
-class DeleteCategoryDialog extends PureComponent {
+class CategoryDeleteForm extends PureComponent {
     state = {
         header: 'Delete category',
         content: 'Are you sure you want to delete this category?',
@@ -24,17 +24,13 @@ class DeleteCategoryDialog extends PureComponent {
     handleOk = async () => {
         try {
             const { category } = this.props;
-            const response = await deleteCategory(category);
-
-            console.log('response from server: ', response);
+            await deleteCategory(category);
             alertService.success('Category successfully deleted.');
             this.props.onClose();
             this.props.onRootCategoryChange();
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
-                console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
                 this.setState({ errors });
             }
         }
@@ -58,7 +54,7 @@ class DeleteCategoryDialog extends PureComponent {
     }
 }
 
-DeleteCategoryDialog.propTypes = {
+CategoryDeleteForm.propTypes = {
     category: categoryRootShape.isRequired,
 
     open: PropTypes.bool.isRequired,
@@ -66,4 +62,4 @@ DeleteCategoryDialog.propTypes = {
     onRootCategoryChange: PropTypes.func.isRequired,
 };
 
-export default DeleteCategoryDialog;
+export default CategoryDeleteForm;

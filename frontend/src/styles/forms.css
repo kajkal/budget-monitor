@@ -58,7 +58,7 @@ form div.form-content.register-form {
 }
 
 
-/*NEW ENTRY FORM*/
+/*ENTRY FORM*/
 
 form div.form-content.new-entry-form {
     display: grid;
@@ -115,4 +115,12 @@ form div.form-content.new-entry-form .subEntry-area .subEntry-row {
         grid-template-areas:
             'value description category removeSubEntry';
     }
+}
+
+/*CATEGORY FORM*/
+
+
+form div.form-content.category-form {
+    display: flex;
+    flex-direction: column;
 }

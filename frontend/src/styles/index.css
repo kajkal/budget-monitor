@@ -1,5 +1,5 @@
 @import '_constants.css';
-@import 'form.css';
+@import 'forms.css';
 
 *,*::before,*::after {
     margin: 0;

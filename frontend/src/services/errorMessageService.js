@@ -35,6 +35,11 @@ const GENERAL_ERRORS_MAP = new Map([
         relatedFields: [USERNAME, PASSWORD],
         message: 'Bad username or password.'
     }],
+
+    [REGISTER_UNKNOWN_ERROR, {
+        relatedFields: [],
+        message: 'Unknown error occurred.'
+    }],
 ]);
 
 function getInputErrorMessages(message) {

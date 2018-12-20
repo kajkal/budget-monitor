@@ -12,11 +12,12 @@ import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
 import { categoryRootShape } from '../../config/propTypesCommon';
 import { getCategoriesByType } from '../../services/entities-services/categoryService';
-import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
-import Dialog from '@material-ui/core/Dialog/Dialog';
+import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
+import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
+import { dialogPaperProps, mobileDialogBreakpoint } from '../../config/theme';
 
 
 class EntryForm extends Form {
@@ -76,9 +77,9 @@ class EntryForm extends Form {
                     .filter(se => !(se[CATEGORY].path && se[CATEGORY].path.includes(newMainCategory.idCategory)))
                     .forEach(se => se[CATEGORY] = {});
 
-                Object.values(subEntries)
-                    .filter(se => _.isEmpty(se[CATEGORY]))
-                    .forEach(se => se[CATEGORY] = newMainCategory)
+                // Object.values(subEntries)
+                //     .filter(se => _.isEmpty(se[CATEGORY]))
+                //     .forEach(se => se[CATEGORY] = newMainCategory)
             }
         }
     };
@@ -173,10 +174,13 @@ class EntryForm extends Form {
 
         return (
             <Dialog
-                disableBackdropClick={true}
                 fullScreen={fullScreen}
+                maxWidth={mobileDialogBreakpoint}
+                PaperProps={dialogPaperProps}
+
                 open={open}
                 onClose={onClose}
+                disableBackdropClick={true}
                 aria-labelledby='entry-form-dialog'
             >
 
@@ -189,7 +193,7 @@ class EntryForm extends Form {
                 </DialogTitle>
 
                 <DialogContent>
-                    <form onSubmit={this.handleSubmit} autoComplete='on'>
+                    <form autoComplete='on' onKeyDown={this.onEnterDown}>
 
                         <div className='form-content new-entry-form'>
                             {this.renderCurrencyInput([VALUE], 'Value', {currency}, {className: 'currency-input', focus: true})}
@@ -224,4 +228,4 @@ EntryForm.propTypes = {
     fullScreen: PropTypes.bool.isRequired,
 };
 
-export default withMobileDialog()(EntryForm);
+export default withMobileDialog({ breakpoint: mobileDialogBreakpoint })(EntryForm);

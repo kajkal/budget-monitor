@@ -1,51 +1,56 @@
 import React, { Component } from 'react';
-import Toolbar from '@material-ui/core/Toolbar/Toolbar';
-import AppBar from '@material-ui/core/AppBar/AppBar';
-import Typography from '@material-ui/core/Typography/Typography';
-import Button from '@material-ui/core/Button/Button';
-import {PowerSettingsNew, Settings, Add, CallMade, PlaylistAdd} from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { Add, CallMade, PlaylistAdd, PowerSettingsNew, Settings } from '@material-ui/icons';
+import Toolbar from '@material-ui/core/es/Toolbar/Toolbar';
+import AppBar from '@material-ui/core/es/AppBar/AppBar';
+import Typography from '@material-ui/core/es/Typography/Typography';
+import Button from '@material-ui/core/es/Button/Button';
 import EntryForm from '../forms/EntryForm';
-import { categoryRootShape } from '../../config/propTypesCommon';
 import ButtonWithMenu from '../common/menus/ButtonWithMenu';
+import CategoryOptionDialog from '../dialogs/CategoryOptionDialog';
+import { categoryRootShape } from '../../config/propTypesCommon';
+import UserOptionDialog from '../dialogs/UserOptionDialog';
 
 
 class Navbar extends Component {
     state = {
         incomeFormDialogOpen: false,
         expenseFormDialogOpen: false,
+        userOptionDialogOpen: false,
+        categoryOptionDialogOpen: false,
     };
 
     newEntryOptions = [
         {
             label: 'Income',
-            icon: <CallMade className='positive'/>,
-            onClick: () => this.setState({ incomeFormDialogOpen: true })
+            icon: <CallMade className='positive' />,
+            onClick: () => this.setState({ incomeFormDialogOpen: true }),
         },
         {
             label: 'Expense',
-            icon: <CallMade className='negative mirrorY'/>,
-            onClick: () => this.setState({ expenseFormDialogOpen: true })
+            icon: <CallMade className='negative mirrorY' />,
+            onClick: () => this.setState({ expenseFormDialogOpen: true }),
         },
     ];
 
     userOptions = [
         {
-            label: "Settings",
+            label: 'Settings',
             icon: <Settings />,
-            onClick: () => console.log('Settings on click')
+            onClick: () => this.setState({ userOptionDialogOpen: true }),
         },
         {
-            label: "Categories",
+            label: 'Categories',
             icon: <PlaylistAdd />,
-            onClick: () => console.log('categories on click')
+            onClick: () => this.setState({ categoryOptionDialogOpen: true }),
         },
         {
-            label: "Logout",
+            label: 'Logout',
             icon: <PowerSettingsNew />,
-            redirect: '/logout'
+            component: NavLink,
+            to: '/logout'
         },
     ];
 
@@ -53,27 +58,66 @@ class Navbar extends Component {
         this.setState({
             incomeFormDialogOpen: false,
             expenseFormDialogOpen: false,
+            userOptionDialogOpen: false,
+            categoryOptionDialogOpen: false,
         });
+    };
+
+    renderEntryFormDialog = (type, currency) => {
+        const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
+        const { rootCategory } = this.props;
+        const open = type === 'income' ? incomeFormDialogOpen : expenseFormDialogOpen;
+        return (
+            <EntryForm
+                type={type}
+                currency={currency}
+                rootCategory={rootCategory}
+                open={open}
+                onClose={this.handleDialogClose}
+            />
+        );
+    };
+
+    renderUserOptionDialog = () => {
+        const { userOptionDialogOpen } = this.state;
+        return (
+            <UserOptionDialog
+                open={userOptionDialogOpen}
+                onClose={this.handleDialogClose}
+            />
+        );
+    };
+
+    renderCategoryOptionDialog = () => {
+        const { categoryOptionDialogOpen } = this.state;
+        const { rootCategory, onRootCategoryChange } = this.props;
+        return (
+            <CategoryOptionDialog
+                open={categoryOptionDialogOpen}
+                onClose={this.handleDialogClose}
+                rootCategory={rootCategory}
+                onRootCategoryChange={onRootCategoryChange}
+            />
+        );
     };
 
     render() {
         const { user, rootCategory } = this.props;
-        const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
-        return (
-            <AppBar position="static">
-                <Toolbar variant="dense">
 
-                    <Typography variant="h5" color="inherit" className='flex-grow-1'>
+        return (
+            <AppBar position='static'>
+                <Toolbar variant='dense'>
+
+                    <Typography variant='h5' color='inherit' className='flex-grow-1'>
                         Budget Monitor
                     </Typography>
 
-                    {/*TODO: remove buttons?*/}
                     {!user && (
                         <React.Fragment>
-                            <Button component={NavLink} to={"/login"} color="inherit">
+                            <Button component={NavLink} to={'/login'} color='inherit'>
                                 Login
                             </Button>
-                            <Button component={NavLink} to={"/register"} color="inherit">
+                            <Button component={NavLink} to={'/register'} color='inherit'>
                                 Register
                             </Button>
                         </React.Fragment>
@@ -88,28 +132,19 @@ class Navbar extends Component {
                                 menuOptions={this.newEntryOptions}
                             />
 
+                            {this.renderEntryFormDialog('income', user.currency)}
+                            {this.renderEntryFormDialog('expense', user.currency)}
+
+
                             <ButtonWithMenu
                                 buttonLabel={user.sub}
                                 buttonTooltip='Options'
                                 menuOptions={this.userOptions}
                             />
 
+                            {this.renderUserOptionDialog()}
+                            {this.renderCategoryOptionDialog()}
 
-                            <EntryForm
-                                type='income'
-                                currency={user.currency}
-                                rootCategory={rootCategory}
-                                open={incomeFormDialogOpen}
-                                onClose={this.handleDialogClose}
-                            />
-
-                            <EntryForm
-                                type='expense'
-                                currency={user.currency}
-                                rootCategory={rootCategory}
-                                open={expenseFormDialogOpen}
-                                onClose={this.handleDialogClose}
-                            />
                         </React.Fragment>
                     )}
 
@@ -122,6 +157,7 @@ class Navbar extends Component {
 Navbar.propTypes = {
     user: PropTypes.object,
     rootCategory: categoryRootShape,
+    onRootCategoryChange: PropTypes.func.isRequired,
 };
 
 export default Navbar;

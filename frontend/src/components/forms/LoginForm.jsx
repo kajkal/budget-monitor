@@ -51,7 +51,7 @@ class LoginForm extends Form {
         return (
             <Paper className='form-container'>
 
-                <form onSubmit={this.handleSubmit} autoComplete='on'>
+                <form autoComplete='on' onKeyDown={this.onEnterDown}>
                     <header className='form-header'>
                         Login
                     </header>

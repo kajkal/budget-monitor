@@ -8,6 +8,7 @@ import { translateErrorMessage } from '../../services/errorMessageService';
 import {USERNAME, EMAIL, PASSWORD, CURRENCY} from '../../config/fieldNames';
 import { getCurrencies } from '../../services/entities-services/currencyService';
 import { alertService } from '../../services/alertService';
+import { Redirect } from 'react-router-dom';
 
 
 class RegisterForm extends Form {
@@ -64,11 +65,13 @@ class RegisterForm extends Form {
     };
 
     render() {
+        if (auth.getCurrentUser()) return <Redirect to='/' />;
+
         const options = getCurrencies();
         return (
             <Paper className='form-container'>
 
-                <form onSubmit={this.handleSubmit} autoComplete='on'>
+                <form autoComplete='on' onKeyDown={this.onEnterDown}>
                     <header className='form-header'>
                         Register
                     </header>

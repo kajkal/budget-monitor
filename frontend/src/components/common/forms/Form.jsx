@@ -38,7 +38,7 @@ class Form extends PureComponent {
         let data = { ...this.state.data };
         _.set(data, path, value);
 
-        this.extendedOnInputChange && this.extendedOnInputChange(path, data);
+        this.extendedOnInputChange && this.extendedOnInputChange(path, data, errors);
         this.setState({ data, errors });
     };
 
@@ -70,9 +70,18 @@ class Form extends PureComponent {
         this.doSubmit();
     };
 
+    onEnterDown = event => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            if (this.validate() === null)
+                this.doSubmit();
+        }
+    };
+
     renderSubmitButton(label) {
         const renderButton = (disabled = false) => (
-            <Button type='submit' disabled={disabled} color='primary' className='submit-button' onClick={this.handleSubmit}>
+            <Button disabled={disabled} color='primary' className='submit-button' onClick={this.handleSubmit}>
                 {label}
             </Button>
         );
@@ -237,7 +246,7 @@ class Form extends PureComponent {
         const value = _.get(this.state.data, path); // whole category object
         const error = _.get(this.state.errors, path);
 
-        const {rootCategory, onlySubCategories, header} = inputDetails;
+        const {rootCategory, onlySubCategories, header, categoryDisabled, resetDisabled } = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
 
         this._getInfo(path, value, error);
@@ -253,6 +262,8 @@ class Form extends PureComponent {
                 rootCategory={rootCategory}
                 onlySubCategories={onlySubCategories}
                 header={header}
+                categoryDisabled={categoryDisabled}
+                resetDisabled={resetDisabled}
 
                 className={className}
                 autoFocus={focus}

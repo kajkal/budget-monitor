@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import TextField from '@material-ui/core/TextField/TextField';
-import Dialog from '@material-ui/core/Dialog/Dialog';
+import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import PropTypes from 'prop-types';
 import CategoryList from '../../lists/CategoryList';
@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import Button from '@material-ui/core/es/Button/Button';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import { categoryRootShape } from '../../../../config/propTypesCommon';
+import { getCategoryName } from '../../../../services/entities-services/categoryService';
+import { dialogPaperProps, mobileDialogBreakpoint } from '../../../../config/theme';
 
 
 class CategoryInput extends PureComponent {
@@ -36,9 +38,9 @@ class CategoryInput extends PureComponent {
 
     render() {
         const { name, label, value, margin, autoFocus, className, error } = this.props;
-        const { rootCategory, onlySubCategories, header, fullScreen } = this.props;
+        const { rootCategory, onlySubCategories, header, categoryDisabled, resetDisabled, fullScreen } = this.props;
 
-        const resetDisabled = !value.name;
+        const isResetDisabled = resetDisabled || !value.name;
 
         return (
             <React.Fragment>
@@ -56,7 +58,7 @@ class CategoryInput extends PureComponent {
 
                 className={className}
 
-                value={value.name || ''}
+                value={getCategoryName(value) || ''}
                 InputProps={{
                     readOnly: true,
                 }}
@@ -67,6 +69,9 @@ class CategoryInput extends PureComponent {
 
                 <Dialog
                     fullScreen={fullScreen}
+                    maxWidth={mobileDialogBreakpoint}
+                    PaperProps={dialogPaperProps}
+
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby='category-input-dialog'
@@ -81,15 +86,16 @@ class CategoryInput extends PureComponent {
                             rootCategory={rootCategory}
                             onlySubCategories={onlySubCategories}
                             header={header}
+                            categoryDisabled={categoryDisabled}
                             onSelect={this.handleSelectCategory}
                         />
                     </DialogContent>
 
                     <DialogActions>
-                        <Button disabled={resetDisabled} onClick={this.handleReset} color='primary'>
+                        <Button disabled={isResetDisabled} onClick={this.handleReset} color='primary'>
                             Reset
                         </Button>
-                        <Button onClick={this.handleClose} color='primary'>
+                        <Button onClick={this.handleClose} color='primary' autoFocus>
                             Cancel
                         </Button>
                     </DialogActions>
@@ -115,8 +121,10 @@ CategoryInput.propTypes = {
     rootCategory: categoryRootShape.isRequired,
     onlySubCategories: PropTypes.bool.isRequired,
     header: PropTypes.string,
+    categoryDisabled: PropTypes.func,
+    resetDisabled: PropTypes.bool,
 
     fullScreen: PropTypes.bool.isRequired,
 };
 
-export default withMobileDialog()(CategoryInput);
+export default withMobileDialog({ breakpoint: mobileDialogBreakpoint })(CategoryInput);

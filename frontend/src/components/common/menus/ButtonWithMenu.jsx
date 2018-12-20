@@ -63,7 +63,8 @@ ButtonWithMenu.propTypes = {
         icon: PropTypes.element.isRequired,
         excluded: PropTypes.bool,
         onClick: PropTypes.func,
-        redirect: PropTypes.string,
+        component: PropTypes.func,
+        to: PropTypes.string,
     })).isRequired,
 };
 

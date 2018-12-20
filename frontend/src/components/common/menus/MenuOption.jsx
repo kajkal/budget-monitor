@@ -25,7 +25,8 @@ MenuOption.propTypes = {
     label: PropTypes.string.isRequired,
     excluded: PropTypes.bool,
     onClick: PropTypes.func,
-    redirect: PropTypes.string,
+    component: PropTypes.func,
+    to: PropTypes.string,
 };
 
 export default MenuOption;
