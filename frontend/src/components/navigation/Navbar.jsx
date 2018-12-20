@@ -3,13 +3,13 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Typography from '@material-ui/core/Typography/Typography';
 import Button from '@material-ui/core/Button/Button';
-import {PowerSettingsNew, Settings, Add, CallMade} from '@material-ui/icons';
-import DropdownMenu from './DropdownMenu';
+import {PowerSettingsNew, Settings, Add, CallMade, PlaylistAdd} from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import EntryForm from '../forms/EntryForm';
 import { categoryRootShape } from '../../config/propTypesCommon';
+import ButtonWithMenu from '../common/menus/ButtonWithMenu';
 
 
 class Navbar extends Component {
@@ -36,6 +36,11 @@ class Navbar extends Component {
             label: "Settings",
             icon: <Settings />,
             onClick: () => console.log('Settings on click')
+        },
+        {
+            label: "Categories",
+            icon: <PlaylistAdd />,
+            onClick: () => console.log('categories on click')
         },
         {
             label: "Logout",
@@ -76,8 +81,19 @@ class Navbar extends Component {
 
                     {user && !_.isEmpty(rootCategory) && (
                         <React.Fragment>
-                            <DropdownMenu label={<Add/>} items={this.newEntryOptions} />
-                            <DropdownMenu label={user.sub} items={this.userOptions} />
+
+                            <ButtonWithMenu
+                                buttonLabel={<Add />}
+                                buttonTooltip='Add'
+                                menuOptions={this.newEntryOptions}
+                            />
+
+                            <ButtonWithMenu
+                                buttonLabel={user.sub}
+                                buttonTooltip='Options'
+                                menuOptions={this.userOptions}
+                            />
+
 
                             <EntryForm
                                 type='income'
@@ -86,6 +102,7 @@ class Navbar extends Component {
                                 open={incomeFormDialogOpen}
                                 onClose={this.handleDialogClose}
                             />
+
                             <EntryForm
                                 type='expense'
                                 currency={user.currency}
