@@ -1,49 +1,32 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton/IconButton';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton/IconButton';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider/Divider';
-import PropTypes from 'prop-types';
+import ListItem from '@material-ui/core/ListItem';
+import Collapse from '@material-ui/core/Collapse';
+import List from '@material-ui/core/List';
 import { categoryRootShape } from '../../../config/propTypesCommon';
+import { getCategoryName } from '../../../services/entities-services/categoryService';
 
 
-const dense = false;
-
-class CategoryList extends Component {
-    state = {
-        categories: {},
-    };
-
+class CategoryList extends PureComponent {
+    
     componentDidMount() {
-        this.setState({ categories: this.props.categories });
+        const { rootCategory, onlySubCategories } = this.props;
+        if (!onlySubCategories) {
+            rootCategory.open = true;
+            this.forceUpdate();
+        }
     }
 
     handleToggleOpen = category => {
-        // console.log('handleToggleOpen', category);
-
-        const categories = { ...this.state.categories };
         category.open = !category.open;
-        _.set(categories, category.lodashPath, category);
-        this.setState({ categories });
-
-        // const categories = getRootCategory();
-        //
-        // for (let i = category.lodashPath.length; i > 0; i-=2) {
-        //     const path = category.lodashPath.slice(0, i);
-        //     console.log('modyfikowana sciezka: ', path);
-        //     const categoryToOpen = _.get(categories, path);
-        //     categoryToOpen.open = !category.open;
-        //     _.set(categories, path, categoryToOpen);
-        // }
-        //
-        // this.setState({ categories });
+        this.forceUpdate();
     };
 
     renderCategory = (category, depth) => {
@@ -55,9 +38,9 @@ class CategoryList extends Component {
 
                 {!depth && <Divider />}
 
-                <ListItem button style={{paddingLeft: depth*20+16}} onClick={() => this.props.onSelect(category)}>
+                <ListItem button style={{paddingLeft: depth*20+16}} onClick={event => this.props.onSelect(category, event)}>
 
-                    <ListItemText primary={category.name} />
+                    <ListItemText primary={getCategoryName(category)} />
 
                     {
                         haveChildren && (
@@ -73,9 +56,9 @@ class CategoryList extends Component {
 
                 {
                     haveChildren && (
-                        <Collapse in={category.open} timeout="auto" unmountOnExit>
+                        <Collapse in={category.open} timeout='auto' unmountOnExit>
                             <List
-                                dense={dense}
+                                dense={this.props.dense}
                                 disablePadding={true}
                             >
                                 {category.subCategories.map(c => this.renderCategory(c, depth+1))}
@@ -88,13 +71,13 @@ class CategoryList extends Component {
     };
 
     render() {
-        const { header, rootCategory, onlySubCategories } = this.props;
+        const { header, rootCategory, onlySubCategories, dense } = this.props;
+        const subheader = header && <ListSubheader>{header}</ListSubheader>;
+
         return (
             <List
                 dense={dense}
-                subheader={header && <ListSubheader>{header}</ListSubheader>}
-                disablePadding={true}
-                style={{minWidth: 260}}
+                subheader={subheader}
             >
 
                 {
@@ -114,6 +97,7 @@ CategoryList.propTypes = {
     onlySubCategories: PropTypes.bool,
     header: PropTypes.string,
     onSelect: PropTypes.func.isRequired,
+    dense: PropTypes.bool,
 };
 
 export default CategoryList;
