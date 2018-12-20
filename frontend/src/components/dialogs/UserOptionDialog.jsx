@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
+import DialogContentText from '@material-ui/core/es/DialogContentText/DialogContentText';
+import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
+import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
+import Button from '@material-ui/core/es/Button/Button';
 import Dialog from '@material-ui/core/es/Dialog/Dialog';
 import Tabs from '@material-ui/core/es/Tabs/Tabs';
 import Tab from '@material-ui/core/es/Tab/Tab';
@@ -47,6 +51,8 @@ class UserOptionDialog extends PureComponent {
 
                 </Tabs>
 
+                <DialogContent>
+                    <DialogContentText>
                 {
                     openTabId === 0 && (
                         <p>Work in progress...</p>
@@ -58,6 +64,14 @@ class UserOptionDialog extends PureComponent {
                         <p>Work in progress......</p>
                     )
                 }
+                    </DialogContentText>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={onClose} color='primary'>
+                        Exit
+                    </Button>
+                </DialogActions>
 
             </Dialog>
         );

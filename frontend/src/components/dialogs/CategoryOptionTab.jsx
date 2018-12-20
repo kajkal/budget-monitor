@@ -113,7 +113,7 @@ class CategoryOptionTab extends PureComponent {
         return (
             <React.Fragment>
 
-                <DialogContent className={'dialog-window'}>
+                <DialogContent>
 
                     <CategoryList
                         rootCategory={categoryListRootCategory}
