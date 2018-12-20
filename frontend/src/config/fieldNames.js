@@ -13,6 +13,5 @@ export const SUB_ENTRIES = 'subEntries';
 
 export const CATEGORY = 'category';
 export const ID_CATEGORY = 'idCategory';
-export const ID_SUPER_CATEGORY = 'idSuperCategory';
 export const NAME = 'name';
-export const COLOR = 'color';
+// export const COLOR = 'color';

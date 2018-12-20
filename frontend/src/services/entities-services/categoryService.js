@@ -1,5 +1,5 @@
 import http from '../httpService';
-import { CATEGORY, COLOR, ID_CATEGORY, ID_SUPER_CATEGORY, NAME } from '../../config/fieldNames';
+import { CATEGORY, ID_CATEGORY, NAME } from '../../config/fieldNames';
 import _ from 'lodash';
 
 

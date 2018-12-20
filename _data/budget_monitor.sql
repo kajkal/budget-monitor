@@ -123,14 +123,14 @@ CREATE TRIGGER newUserSetup
            (2, NEW.username, 'Presents', 0);
 
     INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (3, NEW.username, 'Communication', 0),
-           (3, NEW.username, 'Entertainment', 0),
-           (3, NEW.username, 'Maintenance', 0);
+    VALUES (3, NEW.username, 'Maintenance', 0),
+           (3, NEW.username, 'Communication', 0),
+           (3, NEW.username, 'Entertainment', 0);
     SET id = LAST_INSERT_ID();
 
     INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (id, NEW.username, 'Food', 0),
-           (id, NEW.username, 'Home', 0);
+    VALUES (id, NEW.username, 'Home', 0),
+           (id, NEW.username, 'Food', 0);
     SET id = LAST_INSERT_ID();
 
     INSERT INTO categories (idSuperCategory, owner, name, color)

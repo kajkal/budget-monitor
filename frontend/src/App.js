@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import auth from './services/authService';
-import AlertServiceComponent, { alertService } from './services/alertService';
+import AlertServiceComponent from './services/alertService';
 import AlertDemo from './components/___archive/AlertDemo';
 import Navbar from './components/navigation/Navbar';
 import Playground from './components/___develop/Playground';
@@ -30,7 +30,7 @@ class App extends Component {
             if (!user) return;
             const { data } = await getCategories();
             const rootCategory = getRootCategory(data);
-            alertService.info("Categories fetched.");
+            // alertService.info("Categories fetched.");
             this.setState({ rootCategory });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
@@ -42,15 +42,15 @@ class App extends Component {
         }
     };
 
+    handleRootCategoryChange = () => {
+        this.fetchCategories(this.state.user);
+    };
+
     componentDidMount() {
         const user = auth.getCurrentUser();
         this.setState({ user });
         this.fetchCategories(user);
     }
-
-    handleRootCategoryChange = () => {
-        this.fetchCategories(this.state.user);
-    };
 
     render() {
         const { user, rootCategory } = this.state;
@@ -62,20 +62,20 @@ class App extends Component {
                 <Navbar user={user} rootCategory={rootCategory} onRootCategoryChange={this.handleRootCategoryChange} />
                 <main>
                     <Switch>
-                        <Route path="/dev" render={props => <Playground rootCategory={rootCategory} onRootCategoryChange={this.handleRootCategoryChange} {...props}/>}/>
-                        <Route path="/test" component={Test}/>
-                        <Route path="/new" render={props => <New rootCategory={rootCategory} {...props}/>}/>
+                        <Route path="/dev" component={Playground} />
+                        <Route path="/test" component={Test} />
+                        <Route path="/new" render={props => <New rootCategory={rootCategory} {...props} />} />
 
-                        <Route path="/register" component={RegisterForm}/>
-                        <Route path="/login" component={LoginForm}/>
-                        <Route path="/logout" component={Logout}/>
+                        <Route path="/register" component={RegisterForm} />
+                        <Route path="/login" component={LoginForm} />
+                        <Route path="/logout" component={Logout} />
 
-                        <ProtectedRoute path="/home" component={Home}/>
-                        <ProtectedRoute path="/prot" component={AlertDemo}/>
+                        <ProtectedRoute path="/home" component={Home} />
+                        <ProtectedRoute path="/prot" component={AlertDemo} />
 
-                        <Route path="/not-found" component={NotFound}/>
-                        <Redirect from="/" exact to="/home"/>
-                        <Redirect to="/not-found"/>
+                        <Route path="/not-found" component={NotFound} />
+                        <Redirect from="/" exact to="/home" />
+                        <Redirect to="/not-found" />
                     </Switch>
                 </main>
 

@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
-import Paper from '@material-ui/core/Paper/Paper';
+import React, { PureComponent } from 'react';
 
-class Playground extends Component {
+
+class Playground extends PureComponent {
 
     render() {
-        return (
-            <div>
-                <Paper className={'form-container'}>
-                    {/*<CategoryListDemo/>*/}
-
-                    {/*<ExperimentalCategoryInput/>*/}
-                </Paper>
-            </div>
-        );
+        return (<h1>Dev</h1>);
     }
 }
+
+Playground.propTypes = {};
 
 export default Playground;
