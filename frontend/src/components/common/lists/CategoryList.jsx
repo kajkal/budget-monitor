@@ -6,7 +6,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Divider from '@material-ui/core/Divider/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
@@ -36,8 +35,6 @@ class CategoryList extends PureComponent {
 
         return (
             <React.Fragment key={category.idCategory}>
-
-                {!depth && <Divider />}
 
                 <ListItem button disabled={categoryDisabled} style={{paddingLeft: depth*20+16}} onClick={event => this.props.onSelect(category, event)}>
 

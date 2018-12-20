@@ -23,9 +23,8 @@ class CategoryOptionDialog extends PureComponent {
         const { rootCategory, onRootCategoryChange, onClose } = this.props;
         return (
             <CategoryOptionTab
-                type={categoryType.toLowerCase()}
+                type={categoryType}
                 rootCategory={rootCategory}
-                title={`${categoryType} categories`}
                 onClose={onClose}
                 onRootCategoryChange={onRootCategoryChange}
             />
@@ -64,8 +63,8 @@ class CategoryOptionDialog extends PureComponent {
 
                 </Tabs>
 
-                {this.renderCategoryTab(openTabId, 0, 'Income')}
-                {this.renderCategoryTab(openTabId, 1, 'Expense')}
+                {this.renderCategoryTab(openTabId, 0, 'income')}
+                {this.renderCategoryTab(openTabId, 1, 'expense')}
 
             </Dialog>
         );

@@ -91,7 +91,7 @@ class CategoryForm extends Form {
     render() {
         const { type, rootCategory, category, open, onClose, fullScreen } = this.props;
         const formTitle = category ? 'Edit category' : 'Add category';
-        const submitButtonTitle = category ? 'Submit' : 'Add';
+        const submitButtonTitle = category ? 'Save' : 'Add';
 
         const categoryDetails = {
             rootCategory: getCategoriesByType(rootCategory, type),

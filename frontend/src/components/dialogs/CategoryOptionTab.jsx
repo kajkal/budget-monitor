@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Add, Delete, Edit } from '@material-ui/icons';
-import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import Button from '@material-ui/core/es/Button/Button';
@@ -10,14 +9,8 @@ import DropDownMenu from '../common/menus/DropDownMenu';
 import CategoryForm from '../forms/CategoryForm';
 import CategoryDeleteForm from '../forms/CategoryDeleteForm';
 import { categoryRootShape } from '../../config/propTypesCommon';
-import { getCategoriesByType } from '../../services/entities-services/categoryService';
+import { getCategoriesByType, getCategoryParent } from '../../services/entities-services/categoryService';
 
-
-const basicCategories = [
-    'ROOT_CATEGORY',
-    'INCOME_CATEGORY',
-    'EXPENSE_CATEGORY',
-];
 
 class CategoryOptionTab extends PureComponent {
     state = {
@@ -34,6 +27,13 @@ class CategoryOptionTab extends PureComponent {
         this.setState({ anchorEl: null });
     };
 
+    handleBasicCategoryAddFormOpen = () => {
+        const { selectedCategory } = this.state;
+        const { rootCategory } = this.props;
+        const parentOfSelected = getCategoryParent(rootCategory, selectedCategory.lodashPath);
+        this.setState({ operationType: 'add', selectedCategory: parentOfSelected });
+    };
+
     handleCategoryFormOpen = operationType => {
         this.setState({ operationType: operationType });
     };
@@ -43,11 +43,17 @@ class CategoryOptionTab extends PureComponent {
     };
 
     renderOptionMenu = (anchorEl, selectedCategory) => {
-        const someOptionsExcluded = selectedCategory && basicCategories.includes(selectedCategory.name);
+        const selectedCategoryIsBasicCategory = selectedCategory && selectedCategory.path.length === 2;
         return (
             <DropDownMenu
                 anchorEl={anchorEl}
                 menuOptions={[
+                    {
+                        icon: <Add />,
+                        label: 'Add category',
+                        onClick: () => this.handleBasicCategoryAddFormOpen(),
+                        excluded: !selectedCategoryIsBasicCategory,
+                    },
                     {
                         icon: <Add />,
                         label: 'Add sub category',
@@ -57,13 +63,11 @@ class CategoryOptionTab extends PureComponent {
                         icon: <Edit />,
                         label: 'Edit',
                         onClick: () => this.handleCategoryFormOpen('edit'),
-                        excluded: someOptionsExcluded,
                     },
                     {
                         icon: <Delete />,
                         label: 'Delete',
                         onClick: () => this.handleCategoryFormOpen('delete'),
-                        excluded: someOptionsExcluded,
                     },
                 ]}
                 onClose={this.handleMenuClose}
@@ -102,26 +106,19 @@ class CategoryOptionTab extends PureComponent {
 
     render() {
         const { anchorEl, selectedCategory, operationType } = this.state;
-        const { type, rootCategory, title, onClose } = this.props;
+        const { type, rootCategory, onClose } = this.props;
 
         const categoryListRootCategory = getCategoriesByType(rootCategory, type);
 
         return (
             <React.Fragment>
 
-                <DialogTitle
-                    id='category-tab-dialog'
-                    className='form-header'
-                    disableTypography={true}
-                >
-                    {title}
-                </DialogTitle>
-
                 <DialogContent className={'dialog-window'}>
 
                     <CategoryList
                         rootCategory={categoryListRootCategory}
                         onSelect={(category, event) => this.handleMenuOpen(category, event)}
+                        onlySubCategories={true}
                     />
 
                 </DialogContent>
@@ -145,7 +142,6 @@ class CategoryOptionTab extends PureComponent {
 CategoryOptionTab.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
     rootCategory: categoryRootShape.isRequired,
-    title: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
     onRootCategoryChange: PropTypes.func.isRequired,
 };
