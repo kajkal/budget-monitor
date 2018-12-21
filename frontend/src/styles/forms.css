@@ -7,13 +7,12 @@
 
 @media screen and (min-width: 600px) {
     .form-container {
-        width: 500px;
+        width: 600px;
         min-height: 0;
     }
 }
 
 form {
-    background-color: var(--workspace-color) !important;
     display: flex;
     flex-direction: column;
     padding: 14px;

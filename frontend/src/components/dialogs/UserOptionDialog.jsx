@@ -27,6 +27,7 @@ class UserOptionDialog extends PureComponent {
         return (
             <Dialog
                 fullScreen={fullScreen}
+                scroll={'body'}
                 maxWidth={desktopDialogMaxWidth}
                 fullWidth={true}
 
@@ -53,17 +54,17 @@ class UserOptionDialog extends PureComponent {
 
                 <DialogContent>
                     <DialogContentText>
-                {
-                    openTabId === 0 && (
-                        <p>Work in progress...</p>
-                    )
-                }
+                        {
+                            openTabId === 0 && (
+                                <p>Work in progress...</p>
+                            )
+                        }
 
-                {
-                    openTabId === 1 && (
-                        <p>Work in progress......</p>
-                    )
-                }
+                        {
+                            openTabId === 1 && (
+                                <p>Work in progress......</p>
+                            )
+                        }
                     </DialogContentText>
                 </DialogContent>
 

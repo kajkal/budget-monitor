@@ -14,6 +14,7 @@ const ConfirmationDialog = ({ header, content, onOk, open, onClose, fullScreen }
     return (
         <Dialog
             fullScreen={fullScreen}
+            scroll={'body'}
             maxWidth={desktopDialogMaxWidth}
             fullWidth={true}
 

@@ -11,7 +11,7 @@ import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
-import Home from './components/Home';
+import Home from './components/home/Home';
 import { theme } from './config/theme';
 import RegisterForm from './components/forms/RegisterForm';
 import Test from './components/___develop/Test';
@@ -75,7 +75,7 @@ class App extends Component {
 
                         <Route path="/not-found" component={NotFound} />
                         <Redirect from="/" exact to="/home" />
-                        <Redirect to="/not-found" />
+                        <Redirect to="/home" />
                     </Switch>
                 </main>
 

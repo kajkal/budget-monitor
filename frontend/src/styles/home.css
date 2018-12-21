@@ -1,0 +1,21 @@
+@import '_constants.css';
+
+main {
+
+}
+
+main .selection-controller {
+
+}
+
+main .data-exposition-area {
+
+}
+
+@media screen and (min-width: 600px) {
+    .form-container {
+        width: 500px;
+        min-height: 0;
+    }
+}
+

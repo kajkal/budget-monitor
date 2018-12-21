@@ -69,6 +69,7 @@ class CategoryInput extends PureComponent {
 
                 <Dialog
                     fullScreen={fullScreen}
+                    scroll={'body'}
                     maxWidth={desktopDialogMaxWidth}
                     fullWidth={true}
 

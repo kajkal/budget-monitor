@@ -1,5 +1,6 @@
 @import '_constants.css';
 @import 'forms.css';
+@import 'home.css';
 
 *,*::before,*::after {
     margin: 0;
@@ -12,7 +13,6 @@ body {
     font-family: var(--basic-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--workspace-background-color);
 }
 
 code {
@@ -20,8 +20,8 @@ code {
 }
 
 main {
-    /*width: 100%;*/
-    max-width: 1020px;
+    width: 100%;
+    /*max-width: 1020px;*/
     margin-left: auto;
     margin-right: auto;
     /*border: 1px solid #7f7f7f;*/
@@ -29,7 +29,7 @@ main {
 
 @media screen and (min-width: 600px) {
     main {
-        margin-top: 48px;
+        /*margin-top: 48px;*/
     }
 }
 

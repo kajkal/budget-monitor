@@ -39,6 +39,7 @@ class CategoryOptionDialog extends PureComponent {
         return (
             <Dialog
                 fullScreen={fullScreen}
+                scroll={'body'}
                 maxWidth={desktopDialogMaxWidth}
                 fullWidth={true}
 

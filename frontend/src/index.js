@@ -9,11 +9,13 @@ import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import LuxonUtils from '@date-io/luxon';
+import CssBaseline from '@material-ui/core/es/CssBaseline/CssBaseline';
 
 ReactDOM.render(
     <BrowserRouter>
         <MuiPickersUtilsProvider utils={LuxonUtils}>
             <SnackbarProvider maxSnack={3}>
+                <CssBaseline />
                 <App />
             </SnackbarProvider>
         </MuiPickersUtilsProvider>
