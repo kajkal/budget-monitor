@@ -56,13 +56,13 @@ class UserOptionDialog extends PureComponent {
                     <DialogContentText>
                         {
                             openTabId === 0 && (
-                                <p>Work in progress...</p>
+                                'Work in progress...'
                             )
                         }
 
                         {
                             openTabId === 1 && (
-                                <p>Work in progress......</p>
+                                'Work in progress......'
                             )
                         }
                     </DialogContentText>
