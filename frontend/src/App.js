@@ -133,8 +133,9 @@ class App extends Component {
                     <main>
                         {user && (!rootCategory || !entries) && <LinearProgress />}
                         <Switch>
-                            <Route path="/dev" component={Playground} />
-                            <Route path="/test" render={props => (
+                            <Route exact path="/dev" component={Playground} />
+
+                            <ProtectedRoute exact path="/register" render={props => (
                                 <EntryRegister
                                     rootCategory={rootCategory}
                                     entriesByDay={splitByDays(entries)}
@@ -143,7 +144,8 @@ class App extends Component {
                                     {...props}
                                 />
                             )} />
-                            <ProtectedRoute path="/recent" render={props => (
+
+                            <ProtectedRoute exact path="/recent" render={props => (
                                 <EntryRecent
                                     rootCategory={rootCategory}
                                     recentEntries={recentEntries}
@@ -153,16 +155,16 @@ class App extends Component {
                                     {...props}
                                 />
                             )} />
-                            <Route path="/new" render={props => <New rootCategory={rootCategory} {...props} />} />
+                            <Route exact path="/new" render={props => <New rootCategory={rootCategory} {...props} />} />
 
-                            <Route path="/register" component={RegisterForm} />
-                            <Route path="/login" component={LoginForm} />
-                            <Route path="/logout" component={Logout} />
+                            <Route exact path="/register" component={RegisterForm} />
+                            <Route exact path="/login" component={LoginForm} />
+                            <Route exact path="/logout" component={Logout} />
 
-                            <ProtectedRoute path="/home" component={Home} />
-                            <ProtectedRoute path="/prot" component={AlertDemo} />
+                            <ProtectedRoute exact path="/home" component={Home} />
+                            <ProtectedRoute exact path="/prot" component={AlertDemo} />
 
-                            <Route path="/not-found" component={NotFound} />
+                            <Route exact path="/not-found" component={NotFound} />
                             <Redirect from="/" exact to="/home" />
                             <Redirect to="/not-found" />
                         </Switch>

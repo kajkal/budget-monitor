@@ -1,28 +1,26 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Add, CallMade, Menu, PlaylistAdd, PowerSettingsNew, Settings } from '@material-ui/icons';
+import { Add, CallMade, Menu, PlaylistAdd, PowerSettingsNew, Settings, Restore, CalendarToday } from '@material-ui/icons';
+import { PieChart, BarChart, ShowChart } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/es/Button/Button';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import _ from 'lodash';
 import ButtonWithMenu from '../common/menus/ButtonWithMenu';
 import EntryForm from '../forms/EntryForm';
 import UserOptionDialog from '../dialogs/UserOptionDialog';
 import CategoryOptionDialog from '../dialogs/CategoryOptionDialog';
 import { categoryRootShape } from '../../config/propTypesCommon';
+import CategoryList from '../common/lists/CategoryList';
+import NavigationLink from './NavigationLink';
 
 const drawerWidth = 300;
 
@@ -51,7 +49,7 @@ const styles = theme => ({
     drawerHeader: {
         display: 'flex',
         alignItems: 'center',
-        padding: '0 8px',
+        padding: '0 16px',
         ...theme.mixins.toolbar,
     },
     drawerPaper: {
@@ -95,7 +93,7 @@ class Navbar extends PureComponent {
         {
             label: 'Logout',
             icon: <PowerSettingsNew />,
-            component: NavLink,
+            component: Link,
             to: '/logout',
         },
     ];
@@ -162,28 +160,62 @@ class Navbar extends PureComponent {
 
         const drawer = (
             <div>
+
                 <Typography className={classes.drawerHeader} variant='h6'>
                     Budget Monitor
                 </Typography>
 
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+
+                    {/*TODO: only for logged users*/}
+                    <NavigationLink
+                        icon={<Restore />}
+                        label={'Recent'}
+                        to={'/recent'}
+                    />
+
+                    <NavigationLink
+                        icon={<CalendarToday />}
+                        label={'Entries by day'}
+                        to={'/register'}
+                    />
+
+                    <NavigationLink
+                        icon={<PieChart />}
+                        label={'Chart 1'}
+                        to={'/not-found'}
+                    />
+
+                    <NavigationLink
+                        icon={<BarChart />}
+                        label={'Chart 2'}
+                        to={'/not-found'}
+                    />
+
+                    <NavigationLink
+                        icon={<ShowChart />}
+                        label={'Chart 3'}
+                        to={'/not-found'}
+                    />
+
                 </List>
+
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+
+                    {
+                        user && rootCategory && (
+                            <CategoryList
+                                rootCategory={rootCategory}
+                                onSelect={(category) => console.log('selected: ', category)}
+                                dense={true}
+                            />
+                        )
+                    }
+
                 </List>
+
             </div>
         );
 

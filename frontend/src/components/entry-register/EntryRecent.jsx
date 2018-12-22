@@ -32,6 +32,7 @@ class EntryRecent extends PureComponent {
                         {
                             sortedRecentEntries.map(entry => (
                                 <EntryDataRow
+                                    key={entry.idEntry}
                                     entry={entry}
                                     fullDate={true}
                                     rootCategory={rootCategory}
