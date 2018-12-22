@@ -50,6 +50,13 @@ public class EntryController {
     }
 
     @LogExecutionTime
+    @RequestMapping(method = GET, path = "/api/entries/recent")
+    @ResponseBody
+    public List<EntryDTO> getRecentEntries(@CurrentUser UserDetails user) {
+        return entryService.findAllRecentByUsername(user.getUsername());
+    }
+
+    @LogExecutionTime
     @RequestMapping(method = POST, path = "/api/entries")
     @ResponseBody
     public ResponseEntity<EntryDTO> createEntry(@Valid @RequestBody EntryFormDTO entryFormDTO,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import auth from './services/authService';
-import AlertServiceComponent from './services/alertService';
+import AlertServiceComponent, { alertService } from './services/alertService';
 import AlertDemo from './components/___archive/AlertDemo';
 import Navbar from './components/navigation/Navbar';
 import Playground from './components/___develop/Playground';
@@ -16,9 +16,16 @@ import { theme } from './config/theme';
 import RegisterForm from './components/forms/RegisterForm';
 import { getCategories, getRootCategory, setRootCategory } from './services/entities-services/categoryService';
 import { translateErrorMessage } from './services/errorMessageService';
-import { getEntries, processEntries, processEntry, splitByDays } from './services/entities-services/entryService';
+import {
+    getEntries,
+    getRecentEntries,
+    processEntries,
+    processEntry,
+    splitByDays,
+} from './services/entities-services/entryService';
 import EntryRegister from './components/entry-register/EntryRegister';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
+import EntryRecent from './components/entry-register/EntryRecent';
 
 
 class App extends Component {
@@ -26,6 +33,7 @@ class App extends Component {
         user: null,
         rootCategory: null,
         entries: null,
+        recentEntries: null,
     };
 
     fetchCategories = async user => {
@@ -49,8 +57,8 @@ class App extends Component {
     fetchEntries = async user => {
         try {
             if (!user) return;
-            const { data } = await getEntries();
-            const entries = processEntries(data);
+            const { data: rawEntries } = await getEntries();
+            const entries = processEntries(rawEntries);
             this.setState({ entries });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
@@ -58,6 +66,20 @@ class App extends Component {
                 console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
                 console.log('translated errors: ', errors);
+            }
+        }
+    };
+
+    fetchRecentEntries = async () => {
+        try {
+            const { data: rawRecentEntries } = await getRecentEntries();
+            const recentEntries = processEntries(rawRecentEntries);
+            this.setState({ recentEntries });
+        } catch (e) {
+            if (e.response && [400, 401, 403].includes(e.response.status)) {
+                alertService.warning('Error occured, please refresh page.');
+                const errors = translateErrorMessage(e.response.data.message);
+                console.log('error while fetching recent entries: ', errors);
             }
         }
     };
@@ -80,6 +102,7 @@ class App extends Component {
             const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
             this.setState({ entries });
         }
+        this.fetchRecentEntries(this.state.user);
     };
 
     componentDidMount() {
@@ -94,7 +117,7 @@ class App extends Component {
     }
 
     render() {
-        const { user, rootCategory, entries } = this.state;
+        const { user, rootCategory, entries, recentEntries } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
@@ -117,6 +140,16 @@ class App extends Component {
                                 rootCategory={rootCategory}
                                 entriesByDay={splitByDays(entries)}
                                 currency={user && user.currency}
+                                onEntriesChange={this.handleEntriesChange}
+                                {...props}
+                            />
+                        )} />
+                        <ProtectedRoute path="/recent" render={props => (
+                            <EntryRecent
+                                rootCategory={rootCategory}
+                                recentEntries={recentEntries}
+                                currency={user && user.currency}
+                                getRecentEntries={this.fetchRecentEntries}
                                 onEntriesChange={this.handleEntriesChange}
                                 {...props}
                             />

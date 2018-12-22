@@ -29,6 +29,10 @@ export function getEntries() {
     return http.get(apiEndpoint);
 }
 
+export function getRecentEntries() {
+    return http.get(`${apiEndpoint}/recent`);
+}
+
 export function getEntry(entry) {
     // TODO: add get one entry in rest
     // return http.get(entryUrl(entry[ID_ENTRY]));
@@ -62,6 +66,15 @@ export function processEntries(entries) {
     return entries;
 }
 
+export function sort(items, fieldName, order) {
+    const orderFactor = order === 'desc' ? -1 : 1;
+    return items.sort(({ [fieldName]: a }, { [fieldName]: b }) => {
+        if (a < b) return -1 * orderFactor;
+        if (a > b) return orderFactor;
+        else return 0;
+    });
+}
+
 // return array of object {day: '2018-10-22', entries: [Object]}
 export function splitByDays(entries) {
     if (!entries) return null;
@@ -74,23 +87,22 @@ export function splitByDays(entries) {
         dayEntriesMap.set(day, entriesByDay);
     });
 
-    const sortDesc = (a, b) => {
-        if (a < b) return 1;
-        if (a > b) return -1;
-        else return 0;
-    };
+    console.log('dayEntriesMap', dayEntriesMap);
 
     // // from map to array:
     const dataStructure = [];
     dayEntriesMap.forEach((value, key) => {
         dataStructure.push({
             day: DateTime.fromISO(key).setLocale('local'),
-            entries: value.sort(({ date: a }, { date: b }) =>  sortDesc(a, b)),
+            entries: sort(value, 'date', 'desc'),
         })
     });
 
+    console.log('dataStructure', dataStructure);
+
     // sort by day:
-    return dataStructure.sort(({ day: a }, { day: b }) => sortDesc(a, b));
+    return sort(dataStructure, 'day', 'desc');
+    // return dataStructure.sort(({ day: a }, { day: b }) => sortDesc(a, b));
 }
 
 

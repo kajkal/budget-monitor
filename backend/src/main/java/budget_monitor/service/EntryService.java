@@ -39,6 +39,16 @@ public class EntryService {
         return namedParameterJdbcTemplate.query(sql, parameters, new EntriesWithSubEntriesExtractor());
     }
 
+    public List<EntryDTO> findAllRecentByUsername(String username) {
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("username", username);
+        final String subQuery = "SELECT idEntry FROM entries WHERE owner = :username ORDER BY dateOfLastModification DESC LIMIT 10";
+        final String sql = "SELECT * FROM entriesWithSubEntriesView AS t1 INNER JOIN (" + subQuery + ") AS t2 USING (idEntry)";
+
+        return namedParameterJdbcTemplate.query(sql, parameters, new EntriesWithSubEntriesExtractor());
+    }
+
     public Optional<Entry> findByIdEntry(Long idEntry) {
         return entryRepository.findById(idEntry);
     }
