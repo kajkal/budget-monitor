@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DateTime } from 'luxon';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import Typography from '@material-ui/core/es/Typography/Typography';
 import EntryDataRow from './EntryDataRow';
@@ -24,25 +23,24 @@ class EntryRecent extends PureComponent {
         return (
             <div className='entry-register recent'>
                 {
-                    sortedRecentEntries.map(entry => (
-                        <Typography component={'div'} key={entry.idEntry}>
+                    <Typography component={'div'}>
 
-                            <div className='entries-for-day header'>
-                                {DateTime.fromMillis(entry.dateOfLastModification).toLocaleString(DateTime.DATETIME_MED)}
-                            </div>
+                        <div className='entries-for-day header'>
+                            Recent entries
+                        </div>
 
-                            {
+                        {
+                            sortedRecentEntries.map(entry => (
                                 <EntryDataRow
                                     entry={entry}
+                                    fullDate={true}
                                     rootCategory={rootCategory}
                                     currency={currency}
                                     onEntriesChange={onEntriesChange}
                                 />
-                            }
-                        </Typography>
-
-
-                    ))
+                            ))
+                        }
+                    </Typography>
                 }
             </div>
         );

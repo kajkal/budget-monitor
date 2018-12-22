@@ -16,7 +16,7 @@ class EntryDeleteForm extends PureComponent {
     componentDidMount() {
         const { entry } = this.props;
         if (entry) {
-            const content = `Are you sure you want to delete '${entry}' entry?`;
+            const content = `Are you sure you want to delete entry '${entry.description}'?`;
             this.setState({ content });
         }
     }

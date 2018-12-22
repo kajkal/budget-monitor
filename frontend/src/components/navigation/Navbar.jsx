@@ -122,7 +122,7 @@ class Navbar extends Component {
                     </IconButton>
 
 
-                    <Typography variant='h5' color='inherit' className='flex-grow-1'>
+                    <Typography variant='h5' color='inherit' className='application-title flex-grow-1'>
                         Budget Monitor
                     </Typography>
 

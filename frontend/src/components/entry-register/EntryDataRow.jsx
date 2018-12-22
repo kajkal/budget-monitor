@@ -45,8 +45,9 @@ class EntryDataRow extends PureComponent {
     };
 
     renderEntrySummary = (entry, currency) => {
+        const { fullDate } = this.props;
         const { date, idCategory, description, value } = entry;
-        const time = date.toLocaleString(DateTime.TIME_SIMPLE);
+        const time = date.toLocaleString(fullDate ? DateTime.DATETIME_MED :DateTime.TIME_SIMPLE);
         const category = getCategoryByIdCategory(idCategory);
 
         return (
@@ -54,7 +55,7 @@ class EntryDataRow extends PureComponent {
 
                 <div className='entry-row-summary'>
                     <div className='time'>{time}</div>
-                    <div className='category'>{category && category.name}</div>
+                    {category && <div className='category'>{category.name}</div>}
                     <div className='description'>{description}</div>
                     {this.formatValue(value, currency)}
                 </div>
@@ -166,6 +167,7 @@ class EntryDataRow extends PureComponent {
 
 EntryDataRow.propTypes = {
     entry: entryShape.isRequired,
+    fullDate: PropTypes.bool,
     rootCategory: categoryRootShape,
     currency: PropTypes.string.isRequired,
     onEntriesChange: PropTypes.func.isRequired,

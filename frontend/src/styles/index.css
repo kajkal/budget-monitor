@@ -34,6 +34,14 @@ body {
     flex-direction: column;
 }
 
+@media screen and (max-width: 380px) {
+
+    .application-title {
+        font-size: 1em !important;
+    }
+
+}
+
 
 
 
