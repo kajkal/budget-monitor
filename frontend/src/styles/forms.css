@@ -1,16 +1,40 @@
 @import '_constants.css';
 
+
+
+@media screen and (max-width: 600px) {
+
+    #root > main > div {
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    #root > main > div > form {
+        flex-grow: 1;
+    }
+
+}
+
+
 .form-container {
-    width: 100vw;
-    min-height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 @media screen and (min-width: 600px) {
+
     .form-container {
         width: 600px;
-        min-height: 0;
+        margin-top: 48px;
+        height: auto;
     }
+
 }
+
+
 
 form {
     display: flex;
@@ -24,13 +48,13 @@ form {
 }
 
 form div.form-content {
+    flex-grow: 1;
 }
 
 form footer {
     margin-top: 14px;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
 }
 
 form footer * {

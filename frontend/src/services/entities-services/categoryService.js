@@ -37,6 +37,9 @@ export function deleteCategory(category) {
 
 // DATA OPERATIONS:
 
+let rootCategory;
+let idCategoryCategoryMap;
+
 const categoryNamesMap = new Map([
     ['ROOT_CATEGORY', 'All categories'],
     ['INCOME_CATEGORY', 'Income categories'],
@@ -53,13 +56,21 @@ export function getRootCategory(categories) {
         category.subCategories.forEach(c => {
             const newPath = [ ...path, 'subCategories', category.subCategories.indexOf(c)];
             c.lodashPath = newPath;
+            idCategoryCategoryMap.set(c.idCategory, c);
             processLevel(c, newPath);
         });
     };
 
     const rootCategory = categories;
+    idCategoryCategoryMap = new Map();
     processLevel(rootCategory, []);
     return rootCategory;
+}
+
+export function setRootCategory(newRootCategory) {
+    rootCategory = newRootCategory;
+    console.log('Root category set: ', rootCategory);
+    console.log('IdCategory lodashPath map: ', idCategoryCategoryMap);
 }
 
 export function getCategoriesByType(rootCategory, type) {
@@ -72,3 +83,9 @@ export function getCategoryParent(rootCategory, categoryPath) {
     const parentPath = categoryPath.slice(0, categoryPath.length - 2);
     return _.get(rootCategory, parentPath);
 }
+
+export function getCategoryByIdCategory(idCategory) {
+    if (!idCategoryCategoryMap) return null;
+    return idCategoryCategoryMap.get(idCategory);
+}
+

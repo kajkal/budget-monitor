@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import App from './App';
 import './styles/index.css';
 import 'font-awesome/css/font-awesome.css';
-import 'typeface-roboto';
+// import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import LuxonUtils from '@date-io/luxon';
@@ -14,8 +14,8 @@ import CssBaseline from '@material-ui/core/es/CssBaseline/CssBaseline';
 ReactDOM.render(
     <BrowserRouter>
         <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <CssBaseline />
             <SnackbarProvider maxSnack={3}>
-                <CssBaseline />
                 <App />
             </SnackbarProvider>
         </MuiPickersUtilsProvider>

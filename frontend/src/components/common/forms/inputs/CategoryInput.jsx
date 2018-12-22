@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import TextField from '@material-ui/core/TextField/TextField';
-import Dialog from '@material-ui/core/es/Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog';
 import PropTypes from 'prop-types';
 import CategoryList from '../../lists/CategoryList';

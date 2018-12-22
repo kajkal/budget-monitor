@@ -5,7 +5,7 @@ import DialogContentText from '@material-ui/core/es/DialogContentText/DialogCont
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import Button from '@material-ui/core/es/Button/Button';
-import Dialog from '@material-ui/core/es/Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 import Tabs from '@material-ui/core/es/Tabs/Tabs';
 import Tab from '@material-ui/core/es/Tab/Tab';
 import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';

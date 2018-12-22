@@ -175,17 +175,17 @@ VALUES (100, 17, 'user', 'Insurance', 0),
           (109, 106, 'user', 'Accessories', 5);
 
 
-INSERT INTO entries (idEntry, owner, idCategory, description, value, date, dateOfAddition)
-VALUES (1, 'user', 18, 'Zakupy w Biedronce', -10039, '2018-10-20 12:10:00', '2018-11-01 15:00:00'),
-       (2, 'user', 18, 'Pączki', -400, '2018-10-20 12:15:00', '2018-11-01 15:01:00'),
-       (3, 'user', 15, 'Bilet w tramwaju', -190, '2018-10-20 12:20:00', '2018-11-01 15:02:00'),
-       (4, 'user', 13, 'Wynagrodzenie za październik', 220000, '2018-10-22 00:00:00', '2018-11-01 15:03:00'),
-       (5, 'user1', 103, 'Piwo', -1200, '2018-11-01 15:00:00', '2018-10-14 18:20:00');
+INSERT INTO entries (idEntry, owner, idCategory, description, value, date, dateOfAddition, dateOfLastModification)
+VALUES (1, 'user', 18, 'Zakupy w Biedronce', -10039, '2018-10-20 12:10:00', '2018-11-01 15:00:00', '2018-11-01 15:00:00'),
+       (2, 'user', 18, 'Pączki', -400, '2018-10-20 12:15:00', '2018-11-01 15:01:00', '2018-11-01 15:01:00'),
+       (3, 'user', 15, 'Bilet w tramwaju', -190, '2018-10-20 12:20:00', '2018-11-01 15:02:00', '2018-11-01 15:02:00'),
+       (4, 'user', 13, 'Wynagrodzenie za październik', 220000, '2018-10-22 00:00:00', '2018-11-01 15:03:00', '2018-11-01 15:03:00'),
+       (5, 'user1', 103, 'Piwo', -1200, '2018-11-01 15:00:00', '2018-10-14 18:20:00', '2018-10-14 18:20:00');
 
 
 INSERT INTO subEntries (idEntry, idSubEntry, idCategory, description, value)
-VALUES (1, 1, 18, 'Pieczywo', 39),
-       (1, 2, 18, 'Owoce', 200),
-       (1, 3, 18, 'Szynka', 400),
-       (1, 4, 18, 'Woda', 200),
-       (1, 5, 18, 'Ser', 200);
+VALUES (1, 1, 18, 'Pieczywo', -39),
+       (1, 2, 18, 'Owoce', -200),
+       (1, 3, 18, 'Szynka', -400),
+       (1, 4, 18, 'Woda', -200),
+       (1, 5, 18, 'Ser', -200);

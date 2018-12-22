@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
-import Dialog from '@material-ui/core/es/Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 import Form from '../common/forms/Form';
 import { addCategory, getCategoriesByType, getCategoryParent, updateCategory, } from '../../services/entities-services/categoryService';
 import { translateErrorMessage } from '../../services/errorMessageService';

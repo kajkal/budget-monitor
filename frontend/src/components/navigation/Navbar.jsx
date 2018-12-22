@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Add, CallMade, PlaylistAdd, PowerSettingsNew, Settings } from '@material-ui/icons';
+import { Add, CallMade, PlaylistAdd, PowerSettingsNew, Settings, Menu } from '@material-ui/icons';
 import Toolbar from '@material-ui/core/es/Toolbar/Toolbar';
 import AppBar from '@material-ui/core/es/AppBar/AppBar';
 import Typography from '@material-ui/core/es/Typography/Typography';
@@ -12,6 +12,7 @@ import ButtonWithMenu from '../common/menus/ButtonWithMenu';
 import CategoryOptionDialog from '../dialogs/CategoryOptionDialog';
 import { categoryRootShape } from '../../config/propTypesCommon';
 import UserOptionDialog from '../dialogs/UserOptionDialog';
+import IconButton from '@material-ui/core/es/IconButton/IconButton';
 
 
 class Navbar extends Component {
@@ -107,6 +108,15 @@ class Navbar extends Component {
         return (
             <AppBar position='static'>
                 <Toolbar variant='dense'>
+
+                    <IconButton
+                        color="inherit"
+                        onClick={() => console.log('open drawer')}
+                        // className={classNames(classes.menuButton, open && classes.hide)}
+                    >
+                        <Menu />
+                    </IconButton>
+
 
                     <Typography variant='h5' color='inherit' className='flex-grow-1'>
                         Budget Monitor

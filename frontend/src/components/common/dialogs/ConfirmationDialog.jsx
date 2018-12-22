@@ -5,7 +5,7 @@ import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDi
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
-import Dialog from '@material-ui/core/es/Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 import Button from '@material-ui/core/es/Button/Button';
 import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../../config/theme';
 

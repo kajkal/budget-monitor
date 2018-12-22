@@ -13,7 +13,7 @@ import { alertService } from '../../services/alertService';
 import { categoryRootShape } from '../../config/propTypesCommon';
 import { getCategoriesByType } from '../../services/entities-services/categoryService';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
-import Dialog from '@material-ui/core/es/Dialog/Dialog';
+import Dialog from '@material-ui/core/Dialog/Dialog';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';

@@ -11,18 +11,21 @@ import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
-import Home from './components/home/Home';
+import Home from './components/Home';
 import { theme } from './config/theme';
 import RegisterForm from './components/forms/RegisterForm';
-import Test from './components/___develop/Test';
-import { getCategories, getRootCategory } from './services/entities-services/categoryService';
+import { getCategories, getRootCategory, setRootCategory } from './services/entities-services/categoryService';
 import { translateErrorMessage } from './services/errorMessageService';
+import { getEntries, processEntries, splitByDays } from './services/entities-services/entryService';
+import EntryRegister from './components/entry-register/EntryRegister';
+import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 
 
 class App extends Component {
     state = {
         user: null,
         rootCategory: null,
+        entries: null,
     };
 
     fetchCategories = async user => {
@@ -32,9 +35,26 @@ class App extends Component {
             const rootCategory = getRootCategory(data);
             // alertService.info("Categories fetched.");
             this.setState({ rootCategory });
+            setRootCategory(rootCategory);
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 console.log('error while fetching categories: ', e);
+                console.log('messageKey: ', e.response.data.message);
+                const errors = translateErrorMessage(e.response.data.message);
+                console.log('translated errors: ', errors);
+            }
+        }
+    };
+
+    fetchEntries = async user => {
+        try {
+            if (!user) return;
+            const { data } = await getEntries();
+            const entries = processEntries(data);
+            this.setState({ entries });
+        } catch (e) {
+            if (e.response && [400, 401, 403].includes(e.response.status)) {
+                console.log('error while fetching entries: ', e);
                 console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
                 console.log('translated errors: ', errors);
@@ -50,20 +70,33 @@ class App extends Component {
         const user = auth.getCurrentUser();
         this.setState({ user });
         this.fetchCategories(user);
+
+        this.fetchEntries(user);
+        // setTimeout(() => {
+        //     this.fetchEntries(user);
+        // }, 2000);
     }
 
     render() {
-        const { user, rootCategory } = this.state;
+        const { user, rootCategory, entries } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
 
                 <AlertServiceComponent />
                 <Navbar user={user} rootCategory={rootCategory} onRootCategoryChange={this.handleRootCategoryChange} />
+                {user && (!rootCategory || !entries) && <LinearProgress />}
                 <main>
                     <Switch>
                         <Route path="/dev" component={Playground} />
-                        <Route path="/test" component={Test} />
+                        <Route path="/test" render={props => (
+                            <EntryRegister
+                                rootCategory={rootCategory}
+                                entriesByDay={splitByDays(entries)}
+                                currency={user && user.currency}
+                                {...props}
+                            />
+                        )} />
                         <Route path="/new" render={props => <New rootCategory={rootCategory} {...props} />} />
 
                         <Route path="/register" component={RegisterForm} />
@@ -75,7 +108,7 @@ class App extends Component {
 
                         <Route path="/not-found" component={NotFound} />
                         <Redirect from="/" exact to="/home" />
-                        <Redirect to="/home" />
+                        <Redirect to="/not-found" />
                     </Switch>
                 </main>
 

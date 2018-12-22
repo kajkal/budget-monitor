@@ -1,21 +1,105 @@
 @import '_constants.css';
 
-main {
-
-}
-
-main .selection-controller {
-
-}
-
-main .data-exposition-area {
-
-}
 
 @media screen and (min-width: 600px) {
-    .form-container {
-        width: 500px;
-        min-height: 0;
+
+    .entry-register {
+        width: 100%;
+        max-width: 960px;
+        margin-top: 48px;
+        margin-left: auto;
+        margin-right: auto;
     }
+
+}
+
+.entries-for-day.header {
+    font-size: 1.2em;
+    margin: 12px 0 12px 24px;
+}
+
+
+
+.entry-row-summary {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: auto minmax(10px, 1fr) auto;
+
+    grid-template-areas:
+        'time category value'
+        'description description value';
+}
+
+.entry-row-summary .time {
+    grid-area: time;
+}
+.entry-row-summary .category {
+    grid-area: category;
+
+    margin-left: 1em;
+    font-style: italic;
+}
+.entry-row-summary .description {
+    grid-area: description;
+
+    font-size: 1.1em;
+}
+.entry-row-summary .value {
+    grid-area: value;
+
+    align-self: center;
+    justify-self: end;
+
+    display: flex;
+    margin-left: 1em;
+    font-size: 1.1em;
+}
+
+span.currency {
+    margin-left: 0.5em;
+    font-size: 0.6em;
+    color: var(--basic-font-color);
+}
+
+
+
+.entry-row-details {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(10px, 1fr) auto;
+
+    grid-template-areas:
+        'subEntriesArea subEntriesArea'
+        'added added'
+        'modified modified';
+}
+
+.entry-row-details .addition-date {
+    grid-area: added;
+}
+.entry-row-details .last-modification-date {
+    grid-area: modified;
+}
+.entry-row-details .sub-entries-area {
+    grid-area: subEntriesArea;
+
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-column-gap: 1em;
+
+    /*grid-template-areas:*/
+        /*'value category description';*/
+}
+
+.sub-entries-area .value  {
+    justify-self: end;
+
+    display: flex;
+}
+.sub-entries-area.category  {
+}
+.sub-entries-area.description  {
 }
 

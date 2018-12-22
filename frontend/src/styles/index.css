@@ -1,6 +1,8 @@
 @import '_constants.css';
 @import 'forms.css';
 @import 'home.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
 
 *,*::before,*::after {
     margin: 0;
@@ -13,30 +15,27 @@ body {
     font-family: var(--basic-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100vh;
 }
 
-code {
-    font-family: var(--basic-code-font-family);
-}
-
-main {
-    width: 100%;
-    /*max-width: 1020px;*/
-    margin-left: auto;
-    margin-right: auto;
-    /*border: 1px solid #7f7f7f;*/
-}
-
-@media screen and (min-width: 600px) {
-    main {
-        /*margin-top: 48px;*/
-    }
-}
 
 #root {
+    height: 100%;
+
     display: flex;
     flex-direction: column;
 }
+
+#root > main {
+    width: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 
 .flex-grow-1 {
     flex-grow: 1;
@@ -44,10 +43,6 @@ main {
 
 .m-0 {
     margin: 0 !important;
-}
-
-.ml-1 {
-    margin-left: 1rem;
 }
 
 .mirrorY {

@@ -1,6 +1,6 @@
 import http from '../httpService';
 import { CATEGORY, DATE, DESCRIPTION, ID_CATEGORY, ID_ENTRY, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
-import DateTime from 'luxon/src/datetime';
+import { DateTime } from 'luxon';
 import _ from 'lodash';
 
 const apiEndpoint = '/entries';
@@ -45,3 +45,48 @@ export function updateEntry(entry, type) {
 export function deleteEntry(entry) {
     return http.delete(entryUrl(entry[ID_ENTRY]));
 }
+
+
+
+// DATA OPERATIONS:
+
+export function processEntries(entries) {
+    entries.forEach(entry => {
+        entry.date = DateTime.fromMillis(entry.date);
+    });
+    return entries;
+}
+
+// return array of object {day: '2018-10-22', entries: [Object]}
+export function splitByDays(entries) {
+    if (!entries) return null;
+
+    const dayEntriesMap = new Map();
+    entries.forEach(entry => {
+        const day = entry.date.toISODate();
+        const entriesByDay = dayEntriesMap.get(day) || [];
+        entriesByDay.push(entry);
+        dayEntriesMap.set(day, entriesByDay);
+    });
+
+    const sortDesc = (a, b) => {
+        if (a < b) return 1;
+        if (a > b) return -1;
+        else return 0;
+    };
+
+    // // from map to array:
+    const dataStructure = [];
+    dayEntriesMap.forEach((value, key) => {
+        dataStructure.push({
+            day: DateTime.fromISO(key).setLocale('local'),
+            entries: value.sort(({ date: a }, { date: b }) =>  sortDesc(a, b)),
+        })
+    });
+
+    // sort by day:
+    return dataStructure.sort(({ day: a }, { day: b }) => sortDesc(a, b));
+}
+
+
+
