@@ -68,6 +68,7 @@ class Navbar extends Component {
         const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
         const { rootCategory, onEntriesChange } = this.props;
         const open = type === 'income' ? incomeFormDialogOpen : expenseFormDialogOpen;
+        if (!open) return null;
         return (
             <EntryForm
                 type={type}
@@ -82,6 +83,7 @@ class Navbar extends Component {
 
     renderUserOptionDialog = () => {
         const { userOptionDialogOpen } = this.state;
+        if (!userOptionDialogOpen) return null;
         return (
             <UserOptionDialog
                 open={userOptionDialogOpen}
@@ -92,6 +94,7 @@ class Navbar extends Component {
 
     renderCategoryOptionDialog = () => {
         const { categoryOptionDialogOpen } = this.state;
+        if (!categoryOptionDialogOpen) return null;
         const { rootCategory, onRootCategoryChange } = this.props;
         return (
             <CategoryOptionDialog
