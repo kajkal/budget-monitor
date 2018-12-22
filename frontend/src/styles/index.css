@@ -21,23 +21,22 @@ body {
 
 #root {
     height: 100%;
-
     display: flex;
-    flex-direction: column;
 }
 
 #root > main {
     width: 100%;
     flex-grow: 1;
 
+    padding-top: 64px;
     display: flex;
     flex-direction: column;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 400px) {
 
     .application-title {
-        font-size: 1em !important;
+        font-size: 0 !important;
     }
 
 }

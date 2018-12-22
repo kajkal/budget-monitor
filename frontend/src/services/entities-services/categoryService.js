@@ -37,7 +37,6 @@ export function deleteCategory(category) {
 
 // DATA OPERATIONS:
 
-let rootCategory;
 let idCategoryCategoryMap;
 
 const categoryNamesMap = new Map([
@@ -65,12 +64,6 @@ export function getRootCategory(categories) {
     idCategoryCategoryMap = new Map();
     processLevel(rootCategory, []);
     return rootCategory;
-}
-
-export function setRootCategory(newRootCategory) {
-    rootCategory = newRootCategory;
-    console.log('Root category set: ', rootCategory);
-    console.log('IdCategory lodashPath map: ', idCategoryCategoryMap);
 }
 
 export function getCategoriesByType(rootCategory, type) {

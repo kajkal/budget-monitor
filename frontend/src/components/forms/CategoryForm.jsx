@@ -126,7 +126,7 @@ class CategoryForm extends Form {
 
                         <div className='form-content category-form'>
                             {this.renderCategoryInput([CATEGORY], 'Parent category', categoryDetails, { className: 'category-input' })}
-                            {this.renderTextInput([NAME], 'Name', {}, { className: 'category-name-input' })}
+                            {this.renderTextInput([NAME], 'Name', {}, { focus: true, className: 'category-name-input' })}
                         </div>
 
                     </form>

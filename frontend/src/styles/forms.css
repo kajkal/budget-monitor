@@ -28,7 +28,7 @@
 
     .form-container {
         width: 600px;
-        margin-top: 48px;
+        margin-top: 64px;
         height: auto;
     }
 
@@ -39,7 +39,6 @@
 form {
     display: flex;
     flex-direction: column;
-    padding: 14px;
 }
 
 .form-header {
@@ -47,12 +46,22 @@ form {
     text-align: center;
 }
 
-form div.form-content {
+.form-container > form > .form-header {
+    padding: 24px 24px 20px 24px;
+}
+
+.form-container > form > .form-content {
+    padding: 0 24px 24px 24px;
     flex-grow: 1;
 }
 
-form footer {
-    margin-top: 14px;
+.form-container > form > .form-content {
+    padding: 0 24px 24px 24px;
+    flex-grow: 1;
+}
+
+.form-container > form > footer {
+    margin: 8px 4px;
     display: flex;
     justify-content: flex-end;
 }
@@ -60,9 +69,6 @@ form footer {
 form footer * {
 }
 
-.submit-button {
-    /*margin-top: 16px !important;*/
-}
 
 
 /*LOGIN FORM*/
