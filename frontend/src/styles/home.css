@@ -19,6 +19,17 @@
 }
 
 
+.category {
+    font-style: italic;
+}
+.description {
+    font-size: 1.1em;
+}
+.value {
+    font-size: 1.1em;
+    display: flex;
+}
+
 
 .entry-row-summary {
     width: 100%;
@@ -38,12 +49,9 @@
     grid-area: category;
 
     margin-left: 1em;
-    font-style: italic;
 }
 .entry-row-summary .description {
     grid-area: description;
-
-    font-size: 1.1em;
 }
 .entry-row-summary .value {
     grid-area: value;
@@ -51,9 +59,7 @@
     align-self: center;
     justify-self: end;
 
-    display: flex;
     margin-left: 1em;
-    font-size: 1.1em;
 }
 
 span.currency {
@@ -85,21 +91,15 @@ span.currency {
 .entry-row-details .sub-entries-area {
     grid-area: subEntriesArea;
 
+    margin: 0 1em 1em 1em;
+
     display: grid;
     grid-template-columns: auto auto 1fr;
     grid-column-gap: 1em;
-
-    /*grid-template-areas:*/
-        /*'value category description';*/
+    grid-row-gap: 0.4em;
 }
 
 .sub-entries-area .value  {
     justify-self: end;
-
-    display: flex;
-}
-.sub-entries-area.category  {
-}
-.sub-entries-area.description  {
 }
 

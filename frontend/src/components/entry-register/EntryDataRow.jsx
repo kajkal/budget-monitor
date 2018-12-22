@@ -63,15 +63,23 @@ class EntryDataRow extends PureComponent {
 
     renderEntryDetails = (entry, currency) => {
         const { subEntries, dateOfAddition, dateOfLastModification } = entry;
+        const additionDate = DateTime.fromMillis(dateOfAddition).toLocaleString(DateTime.DATETIME_MED);
+        const modificationDate = (dateOfAddition !== dateOfLastModification) ?
+            DateTime.fromMillis(dateOfLastModification).toLocaleString(DateTime.DATETIME_MED) : null;
+
         return (
             <ExpansionPanelDetails>
 
                 <div className='entry-row-details'>
-                    <div className='addition-date'>Added: {dateOfAddition}</div>
-                    <div className='last-modification-date'>Modified: {dateOfLastModification}</div>
-                    <div className='sub-entries-area'>
-                        {subEntries.map(subEntry => this.renderSubEntry(subEntry, currency))}
-                    </div>
+                    <div className='addition-date'>Added: {additionDate}</div>
+                    {modificationDate && <div className='last-modification-date'>Modified: {modificationDate}</div>}
+                    {
+                        subEntries.length > 0 && (
+                            <div className='sub-entries-area'>
+                                {subEntries.map(subEntry => this.renderSubEntry(subEntry, currency))}
+                            </div>
+                        )
+                    }
                 </div>
 
             </ExpansionPanelDetails>
