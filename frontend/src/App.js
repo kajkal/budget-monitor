@@ -16,7 +16,7 @@ import { theme } from './config/theme';
 import RegisterForm from './components/forms/RegisterForm';
 import { getCategories, getRootCategory, setRootCategory } from './services/entities-services/categoryService';
 import { translateErrorMessage } from './services/errorMessageService';
-import { getEntries, processEntries, splitByDays } from './services/entities-services/entryService';
+import { getEntries, processEntries, processEntry, splitByDays } from './services/entities-services/entryService';
 import EntryRegister from './components/entry-register/EntryRegister';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 
@@ -66,6 +66,22 @@ class App extends Component {
         this.fetchCategories(this.state.user);
     };
 
+    handleEntriesChange = (entry, operationType) => {
+        if (operationType === 'add') {
+            const entries = [ ...this.state.entries, processEntry(entry) ];
+            this.setState({ entries });
+        } if (operationType === 'edit') {
+            const oldEntries = [ ...this.state.entries ];
+            const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
+            entries.push(processEntry(entry));
+            this.setState({ entries });
+        } else if (operationType === 'delete') {
+            const oldEntries = [ ...this.state.entries ];
+            const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
+            this.setState({ entries });
+        }
+    };
+
     componentDidMount() {
         const user = auth.getCurrentUser();
         this.setState({ user });
@@ -84,7 +100,14 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
 
                 <AlertServiceComponent />
-                <Navbar user={user} rootCategory={rootCategory} onRootCategoryChange={this.handleRootCategoryChange} />
+
+                <Navbar
+                    user={user}
+                    rootCategory={rootCategory}
+                    onRootCategoryChange={this.handleRootCategoryChange}
+                    onEntriesChange={this.handleEntriesChange}
+                />
+
                 {user && (!rootCategory || !entries) && <LinearProgress />}
                 <main>
                     <Switch>
@@ -94,6 +117,7 @@ class App extends Component {
                                 rootCategory={rootCategory}
                                 entriesByDay={splitByDays(entries)}
                                 currency={user && user.currency}
+                                onEntriesChange={this.handleEntriesChange}
                                 {...props}
                             />
                         )} />

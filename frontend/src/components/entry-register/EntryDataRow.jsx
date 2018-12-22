@@ -3,37 +3,40 @@ import { Delete, Edit, ExpandMore } from '@material-ui/icons';
 import ExpansionPanel from '@material-ui/core/es/ExpansionPanel/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/es/ExpansionPanelSummary/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/es/ExpansionPanelDetails/ExpansionPanelDetails';
-import { entryShape } from '../../config/propTypesCommon';
+import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
 import { DateTime } from 'luxon';
 import { getCategoryByIdCategory } from '../../services/entities-services/categoryService';
 import PropTypes from 'prop-types';
 import ExpansionPanelActions from '@material-ui/core/es/ExpansionPanelActions/ExpansionPanelActions';
 import Button from '@material-ui/core/es/Button/Button';
 import ListItemIcon from '@material-ui/core/es/ListItemIcon/ListItemIcon';
+import EntryDeleteForm from '../forms/EntryDeleteForm';
+import EntryForm from '../forms/EntryForm';
 
 
 class EntryDataRow extends PureComponent {
     state = {
         open: false,
+        operationType: null,
     };
 
     formatValue = (value, currency) => {
+        const valueType = value > 0 ? 'positive' : '';
         return (
-            <React.Fragment>
-                {(value / 100).toFixed(2)}
+            <div className='value'>
+                <span className={valueType}>{(value / 100).toFixed(2)}</span>
                 <span className='currency'>{currency}</span>
-            </React.Fragment>
+            </div>
         );
     };
 
     renderSubEntry = (subEntry, currency) => {
         const { idSubEntry, value, description, idCategory } = subEntry;
         const category = getCategoryByIdCategory(idCategory);
-        const entryType = value > 0 ? 'positive' : '';
 
         return (
             <React.Fragment key={idSubEntry}>
-                <div className={`value ${entryType}`}>{this.formatValue(value, currency)}</div>
+                {this.formatValue(value, currency)}
                 <div className='category'>{category && category.name}</div>
                 <div className='description'>{description}</div>
 
@@ -45,7 +48,6 @@ class EntryDataRow extends PureComponent {
         const { date, idCategory, description, value } = entry;
         const time = date.toLocaleString(DateTime.TIME_SIMPLE);
         const category = getCategoryByIdCategory(idCategory);
-        const entryType = value > 0 ? 'positive' : '';
 
         return (
             <ExpansionPanelSummary expandIcon={<ExpandMore />}>
@@ -54,7 +56,7 @@ class EntryDataRow extends PureComponent {
                     <div className='time'>{time}</div>
                     <div className='category'>{category && category.name}</div>
                     <div className='description'>{description}</div>
-                    <div className={`value ${entryType}`}>{this.formatValue(value, currency)}</div>
+                    {this.formatValue(value, currency)}
                 </div>
 
             </ExpansionPanelSummary>
@@ -86,16 +88,16 @@ class EntryDataRow extends PureComponent {
         );
     };
 
-    renderEntryOptions = (entry) => {
+    renderEntryOptions = () => {
         return (
             <ExpansionPanelActions>
-                <Button size='small' onClick={() => console.log(entry)}>
+                <Button size='small' onClick={() => this.setState({ operationType: 'delete' })}>
                     <ListItemIcon className='m-0'>
                         <Delete />
                     </ListItemIcon>
                     Delete
                 </Button>
-                <Button size='small'>
+                <Button size='small' onClick={() => this.setState({ operationType: 'edit' })}>
                     <ListItemIcon className='m-0'>
                         <Edit />
                     </ListItemIcon>
@@ -105,8 +107,43 @@ class EntryDataRow extends PureComponent {
         );
     };
 
+
+    handleEntryFormClose = () => {
+        this.setState({ operationType: null });
+    };
+
+    renderDeleteEntryDialog = operationType => {
+        if (operationType !== 'delete') return null;
+        const { entry, onEntriesChange } = this.props;
+        return (
+            <EntryDeleteForm
+                entry={entry}
+                open={Boolean(entry)}
+                onClose={this.handleEntryFormClose}
+                onEntriesChange={onEntriesChange}
+            />
+        );
+    };
+
+    renderEditEntryDialog = operationType => {
+        if (operationType !== 'edit') return null;
+        const { entry, rootCategory, currency, onEntriesChange } = this.props;
+        const type = entry.value > 0 ? 'income' : 'expense';
+        return (
+            <EntryForm
+                type={type}
+                currency={currency}
+                rootCategory={rootCategory}
+                entry={entry}
+                open={Boolean(entry)}
+                onClose={this.handleEntryFormClose}
+                onEntriesChange={onEntriesChange}
+            />
+        );
+    };
+
     render() {
-        const { open } = this.state;
+        const { open, operationType } = this.state;
         const { entry, currency } = this.props;
 
         return (
@@ -116,10 +153,11 @@ class EntryDataRow extends PureComponent {
             >
 
                 {this.renderEntrySummary(entry, currency)}
-
                 {open && this.renderEntryDetails(entry, currency)}
+                {open && this.renderEntryOptions()}
 
-                {open && this.renderEntryOptions(entry)}
+                {open && this.renderDeleteEntryDialog(operationType)}
+                {open && this.renderEditEntryDialog(operationType)}
 
             </ExpansionPanel>
         );
@@ -128,7 +166,9 @@ class EntryDataRow extends PureComponent {
 
 EntryDataRow.propTypes = {
     entry: entryShape.isRequired,
+    rootCategory: categoryRootShape,
     currency: PropTypes.string.isRequired,
+    onEntriesChange: PropTypes.func.isRequired,
 };
 
 export default EntryDataRow;

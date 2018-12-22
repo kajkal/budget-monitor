@@ -31,7 +31,7 @@ export const subEntryShape = PropTypes.shape({
 
 export const entryShape = PropTypes.shape({
     idEntry: PropTypes.number.isRequired,
-    idCategory: PropTypes.number.isRequired,
+    idCategory: PropTypes.number,
     description: PropTypes.string.isRequired,
     value: PropTypes.number.isRequired,
     date: dateShape.isRequired,

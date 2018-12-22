@@ -66,7 +66,7 @@ class Navbar extends Component {
 
     renderEntryFormDialog = (type, currency) => {
         const { incomeFormDialogOpen, expenseFormDialogOpen } = this.state;
-        const { rootCategory } = this.props;
+        const { rootCategory, onEntriesChange } = this.props;
         const open = type === 'income' ? incomeFormDialogOpen : expenseFormDialogOpen;
         return (
             <EntryForm
@@ -75,6 +75,7 @@ class Navbar extends Component {
                 rootCategory={rootCategory}
                 open={open}
                 onClose={this.handleDialogClose}
+                onEntriesChange={onEntriesChange}
             />
         );
     };
@@ -168,6 +169,7 @@ Navbar.propTypes = {
     user: PropTypes.object,
     rootCategory: categoryRootShape,
     onRootCategoryChange: PropTypes.func.isRequired,
+    onEntriesChange: PropTypes.func.isRequired,
 };
 
 export default Navbar;

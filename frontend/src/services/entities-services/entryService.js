@@ -38,8 +38,8 @@ export function addEntry(entry, type) {
     return http.post(apiEndpoint, parseEntry(entry, type));
 }
 
-export function updateEntry(entry, type) {
-    return http.put(entryUrl(entry[ID_ENTRY]), parseEntry(entry, type));
+export function updateEntry(idEntry, entry, type) {
+    return http.put(entryUrl(idEntry), parseEntry(entry, type));
 }
 
 export function deleteEntry(entry) {
@@ -49,6 +49,11 @@ export function deleteEntry(entry) {
 
 
 // DATA OPERATIONS:
+
+export function processEntry(entry) {
+    entry.date = DateTime.fromMillis(entry.date);
+    return entry;
+}
 
 export function processEntries(entries) {
     entries.forEach(entry => {

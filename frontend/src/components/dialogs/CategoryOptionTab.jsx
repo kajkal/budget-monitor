@@ -97,7 +97,7 @@ class CategoryOptionTab extends PureComponent {
         return (
             <CategoryDeleteForm
                 category={selectedCategory}
-                open={Boolean(selectedCategory) && Boolean(operationType)}
+                open={Boolean(selectedCategory)}
                 onClose={this.handleCategoryFormClose}
                 onRootCategoryChange={onRootCategoryChange}
             />

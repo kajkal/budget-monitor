@@ -29,6 +29,11 @@
     font-size: 1.1em;
     display: flex;
 }
+.currency {
+    margin-left: 0.5em;
+    font-size: 0.6em;
+    color: var(--basic-font-color);
+}
 
 
 .entry-row-summary {
@@ -60,12 +65,6 @@
     justify-self: end;
 
     margin-left: 1em;
-}
-
-span.currency {
-    margin-left: 0.5em;
-    font-size: 0.6em;
-    color: var(--basic-font-color);
 }
 
 

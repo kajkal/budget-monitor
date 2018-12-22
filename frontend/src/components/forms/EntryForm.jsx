@@ -5,13 +5,13 @@ import { DateTime } from 'luxon';
 import _ from 'lodash';
 import { Add, Delete } from '@material-ui/icons';
 import Button from '@material-ui/core/Button/Button';
-import { addEntry } from '../../services/entities-services/entryService';
+import { addEntry, updateEntry } from '../../services/entities-services/entryService';
 import Form from '../common/forms/Form';
 import { CATEGORY, DATE, DESCRIPTION, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
 import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
-import { categoryRootShape } from '../../config/propTypesCommon';
-import { getCategoriesByType } from '../../services/entities-services/categoryService';
+import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
+import { getCategoriesByType, getCategoryByIdCategory } from '../../services/entities-services/categoryService';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
 import Dialog from '@material-ui/core/Dialog/Dialog';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
@@ -55,7 +55,21 @@ class EntryForm extends Form {
 
     componentDidMount() {
         const data = { ...this.state.data };
-        data[DATE] = DateTime.local().toISO();
+        const { entry } = this.props;
+
+        if (entry) {
+            data[VALUE] = (Math.abs(entry.value / 100)).toString();
+            data[DESCRIPTION] = entry.description;
+            data[DATE] = entry.date.toISO();
+            data[CATEGORY] = getCategoryByIdCategory(entry.idCategory) || {};
+            data[SUB_ENTRIES] = entry.subEntries.map(subEntry => ({
+                [VALUE]: (Math.abs(subEntry.value / 100)).toString(),
+                [DESCRIPTION]: subEntry.description,
+                [CATEGORY]: getCategoryByIdCategory(subEntry.idCategory) || {},
+            }));
+        } else {
+            data[DATE] = DateTime.local().toISO();
+        }
         this.setState({ data });
     }
 
@@ -85,12 +99,19 @@ class EntryForm extends Form {
     };
 
     doSubmit = async () => {
+        const { data } = this.state;
+        const { entry, type, onClose, onEntriesChange } = this.props;
         try {
-            const response = await addEntry(this.state.data, this.props.type);
-
-            console.log('response from server: ', response);
-            alertService.success('Entry successfully added.');
-            this.props.onClose();
+            if (entry) {
+                const { data: response } = await updateEntry(entry.idEntry, data, type);
+                alertService.success('Entry successfully updated.');
+                onEntriesChange(response, 'edit');
+            } else {
+                const { data: response } = await addEntry(data, type);
+                alertService.success('Entry successfully added.');
+                onEntriesChange(response, 'add');
+            }
+            onClose();
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 console.log('messageKey: ', e.response.data.message);
@@ -163,8 +184,10 @@ class EntryForm extends Form {
     };
 
     render() {
-        const { currency, type, rootCategory, open, onClose, fullScreen } = this.props;
+        const { entry, currency, type, rootCategory, open, onClose, fullScreen } = this.props;
         const headerClassName = type === 'income' ? 'positive' : 'negative';
+        const formTitle = entry ? 'Edit ' : 'Add new';
+        const submitButtonTitle = entry ? 'Save' : 'Add';
 
         const categoryDetails = {
             rootCategory: getCategoriesByType(rootCategory, type),
@@ -190,7 +213,7 @@ class EntryForm extends Form {
                     className='form-header'
                     disableTypography={true}
                 >
-                    Add new <span className={headerClassName}>{type}</span>
+                    {formTitle} <span className={headerClassName}>{type}</span>
                 </DialogTitle>
 
                 <DialogContent>
@@ -211,7 +234,7 @@ class EntryForm extends Form {
 
                 <DialogActions>
                     {this.renderCancelButton(onClose)}
-                    {this.renderSubmitButton('Add')}
+                    {this.renderSubmitButton(submitButtonTitle)}
                 </DialogActions>
 
             </Dialog>
@@ -221,11 +244,14 @@ class EntryForm extends Form {
 
 EntryForm.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
-    rootCategory: categoryRootShape.isRequired,
     currency: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired,
+    rootCategory: categoryRootShape.isRequired,
+    entry: entryShape,
 
     open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onEntriesChange: PropTypes.func.isRequired,
+
     fullScreen: PropTypes.bool.isRequired,
 };
 
