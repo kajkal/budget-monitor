@@ -59,10 +59,21 @@ export function getRootCategory(categories) {
             processLevel(c, newPath);
         });
     };
+    const addUncategorizedSubCategory = category => {
+        category.subCategories.push({
+            idCategory: 0,
+            path: [1, category.idCategory],
+            name: 'Uncategorized',
+            color: 0,
+            subCategories: [],
+            lodashPath: [ ...category.lodashPath, 'subCategories', category.subCategories.length],
+        });
+    };
 
     const rootCategory = categories;
     idCategoryCategoryMap = new Map();
     processLevel(rootCategory, []);
+    rootCategory.subCategories.forEach(c => addUncategorizedSubCategory(c));
     return rootCategory;
 }
 
