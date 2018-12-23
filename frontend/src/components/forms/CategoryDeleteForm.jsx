@@ -4,7 +4,7 @@ import ConfirmationDialog from '../common/dialogs/ConfirmationDialog';
 import { alertService } from '../../services/alertService';
 import { translateErrorMessage } from '../../services/errorMessageService';
 import { deleteCategory } from '../../services/entities-services/categoryService';
-import { categoryRootShape } from '../../config/propTypesCommon';
+import { categoryShape } from '../../config/propTypesCommon';
 
 
 class CategoryDeleteForm extends PureComponent {
@@ -55,7 +55,7 @@ class CategoryDeleteForm extends PureComponent {
 }
 
 CategoryDeleteForm.propTypes = {
-    category: categoryRootShape.isRequired,
+    category: categoryShape.isRequired,
 
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,

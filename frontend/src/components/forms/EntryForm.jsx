@@ -10,7 +10,7 @@ import Form from '../common/forms/Form';
 import { CATEGORY, DATE, DESCRIPTION, SUB_ENTRIES, VALUE } from '../../config/fieldNames';
 import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
-import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
+import { categoryShape, entryShape } from '../../config/propTypesCommon';
 import { getCategoriesByType, getCategoryByIdCategory } from '../../services/entities-services/categoryService';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
 import Dialog from '@material-ui/core/Dialog/Dialog';
@@ -245,7 +245,7 @@ class EntryForm extends Form {
 EntryForm.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
     currency: PropTypes.string.isRequired,
-    rootCategory: categoryRootShape.isRequired,
+    rootCategory: categoryShape.isRequired,
     entry: entryShape,
 
     open: PropTypes.bool.isRequired,

@@ -3,7 +3,7 @@ import { Delete, Edit, ExpandMore } from '@material-ui/icons';
 import ExpansionPanel from '@material-ui/core/es/ExpansionPanel/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/es/ExpansionPanelSummary/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/es/ExpansionPanelDetails/ExpansionPanelDetails';
-import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
+import { categoryShape, entryShape } from '../../config/propTypesCommon';
 import { DateTime } from 'luxon';
 import { getCategoryByIdCategory } from '../../services/entities-services/categoryService';
 import PropTypes from 'prop-types';
@@ -168,7 +168,7 @@ class EntryDataRow extends PureComponent {
 EntryDataRow.propTypes = {
     entry: entryShape.isRequired,
     fullDate: PropTypes.bool,
-    rootCategory: categoryRootShape,
+    rootCategory: categoryShape,
     currency: PropTypes.string.isRequired,
     onEntriesChange: PropTypes.func.isRequired,
 };

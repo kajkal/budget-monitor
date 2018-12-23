@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import EntryDataRow from './EntryDataRow';
 import Typography from '@material-ui/core/es/Typography/Typography';
-import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
+import { categoryShape, entryShape } from '../../config/propTypesCommon';
 
 
 const EntryRegister = ({ entriesByDay, rootCategory, currency, onEntriesChange }) => {
@@ -43,7 +43,7 @@ EntryRegister.propTypes = {
             entries: PropTypes.arrayOf(entryShape),
         }).isRequired,
     ),
-    rootCategory: categoryRootShape,
+    rootCategory: categoryShape,
     currency: PropTypes.string,
     onEntriesChange: PropTypes.func.isRequired,
 };

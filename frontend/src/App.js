@@ -5,7 +5,6 @@ import auth from './services/authService';
 import AlertServiceComponent, { alertService } from './services/alertService';
 import AlertDemo from './components/___archive/AlertDemo';
 import Playground from './components/___develop/Playground';
-import New from './components/___develop/New';
 import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
@@ -26,6 +25,9 @@ import EntryRegister from './components/entry-register/EntryRegister';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import EntryRecent from './components/entry-register/EntryRecent';
 import ResponsiveDrawer from './components/navigation/Navbar';
+import Chart1 from './components/charts/Chart1';
+import Chart3 from './components/charts/Chart3';
+import Chart2 from './components/charts/Chart2';
 
 
 class App extends Component {
@@ -133,7 +135,12 @@ class App extends Component {
                     <main>
                         {user && (!rootCategory || !entries) && <LinearProgress />}
                         <Switch>
-                            <Route exact path="/dev" component={Playground} />
+                            <Route exact path="/dev" render={props => (
+                                <Playground
+                                    rootCategory={rootCategory}
+                                    {...props}
+                                />
+                            )} />
 
                             <ProtectedRoute exact path="/register" render={props => (
                                 <EntryRegister
@@ -155,7 +162,33 @@ class App extends Component {
                                     {...props}
                                 />
                             )} />
-                            <Route exact path="/new" render={props => <New rootCategory={rootCategory} {...props} />} />
+
+                            <ProtectedRoute exact path="/chart1" render={props => (
+                                <Chart1
+                                    entries={entries}
+                                    rootCategory={rootCategory}
+                                    currency={user && user.currency}
+                                    {...props}
+                                />
+                            )} />
+
+                            <ProtectedRoute exact path="/chart2" render={props => (
+                                <Chart2
+                                    entries={entries}
+                                    rootCategory={rootCategory}
+                                    currency={user && user.currency}
+                                    {...props}
+                                />
+                            )} />
+
+                            <ProtectedRoute exact path="/chart3" render={props => (
+                                <Chart3
+                                    entries={entries}
+                                    rootCategory={rootCategory}
+                                    currency={user && user.currency}
+                                    {...props}
+                                />
+                            )} />
 
                             <Route exact path="/register" component={RegisterForm} />
                             <Route exact path="/login" component={LoginForm} />

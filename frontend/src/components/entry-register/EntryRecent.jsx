@@ -4,7 +4,7 @@ import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import Typography from '@material-ui/core/es/Typography/Typography';
 import EntryDataRow from './EntryDataRow';
 import { sort } from '../../services/entities-services/entryService';
-import { categoryRootShape, entryShape } from '../../config/propTypesCommon';
+import { categoryShape, entryShape } from '../../config/propTypesCommon';
 
 
 class EntryRecent extends PureComponent {
@@ -50,7 +50,7 @@ class EntryRecent extends PureComponent {
 
 EntryRecent.propTypes = {
     recentEntries: PropTypes.arrayOf(entryShape),
-    rootCategory: categoryRootShape,
+    rootCategory: categoryShape,
     currency: PropTypes.string,
     getRecentEntries: PropTypes.func.isRequired,
     onEntriesChange: PropTypes.func.isRequired,

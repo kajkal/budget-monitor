@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { categoryRootShape } from '../../config/propTypesCommon';
+import { categoryShape } from '../../config/propTypesCommon';
 import withMobileDialog from '@material-ui/core/es/withMobileDialog/withMobileDialog';
 import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 import Dialog from '@material-ui/core/Dialog/Dialog';
@@ -73,7 +73,7 @@ class CategoryOptionDialog extends PureComponent {
 }
 
 CategoryOptionDialog.propTypes = {
-    rootCategory: categoryRootShape,
+    rootCategory: categoryShape,
     onRootCategoryChange: PropTypes.func.isRequired,
 
     open: PropTypes.bool.isRequired,

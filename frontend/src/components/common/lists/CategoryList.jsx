@@ -1,15 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
-import { categoryRootShape } from '../../../config/propTypesCommon';
+import { categoryShape } from '../../../config/propTypesCommon';
 import { getCategoryName } from '../../../services/entities-services/categoryService';
 
 
@@ -33,6 +32,7 @@ class CategoryList extends PureComponent {
         const haveChildren = category.subCategories.length > 0;
         const categoryDisabled = this.props.categoryDisabled && this.props.categoryDisabled(category);
 
+        if (category.idCategory === 0) return null;
         return (
             <React.Fragment key={category.idCategory}>
 
@@ -44,7 +44,7 @@ class CategoryList extends PureComponent {
                         haveChildren && (
                             <ListItemSecondaryAction>
                                 <IconButton onClick={() => this.handleToggleOpen(category)}>
-                                    {category.subCategories.length > 0 && expandIcon}
+                                    {expandIcon}
                                 </IconButton>
                             </ListItemSecondaryAction>
                         )
@@ -91,7 +91,7 @@ class CategoryList extends PureComponent {
 }
 
 CategoryList.propTypes = {
-    rootCategory: categoryRootShape.isRequired,
+    rootCategory: categoryShape.isRequired,
     onlySubCategories: PropTypes.bool,
     header: PropTypes.string,
     onSelect: PropTypes.func.isRequired,

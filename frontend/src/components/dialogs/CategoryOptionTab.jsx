@@ -8,7 +8,7 @@ import CategoryList from '../common/lists/CategoryList';
 import DropDownMenu from '../common/menus/DropDownMenu';
 import CategoryForm from '../forms/CategoryForm';
 import CategoryDeleteForm from '../forms/CategoryDeleteForm';
-import { categoryRootShape } from '../../config/propTypesCommon';
+import { categoryShape } from '../../config/propTypesCommon';
 import { getCategoriesByType, getCategoryParent } from '../../services/entities-services/categoryService';
 
 
@@ -141,7 +141,7 @@ class CategoryOptionTab extends PureComponent {
 
 CategoryOptionTab.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
-    rootCategory: categoryRootShape.isRequired,
+    rootCategory: categoryShape.isRequired,
     onClose: PropTypes.func.isRequired,
     onRootCategoryChange: PropTypes.func.isRequired,
 };

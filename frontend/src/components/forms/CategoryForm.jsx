@@ -13,7 +13,7 @@ import { translateErrorMessage } from '../../services/errorMessageService';
 import { alertService } from '../../services/alertService';
 import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../config/theme';
 import { CATEGORY, ID_CATEGORY, NAME } from '../../config/fieldNames';
-import { categoryRootShape } from '../../config/propTypesCommon';
+import { categoryShape } from '../../config/propTypesCommon';
 
 
 class CategoryForm extends Form {
@@ -144,9 +144,9 @@ class CategoryForm extends Form {
 
 CategoryForm.propTypes = {
     type: PropTypes.oneOf(['expense', 'income']).isRequired,
-    rootCategory: categoryRootShape.isRequired,
-    superCategory: categoryRootShape,
-    category: categoryRootShape,
+    rootCategory: categoryShape.isRequired,
+    superCategory: categoryShape,
+    category: categoryShape,
 
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,

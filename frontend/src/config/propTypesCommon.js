@@ -8,14 +8,14 @@ export const lodashPath = PropTypes.arrayOf(
     ]),
 );
 
-export const categoryRootShape = PropTypes.shape({
+export const categoryShape = PropTypes.shape({
     idCategory: PropTypes.number.isRequired,
     path: PropTypes.arrayOf(PropTypes.number).isRequired,
     lodashPath: lodashPath,
     name: PropTypes.string.isRequired,
     color: PropTypes.number.isRequired,
 });
-categoryRootShape.subCategories = PropTypes.arrayOf(categoryRootShape).isRequired;
+categoryShape.subCategories = PropTypes.arrayOf(categoryShape).isRequired;
 
 export const dateShape = PropTypes.oneOfType([
     PropTypes.object,

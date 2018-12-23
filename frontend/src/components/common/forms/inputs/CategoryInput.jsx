@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/es/DialogTitle/DialogTitle';
 import DialogContent from '@material-ui/core/es/DialogContent/DialogContent';
 import Button from '@material-ui/core/es/Button/Button';
 import DialogActions from '@material-ui/core/es/DialogActions/DialogActions';
-import { categoryRootShape } from '../../../../config/propTypesCommon';
+import { categoryShape } from '../../../../config/propTypesCommon';
 import { getCategoryName } from '../../../../services/entities-services/categoryService';
 import { desktopDialogMaxWidth, mobileDialogBreakpoint } from '../../../../config/theme';
 
@@ -111,7 +111,7 @@ class CategoryInput extends PureComponent {
 CategoryInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([categoryRootShape, PropTypes.shape({})]).isRequired,
+    value: PropTypes.oneOfType([categoryShape, PropTypes.shape({})]).isRequired,
     onChange: PropTypes.func.isRequired,
     error: PropTypes.string,
 
@@ -119,7 +119,7 @@ CategoryInput.propTypes = {
     margin: PropTypes.string.isRequired,
     className: PropTypes.string,
 
-    rootCategory: categoryRootShape.isRequired,
+    rootCategory: categoryShape.isRequired,
     onlySubCategories: PropTypes.bool.isRequired,
     header: PropTypes.string,
     categoryDisabled: PropTypes.func,
