@@ -11,6 +11,7 @@ import CurrencyInput from './inputs/CurrencyInput';
 import DateTimeInput from './inputs/DateTimeInput';
 import { formInputMargin } from '../../../config/theme';
 import CategoryInput from './inputs/CategoryInput';
+import DateInput from './inputs/DateInput';
 
 
 class Form extends PureComponent {
@@ -237,6 +238,28 @@ class Form extends PureComponent {
                 className={className}
                 error={error}
                 autoFocus={focus}
+                margin={margin}
+            />
+        );
+    }
+
+    renderDateInput(path, label, inputDetails, inputOptions) {
+        const value = _.get(this.state.data, path);
+        const error = _.get(this.state.errors, path);
+
+        // const {} = inputDetails;
+        const {className, margin = formInputMargin} = inputOptions;
+
+        this._getInfo(path, value, error);
+
+        return (
+            <DateInput
+                name={_.last(path)}
+                label={label}
+                value={value}
+                onChange={this.handleChange(path)}
+                className={className}
+                error={error}
                 margin={margin}
             />
         );
