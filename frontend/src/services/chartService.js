@@ -181,7 +181,7 @@ export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
         const dayValueMap = (entry.value > 0) ? incomeDayValueMap : expenseDayValueMap;
         const day = entry.date.toISODate();
         const value = dayValueMap.get(day) || 0;
-        dayValueMap.set(day, value + Math.abs(entry.value) / 100);
+        dayValueMap.set(day, value + entry.value / 100);
     });
 
     const incomeDataArray = [];
