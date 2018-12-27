@@ -29,15 +29,16 @@ const styles = {
 };
 
 
-const ChartWrapper = ({ title, caption, children, classes }) => {
+const ChartWrapper = ({ title, caption, fullWidth = false, children, classes }) => {
     const chartWrapperClassName = [
         {element: true, className: classes.chartWrapper},
         {element: title, className: classes.withTitle},
         {element: caption, className: classes.withTitleAndCaption},
     ].filter(e => e.element).map(e => e.className).join(' ');
+    const wrapperOptions = fullWidth ? { width: '100%' } : null;
 
     return (
-        <div className={classes.containerWrapper}>
+        <div className={classes.containerWrapper} style={wrapperOptions}>
             {
                 title && (
                     <Typography variant='h6' className={classes.chartDescription}>
@@ -62,6 +63,7 @@ const ChartWrapper = ({ title, caption, children, classes }) => {
 ChartWrapper.propTypes = {
     title: PropTypes.string,
     caption: PropTypes.string,
+    fullWidth: PropTypes.bool,
     children: PropTypes.element.isRequired,
     classes: PropTypes.object.isRequired,
 };

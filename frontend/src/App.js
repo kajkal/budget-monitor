@@ -27,9 +27,13 @@ import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import EntryRecent from './components/entry-register/EntryRecent';
 import Navbar from './components/navigation/Navbar';
 import BarChart from './components/charts/BarChart';
-import Chart3 from './components/charts/Chart3';
+import CalendarChart from './components/charts/CalendarChart';
 import SunburstChart from './components/charts/SunburstChart';
-import { prepareDataStructureForBarChart, prepareDataStructureForSunburstChart } from './services/chartService';
+import {
+    prepareDataStructureForBarChart,
+    prepareDataStructureForCalendarChart,
+    prepareDataStructureForSunburstChart,
+} from './services/chartService';
 
 
 class App extends Component {
@@ -213,10 +217,9 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/chart3" render={props => (
-                                    <Chart3
-                                        entries={entries}
-                                        rootCategory={rootCategory}
+                                <ProtectedRoute exact path="/calendarChart" render={props => (
+                                    <CalendarChart
+                                        dataStructure={prepareDataStructureForCalendarChart(entries, selectionSpec)}
                                         currency={user && user.currency}
                                         {...props}
                                     />

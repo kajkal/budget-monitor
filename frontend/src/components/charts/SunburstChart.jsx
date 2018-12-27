@@ -9,7 +9,7 @@ const SunburstChart = ({ dataStructure, currency }) => {
     if (!dataStructure || !currency) return <LinearProgress style={{ width: '100%' }} />;
 
     const { incomeTree, expenseTree } = dataStructure;
-    if (incomeTree.totalValue === 0 && expenseTree.totalValue === 0)return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
+    if (incomeTree.totalValue === 0 && expenseTree.totalValue === 0) return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
 
     return (
         <div className='chart-area'>

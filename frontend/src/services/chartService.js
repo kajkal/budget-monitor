@@ -118,3 +118,38 @@ export function prepareDataStructureForSunburstChart(entries, rootCategory) {
         expenseTree,
     }
 }
+
+export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
+    console.log('prepareDataStructureForCalendarChart', selectionSpec);
+
+    if (!entries || !selectionSpec) return null;
+    const { from, to } = selectionSpec;
+    if (entries.length === 0) return { from: from.toISODate(), to: to.toISODate(), incomeData: [], expenseData: [] };
+
+
+    const incomeDayValueMap = new Map();
+    const expenseDayValueMap = new Map();
+
+    entries.forEach(entry => {
+        const dayValueMap = (entry.value > 0) ? incomeDayValueMap : expenseDayValueMap;
+        const day = entry.date.toISODate();
+        const value = dayValueMap.get(day) || 0;
+        dayValueMap.set(day, value + Math.abs(entry.value) / 100);
+    });
+
+    const incomeDataArray = [];
+    const expenseDataArray = [];
+
+    incomeDataArray.forEach((value, day) => incomeDataArray.push({ day, value }));
+    expenseDayValueMap.forEach((value, day) => expenseDataArray.push({ day, value }));
+
+    console.log('INCOME:', incomeDataArray);
+    console.log('EXPENSE:', expenseDataArray);
+
+    return {
+        from: from.toISODate(),
+        to: to.toISODate(),
+        incomeData: incomeDataArray,
+        expenseData: expenseDataArray,
+    }
+}

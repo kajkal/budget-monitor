@@ -253,8 +253,8 @@ class Navbar extends PureComponent {
 
                             <NavigationLink
                                 icon={<ShowChart />}
-                                label={'Chart 3'}
-                                to={'/chart3'}
+                                label={'Calendar chart'}
+                                to={'/calendarChart'}
                             />
                         </List>
                         <Divider />
