@@ -6,15 +6,13 @@
     .entry-register {
         width: 100%;
         max-width: 960px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
 }
 
 .entries-for-day.header {
     font-size: 1.2em;
-    margin: 12px 0 12px 24px;
+    padding: 12px 0 12px 24px;
 }
 
 

@@ -1,7 +1,19 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Add, CallMade, Menu, PlaylistAdd, PowerSettingsNew, Settings, Restore, CalendarToday } from '@material-ui/icons';
-import { PieChart, BarChart, ShowChart } from '@material-ui/icons';
+import {
+    Add,
+    BarChart,
+    CalendarToday,
+    CallMade,
+    Menu,
+    PieChart,
+    PlaylistAdd,
+    PowerSettingsNew,
+    Restore,
+    Settings,
+    ShowChart,
+    Info
+} from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,9 +30,10 @@ import ButtonWithMenu from '../common/menus/ButtonWithMenu';
 import EntryForm from '../forms/EntryForm';
 import UserOptionDialog from '../dialogs/UserOptionDialog';
 import CategoryOptionDialog from '../dialogs/CategoryOptionDialog';
-import { categoryRootShape } from '../../config/propTypesCommon';
-import CategoryList from '../common/lists/CategoryList';
+import { categoryShape } from '../../config/propTypesCommon';
 import NavigationLink from './NavigationLink';
+import EntriesSelectionForm from '../forms/EntriesSelectionForm';
+
 
 const drawerWidth = 300;
 
@@ -37,6 +50,7 @@ const styles = theme => ({
             width: `calc(100% - ${drawerWidth}px)`,
         },
     },
+    fakeToolbar: theme.mixins.toolbar,
     toolbar: {
         justifyContent: 'flex-end',
     },
@@ -55,6 +69,17 @@ const styles = theme => ({
     drawerPaper: {
         width: drawerWidth,
     },
+    content: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    applicationContent: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 });
 
 class Navbar extends PureComponent {
@@ -64,6 +89,9 @@ class Navbar extends PureComponent {
         expenseFormDialogOpen: false,
         userOptionDialogOpen: false,
         categoryOptionDialogOpen: false,
+
+        expandedCategories: [],
+        selectedCategories: [],
     };
 
     newEntryOptions = [
@@ -101,6 +129,16 @@ class Navbar extends PureComponent {
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+    };
+
+    handleCategoryExpandToggle = expandedCategories => {
+        this.setState({ expandedCategories });
+    };
+
+    handleSelectionSpecChange = selectionSpec => {
+        this.props.onSelectionSpecChange(selectionSpec);
+        const { selectedCategories } = selectionSpec;
+        this.setState({ selectedCategories });
     };
 
     handleDialogClose = () => {
@@ -156,6 +194,7 @@ class Navbar extends PureComponent {
 
 
     render() {
+        const { expandedCategories, selectedCategories } = this.state;
         const { classes, theme, user, rootCategory, children } = this.props;
 
         const drawer = (
@@ -166,55 +205,73 @@ class Navbar extends PureComponent {
                 </Typography>
 
                 <Divider />
-                <List>
 
-                    {/*TODO: only for logged users*/}
-                    <NavigationLink
-                        icon={<Restore />}
-                        label={'Recent'}
-                        to={'/recent'}
-                    />
-
-                    <NavigationLink
-                        icon={<CalendarToday />}
-                        label={'Entries by day'}
-                        to={'/register'}
-                    />
-
-                    <NavigationLink
-                        icon={<PieChart />}
-                        label={'Chart 1'}
-                        to={'/not-found'}
-                    />
-
-                    <NavigationLink
-                        icon={<BarChart />}
-                        label={'Chart 2'}
-                        to={'/not-found'}
-                    />
-
-                    <NavigationLink
-                        icon={<ShowChart />}
-                        label={'Chart 3'}
-                        to={'/not-found'}
-                    />
-
-                </List>
-
-                <Divider />
-                <List>
-
-                    {
-                        user && rootCategory && (
-                            <CategoryList
-                                rootCategory={rootCategory}
-                                onSelect={(category) => console.log('selected: ', category)}
-                                dense={true}
+                {!user && (
+                    <React.Fragment>
+                        <List>
+                            <NavigationLink
+                                icon={<Info />}
+                                label={'About Budget Monitor'}
+                                to={'/about'}
                             />
-                        )
-                    }
 
-                </List>
+                            < NavigationLink
+                                icon={<CalendarToday />}
+                                label={'Entries by day'}
+                                to={'/register'}
+                            />
+                        </List>
+                    </React.Fragment>
+                )}
+
+                {user && (
+                    <React.Fragment>
+                        <List>
+                            <NavigationLink
+                                icon={<Restore />}
+                                label={'Recent'}
+                                to={'/recent'}
+                            />
+
+                            < NavigationLink
+                                icon={<CalendarToday />}
+                                label={'Entries by day'}
+                                to={'/daily'}
+                            />
+
+                            <NavigationLink
+                                icon={<BarChart />}
+                                label={'Bar chart'}
+                                to={'/barChart'}
+                            />
+
+                            <NavigationLink
+                                icon={<PieChart />}
+                                label={'Sunburst chart'}
+                                to={'/sunburstChart'}
+                            />
+
+                            <NavigationLink
+                                icon={<ShowChart />}
+                                label={'Chart 3'}
+                                to={'/chart3'}
+                            />
+                        </List>
+                        <Divider />
+                    </React.Fragment>
+                )}
+
+                {user && rootCategory && (
+                    <List>
+                        <EntriesSelectionForm
+                            rootCategory={rootCategory}
+                            expandedCategories={expandedCategories}
+                            selectedCategories={selectedCategories}
+                            onCategoryExpandToggle={this.handleCategoryExpandToggle}
+                            onSelectionSpecChange={this.handleSelectionSpecChange}
+                        />
+                    </List>
+                )}
 
             </div>
         );
@@ -306,7 +363,12 @@ class Navbar extends PureComponent {
 
                 </nav>
 
-                {children}
+                <div className={classes.content}>
+                    <div className={classes.fakeToolbar} />
+                    <main className={classes.applicationContent}>
+                        {children}
+                    </main>
+                </div>
 
             </React.Fragment>
         );
@@ -315,9 +377,10 @@ class Navbar extends PureComponent {
 
 Navbar.propTypes = {
     user: PropTypes.object,
-    rootCategory: categoryRootShape,
+    rootCategory: categoryShape,
     onRootCategoryChange: PropTypes.func.isRequired,
     onEntriesChange: PropTypes.func.isRequired,
+    onSelectionSpecChange: PropTypes.func.isRequired,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,

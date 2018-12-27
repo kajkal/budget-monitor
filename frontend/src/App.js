@@ -9,33 +9,39 @@ import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/common/route/ProtectedRoute';
-import Home from './components/Home';
 import { theme } from './config/theme';
 import RegisterForm from './components/forms/RegisterForm';
 import { getCategories, getRootCategory } from './services/entities-services/categoryService';
 import { translateErrorMessage } from './services/errorMessageService';
 import {
-    getEntries,
+    filterEntriesByByCategory, filterEntriesByCategoryAndDate,
+    filterEntryByDate,
+    getEntriesBetween,
     getRecentEntries,
-    processEntries,
+    processEntries, processEntriesDate,
     processEntry,
     splitByDays,
 } from './services/entities-services/entryService';
 import EntryRegister from './components/entry-register/EntryRegister';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import EntryRecent from './components/entry-register/EntryRecent';
-import ResponsiveDrawer from './components/navigation/Navbar';
-import Chart1 from './components/charts/Chart1';
+import Navbar from './components/navigation/Navbar';
+import BarChart from './components/charts/BarChart';
 import Chart3 from './components/charts/Chart3';
-import Chart2 from './components/charts/Chart2';
+import SunburstChart from './components/charts/SunburstChart';
+import { prepareDataStructureForBarChart, prepareDataStructureForSunburstChart } from './services/chartService';
 
 
 class App extends Component {
     state = {
         user: null,
         rootCategory: null,
-        entries: null,
+
         recentEntries: null,
+
+        entries: null,
+        selectionSpec: null,
+        filteredEntries: null,
     };
 
     fetchCategories = async user => {
@@ -48,22 +54,6 @@ class App extends Component {
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 console.log('error while fetching categories: ', e);
-                console.log('messageKey: ', e.response.data.message);
-                const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
-            }
-        }
-    };
-
-    fetchEntries = async user => {
-        try {
-            if (!user) return;
-            const { data: rawEntries } = await getEntries();
-            const entries = processEntries(rawEntries);
-            this.setState({ entries });
-        } catch (e) {
-            if (e.response && [400, 401, 403].includes(e.response.status)) {
-                console.log('error while fetching entries: ', e);
                 console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
                 console.log('translated errors: ', errors);
@@ -90,119 +80,162 @@ class App extends Component {
     };
 
     handleEntriesChange = (entry, operationType) => {
+        console.log('APP handleEntriesChange, ' + operationType + ": ", entry);
         if (operationType === 'add') {
-            const entries = [...this.state.entries, processEntry(entry)];
-            this.setState({ entries });
-        }
-        if (operationType === 'edit') {
+            const filteredEntry = filterEntryByDate(processEntry(entry), this.state.selectionSpec);
+            const { entries: currentEntries, filteredEntries: currentFilteredEntries } = this.state;
+            const entries = filteredEntry ? [...currentEntries, filteredEntry] : currentEntries;
+            const filteredEntries = filteredEntry ? [...currentFilteredEntries, filteredEntry] : currentFilteredEntries;
+            this.setState({ entries, filteredEntries });
+        } else if (operationType === 'edit') {
+            // remove from entries and filtered entries
             const oldEntries = [...this.state.entries];
+            const oldFilteredEntries = [...this.state.filteredEntries];
             const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
-            entries.push(processEntry(entry));
-            this.setState({ entries });
+            const filteredEntries = oldFilteredEntries.filter(e => e.idEntry !== entry.idEntry);
+            const filteredEntry = filterEntryByDate(processEntry(entry), this.state.selectionSpec);
+            if (filteredEntry) entries.push(filteredEntry);
+            if (filteredEntry) filteredEntries.push(filteredEntry);
+            this.setState({ entries, filteredEntries });
         } else if (operationType === 'delete') {
             const oldEntries = [...this.state.entries];
+            const oldFilteredEntries = [...this.state.filteredEntries];
             const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
-            this.setState({ entries });
+            const filteredEntries = oldFilteredEntries.filter(e => e.idEntry !== entry.idEntry);
+            this.setState({ entries, filteredEntries });
         }
         this.fetchRecentEntries(this.state.user);
+    };
+
+    handleSelectionSpecChange = async selectionSpec => {
+        try {
+            const { from, to } = selectionSpec;
+            const { entries: currentEntries, selectionSpec: currentSelectionSpec } = this.state;
+
+            let filteredEntries;
+
+            if (currentSelectionSpec) {
+                const { from: currentFrom, to: currentTo } = currentSelectionSpec;
+                if (+currentFrom === +from && +currentTo === +to) {
+                    console.log('APP only filter entries by new selected categories', this.state);
+                    filteredEntries = filterEntriesByByCategory(currentEntries, selectionSpec);
+                    this.setState({ selectionSpec, filteredEntries });
+                    return;
+                }
+            }
+
+            console.log('APP fetch entries from server and filter them', this.state);
+            const { data: rawEntries } = await getEntriesBetween(from, to);
+            const entries = processEntriesDate(rawEntries);
+            filteredEntries = filterEntriesByCategoryAndDate(entries, selectionSpec);
+            this.setState({ entries, selectionSpec, filteredEntries });
+        } catch (e) {
+            if (e.response && [400, 401, 403].includes(e.response.status)) {
+                const errors = translateErrorMessage(e.response.data.message);
+                alertService.warning('Error occurred, entries cannot be fetched. Refresh Page.');
+                this.setState({ errors });
+            }
+        }
     };
 
     componentDidMount() {
         const user = auth.getCurrentUser();
         this.setState({ user });
-        this.fetchCategories(user);
 
-        this.fetchEntries(user);
+        this.fetchCategories(user);
         // setTimeout(() => {
-        //     this.fetchEntries(user);
-        // }, 2000);
+        //     this.fetchCategories(user);
+        // }, 3000);
     }
 
     render() {
-        const { user, rootCategory, entries, recentEntries } = this.state;
+        const { user, rootCategory, recentEntries, entries, selectionSpec, filteredEntries } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
 
                 <AlertServiceComponent />
 
-                <ResponsiveDrawer
+                <Navbar
                     user={user}
                     rootCategory={rootCategory}
                     onRootCategoryChange={this.handleRootCategoryChange}
                     onEntriesChange={this.handleEntriesChange}
+                    onSelectionSpecChange={this.handleSelectionSpecChange}
                 >
-                    <main>
-                        {user && (!rootCategory || !entries) && <LinearProgress />}
-                        <Switch>
-                            <Route exact path="/dev" render={props => (
-                                <Playground
-                                    rootCategory={rootCategory}
-                                    {...props}
-                                />
-                            )} />
 
-                            <ProtectedRoute exact path="/register" render={props => (
-                                <EntryRegister
-                                    rootCategory={rootCategory}
-                                    entriesByDay={splitByDays(entries)}
-                                    currency={user && user.currency}
-                                    onEntriesChange={this.handleEntriesChange}
-                                    {...props}
-                                />
-                            )} />
+                    {
+                        (user && !rootCategory) ? <LinearProgress style={{width: '100%'}} /> : (
+                            <Switch>
 
-                            <ProtectedRoute exact path="/recent" render={props => (
-                                <EntryRecent
-                                    rootCategory={rootCategory}
-                                    recentEntries={recentEntries}
-                                    currency={user && user.currency}
-                                    getRecentEntries={this.fetchRecentEntries}
-                                    onEntriesChange={this.handleEntriesChange}
-                                    {...props}
-                                />
-                            )} />
+                                <Route exact path="/dev" render={props => (
+                                    <Playground
+                                        rootCategory={rootCategory}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <ProtectedRoute exact path="/chart1" render={props => (
-                                <Chart1
-                                    entries={entries}
-                                    rootCategory={rootCategory}
-                                    currency={user && user.currency}
-                                    {...props}
-                                />
-                            )} />
+                                <ProtectedRoute exact path="/daily" render={props => (
+                                    <EntryRegister
+                                        rootCategory={rootCategory}
+                                        entriesByDay={splitByDays(filteredEntries)}
+                                        currency={user && user.currency}
+                                        onEntriesChange={this.handleEntriesChange}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <ProtectedRoute exact path="/chart2" render={props => (
-                                <Chart2
-                                    entries={entries}
-                                    rootCategory={rootCategory}
-                                    currency={user && user.currency}
-                                    {...props}
-                                />
-                            )} />
+                                <ProtectedRoute exact path="/recent" render={props => (
+                                    <EntryRecent
+                                        rootCategory={rootCategory}
+                                        recentEntries={recentEntries}
+                                        currency={user && user.currency}
+                                        getRecentEntries={this.fetchRecentEntries}
+                                        onEntriesChange={this.handleEntriesChange}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <ProtectedRoute exact path="/chart3" render={props => (
-                                <Chart3
-                                    entries={entries}
-                                    rootCategory={rootCategory}
-                                    currency={user && user.currency}
-                                    {...props}
-                                />
-                            )} />
+                                <ProtectedRoute exact path="/barChart" render={props => (
+                                    <BarChart
+                                        dataStructure={prepareDataStructureForBarChart(filteredEntries, selectionSpec)}
+                                        currency={user && user.currency}
+                                        groupMode={false}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <Route exact path="/register" component={RegisterForm} />
-                            <Route exact path="/login" component={LoginForm} />
-                            <Route exact path="/logout" component={Logout} />
+                                <ProtectedRoute exact path="/sunburstChart" render={props => (
+                                    <SunburstChart
+                                        dataStructure={prepareDataStructureForSunburstChart(entries, rootCategory)}
+                                        currency={user && user.currency}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <ProtectedRoute exact path="/home" component={Home} />
-                            <ProtectedRoute exact path="/prot" component={AlertDemo} />
+                                <ProtectedRoute exact path="/chart3" render={props => (
+                                    <Chart3
+                                        entries={entries}
+                                        rootCategory={rootCategory}
+                                        currency={user && user.currency}
+                                        {...props}
+                                    />
+                                )} />
 
-                            <Route exact path="/not-found" component={NotFound} />
-                            <Redirect from="/" exact to="/home" />
-                            <Redirect to="/not-found" />
-                        </Switch>
-                    </main>
-                </ResponsiveDrawer>
+                                <Route exact path="/register" component={RegisterForm} />
+                                <Route exact path="/login" component={LoginForm} />
+                                <Route exact path="/logout" component={Logout} />
+
+                                <ProtectedRoute exact path="/prot" component={AlertDemo} />
+
+                                <Route exact path="/not-found" component={NotFound} />
+                                <Redirect from="/" exact to="/recent" />
+                                <Redirect to="/not-found" />
+                            </Switch>
+                        )
+                    }
+
+                </Navbar>
 
             </MuiThemeProvider>
         );

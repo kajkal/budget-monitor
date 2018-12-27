@@ -4,24 +4,29 @@
 
 @media screen and (max-width: 600px) {
 
-    #root > main > div {
-        flex-grow: 1;
+    /*#root > main > div {*/
+        /*flex-grow: 1;*/
 
-        display: flex;
-        flex-direction: column;
-    }
+        /*display: flex;*/
+        /*flex-direction: column;*/
+    /*}*/
 
-    #root > main > div > form {
-        flex-grow: 1;
-    }
+    /*#root > main > div > form {*/
+        /*flex-grow: 1;*/
+    /*}*/
 
 }
 
 
 .form-container {
-    margin-left: auto;
-    margin-right: auto;
     width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container > form {
+    flex-grow: 1;
 }
 
 @media screen and (min-width: 600px) {
@@ -29,7 +34,7 @@
     .form-container {
         width: 600px;
         margin-top: 64px;
-        height: auto;
+        flex-grow: 0;
     }
 
 }
@@ -152,4 +157,32 @@ form div.form-content.new-entry-form .subEntry-area .subEntry-row {
 form div.form-content.category-form {
     display: flex;
     flex-direction: column;
+}
+
+
+/*ENTRIES SELECTION FORM*/
+
+form.selection-entries-form {
+    margin-top: 16px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 1em;
+
+    grid-template-areas:
+            'from to'
+            'categories categories';
+}
+form.selection-entries-form .from-input {
+    grid-area: from;
+    margin-left: 16px;
+    margin-right: 8px;
+}
+form.selection-entries-form .to-input {
+    grid-area: to;
+    margin-left: 8px;
+    margin-right: 16px;
+}
+form.selection-entries-form .categories-input {
+    grid-area: categories;
 }

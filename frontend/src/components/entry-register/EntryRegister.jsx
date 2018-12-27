@@ -7,7 +7,8 @@ import { categoryShape, entryShape } from '../../config/propTypesCommon';
 
 const EntryRegister = ({ entriesByDay, rootCategory, currency, onEntriesChange }) => {
 
-    if (!entriesByDay || !rootCategory || !currency) return null;
+    if (!entriesByDay || entriesByDay.length === 0 || !rootCategory || !currency)
+        return <h1 style={{ margin: '64px' }}>No data to display</h1>;
     return (
         <div className='entry-register'>
             {

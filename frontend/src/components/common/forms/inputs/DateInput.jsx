@@ -23,11 +23,11 @@ const DateInput = ({ name, label, onChange, error, ...rest }) => {
             rightArrowIcon={<KeyboardArrowRight />}
             keyboardIcon={<CalendarToday />}
 
-            format='dd.MM.yy'
+            format='dd.MM.yyyy'
             mask={[
                 /\d/, /\d/, '.',
                 /\d/, /\d/, '.',
-                /\d/, /\d/,
+                /\d/, /\d/, /\d/, /\d/,
             ]}
         />
     );

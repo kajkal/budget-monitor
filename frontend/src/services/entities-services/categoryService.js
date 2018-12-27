@@ -77,6 +77,27 @@ export function getRootCategory(categories) {
     return rootCategory;
 }
 
+export function getCategoryIds(category) {
+    const processLevel = (category, ids) => {
+        ids.push(category.idCategory);
+        category.subCategories.forEach(c => processLevel(c, ids));
+        return ids;
+    };
+
+    return processLevel(category, []);
+}
+
+export function getCategoriesIds(categories) {
+    if (!categories) return [];
+    const processLevel = (category, ids) => {
+        ids.push(category.idCategory);
+        category.subCategories.forEach(c => processLevel(c, ids));
+    };
+    const categoriesIds = [];
+    categories.forEach(c => processLevel(c, categoriesIds));
+    return categoriesIds;
+}
+
 export function getCategoriesByType(rootCategory, type) {
     const name = type === 'income' ? 'INCOME_CATEGORY' : 'EXPENSE_CATEGORY';
     if (!rootCategory || !rootCategory.subCategories) return null;

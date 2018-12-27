@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,17 @@ public class EntryService {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("username", username);
         final String sql = "SELECT * FROM entriesWithSubEntriesView WHERE owner = :username";
+
+        return namedParameterJdbcTemplate.query(sql, parameters, new EntriesWithSubEntriesExtractor());
+    }
+
+    public List<EntryDTO> findAllByUsernameBetweenDates(String username, Timestamp from, Timestamp to) {
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("username", username);
+        parameters.addValue("from", from);
+        parameters.addValue("to", to);
+        final String sql = "SELECT * FROM entriesWithSubEntriesView WHERE owner = :username AND date BETWEEN :from AND :to";
 
         return namedParameterJdbcTemplate.query(sql, parameters, new EntriesWithSubEntriesExtractor());
     }

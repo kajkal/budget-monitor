@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -54,6 +58,23 @@ public class EntryController {
     @ResponseBody
     public List<EntryDTO> getRecentEntries(@CurrentUser UserDetails user) {
         return entryService.findAllRecentByUsername(user.getUsername());
+    }
+
+    @LogExecutionTime
+    @RequestMapping(method = GET, path = "/api/entries/{from}/{to}")
+    @ResponseBody
+    public List<EntryDTO> getEntriesBetweenDates(@PathVariable("from") String fromInString,
+                                                 @PathVariable("to") String toInString,
+                                                 @CurrentUser UserDetails user) throws EntryException {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Timestamp from = new Timestamp(df.parse(fromInString).getTime());
+            Timestamp to = new Timestamp(df.parse(toInString).getTime());
+            return entryService.findAllByUsernameBetweenDates(user.getUsername(), from, to);
+        } catch (ParseException e) {
+            throw new EntryException("getEntries.error.badFormat");
+        }
     }
 
     @LogExecutionTime
