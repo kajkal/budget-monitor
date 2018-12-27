@@ -12,12 +12,12 @@ function entryUrl(entryId) {
 function parseEntry(entry, type) {
     const factor = type === 'income' ? 100 : -100;
     return ({
-        value: entry[VALUE] * factor,
+        value: (entry[VALUE] * factor).toFixed(0),
         description: entry[[DESCRIPTION]],
         date: DateTime.fromISO(entry[DATE]).valueOf(),
         idCategory: _.get(entry, [CATEGORY, ID_CATEGORY]),
         subEntries: Object.values(entry[SUB_ENTRIES]).map(subEntry => ({
-            value: subEntry[VALUE] * factor,
+            value: (subEntry[VALUE] * factor).toFixed(0),
             description: subEntry[DESCRIPTION],
             idCategory: _.get(subEntry, [CATEGORY, ID_CATEGORY]),
         })),
@@ -55,6 +55,7 @@ export function deleteEntry(entry) {
 
 export function processEntry(entry) {
     entry.date = DateTime.fromMillis(entry.date);
+    if (!entry.idCategory) entry.idCategory = 0;
     return entry;
 }
 
@@ -121,95 +122,35 @@ function isEntriesAndSelectionSpecValid(entries, selectionSpec) {
     return Boolean(entries && selectionSpec);
 }
 
+function isEntryBetweenDates(entry, from, to) {
+    return (entry.date > from && entry.date < to);
+}
+function isEntryOfSelectedCategory(entry, selectedCategoriesIds) {
+    return selectedCategoriesIds.includes(entry.idCategory) ||
+        entry.subEntries.some(subEntry => selectedCategoriesIds.includes(subEntry.idCategory));
+}
+
 
 export function filterEntryByDate(entry, selectionSpec) {
     if (!isEntryAndSelectionSpecValid(entry, selectionSpec)) return null;
 
     const { from, to } = selectionSpec;
-    if (entry.date > from && entry.date < to) return entry;
+    if (isEntryBetweenDates(entry, from, to)) return entry;
     return null;
-}
-
-export function filterSubEntryByCategory(subEntry, selectedCategoriesIds) {
-    // console.log('sprawdzanie pod kategori: ', subEntry);
-    // console.log('                   wobec: ', selectedCategoriesIds);
-    // console.log('                  zwraca: ', selectedCategoriesIds.includes(subEntry.idCategory));
-    // console.log('\n\n');
-    return selectedCategoriesIds.includes(subEntry.idCategory);
 }
 
 export function filterEntryByCategory(entry, selectionSpec) {
-    if (!entry || !selectionSpec) return null;
-    const { selectedCategories, selectedCategoriesIds } = selectionSpec;
-    if (!entry || selectedCategoriesIds.length === 0) return null;
+    if (!isEntryAndSelectionSpecValid(entry, selectionSpec)) return null;
+    const { selectedCategoriesType, selectedCategoriesIds } = selectionSpec;
 
-    if (entry.idCategory === 0) {
-        // categoryType: 2 => income, 3 => expense, undefined => no category selected
-        const categoryType = selectedCategories.filter(c => c.idCategory === 0).map(c => c.path[1]).find(e => e);
-        if ((entry.value > 0 ? 2 : 3) === categoryType) return entry;
+    const entryType = entry.value > 0 ? 1 : -1;
+    if (entryType !== selectedCategoriesType) return null;
 
-        if (entry.subEntries.some(subEntry => filterSubEntryByCategory(subEntry, selectedCategoriesIds))) return entry;
-        return null;
-    }
-
-    if (selectedCategoriesIds.includes(entry.idCategory)) return entry;
-    if (entry.subEntries.some(subEntry => filterSubEntryByCategory(subEntry, selectedCategoriesIds))) return entry;
+    if (isEntryOfSelectedCategory(entry, selectedCategoriesIds)) return entry;
     return null;
 }
 
-export function filterEntriesByByCategory(entries, selectionSpec) {
+export function filterEntriesByCategory(entries, selectionSpec) {
     if (!isEntriesAndSelectionSpecValid(entries, selectionSpec)) return [];
-
-    const filteredEntries = [];
-    entries.forEach(e => {
-        if (filterEntryByCategory(e, selectionSpec))
-            filteredEntries.push(e);
-    });
-    return filteredEntries;
+    return entries.filter(entry => filterEntryByCategory(entry, selectionSpec));
 }
-
-
-
-
-export function filterEntriesByCategoryAndDate(entries, selectionSpec) {
-    if (!entries || !selectionSpec) return [];
-
-    const filteredEntries = [];
-    entries.forEach(e => {
-        if (filterEntryByCategory(e, selectionSpec) && filterEntryByDate(e, selectionSpec))
-            filteredEntries.push(e);
-    });
-    return filteredEntries;
-}
-
-// export function filterEntryByCategory2(entry, selectionSpecification) {
-//     if (!entry || !selectionSpecification) return null;
-//     const { selectedCategories, selectedCategoriesIds } = selectionSpecification;
-//     if (!entry || selectedCategoriesIds.length === 0) return null;
-//
-//     if (entry.idCategory === 0) {
-//         const category = selectedCategories.find(c => c.idCategory === 0);
-//         if (!category) return null;
-//         if ((entry.value > 0 ? 2 : 3) === (category.path[1])) return entry;
-//         return null;
-//     }
-//
-//     const entryCategoryIsSelected = selectedCategoriesIds.filter(id => id === entry.idCategory).length > 0;
-//     if (entryCategoryIsSelected) return entry;
-//     return null;
-// }
-//
-//
-//
-// export function filterBySelectionSpecification(entries, selectionSpecification) {
-//     if (!entries || !selectionSpecification) return [];
-//
-//     const filteredEntries = [];
-//     entries.forEach(e => {
-//         if (filterEntryByCategory(e, selectionSpecification))
-//             filteredEntries.push(e);
-//     });
-//     return filteredEntries;
-// }
-//
-//

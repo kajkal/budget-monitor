@@ -20,7 +20,7 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
     const { from, to, selectedCategories } = selectionSpec;
     const durationInWeeks = Interval.fromDateTimes(from, to).length('weeks');
     const timePeriodUnit = (durationInWeeks > 5) ? 'month' : 'week';
-    const format = (timePeriodUnit === 'Month') ? 'yyyy-MM' : 'kkkk-WW';
+    const format = (timePeriodUnit === 'month') ? 'yyyy-MM' : 'kkkk-WW';
 
     const timePeriodEntriesMap = new Map();
 
@@ -60,7 +60,54 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
     };
 }
 
+export function prepareDataStructureForLineChart(entries, selectionSpec) {
+    if (!entries || !selectionSpec) return null;
+    if (entries.length === 0) return [];
 
+    const { selectedCategories } = selectionSpec;
+
+    const categoryDataMap = new Map();
+    const selectedCategoryCategoryIdsMap = new Map();
+
+    selectedCategories.forEach(category => {
+        categoryDataMap.set(category, new Map());
+        selectedCategoryCategoryIdsMap.set(category, getCategoryIds(category));
+    });
+
+    entries.forEach(entry => {
+        selectedCategoryCategoryIdsMap.forEach((categoryIds, category) => {
+            const categoryValue = sumCategoryValuesInEntry(entry, categoryIds);
+
+            if (categoryValue !== 0) {
+                const day = entry.date.toISODate();
+                const dayValueMap = categoryDataMap.get(category);
+                const valueForDay = dayValueMap.get(day) || 0;
+
+                console.log('    valueForDay', valueForDay);
+                console.log('    new value', Number((valueForDay + (categoryValue / 100)).toFixed(2)) );
+                console.log('\n\n');
+
+                dayValueMap.set(day, Number((valueForDay + (categoryValue / 100)).toFixed(2)));
+            }
+        });
+    });
+
+    console.log('categoryDataMap', categoryDataMap);
+
+    const dataStructure = [];
+    categoryDataMap.forEach((dataForCategory, category) => {
+        if (dataForCategory.size > 0) {
+            const data = [];
+            dataForCategory.forEach((value, day) => data.push({ x: day, y: Number(value.toFixed(2)) }));
+            dataStructure.push({
+                id: category.name,
+                data: data,
+            });
+        }
+    });
+
+    return dataStructure;
+}
 
 export function prepareDataStructureForSunburstChart(entries, rootCategory) {
     if (!entries || !rootCategory) return null;

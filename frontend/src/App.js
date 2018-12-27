@@ -14,7 +14,7 @@ import RegisterForm from './components/forms/RegisterForm';
 import { getCategories, getRootCategory } from './services/entities-services/categoryService';
 import { translateErrorMessage } from './services/errorMessageService';
 import {
-    filterEntriesByByCategory, filterEntriesByCategoryAndDate,
+    filterEntriesByCategory, filterEntryByCategory,
     filterEntryByDate,
     getEntriesBetween,
     getRecentEntries,
@@ -31,10 +31,11 @@ import CalendarChart from './components/charts/CalendarChart';
 import SunburstChart from './components/charts/SunburstChart';
 import {
     prepareDataStructureForBarChart,
-    prepareDataStructureForCalendarChart, prepareDataStructureForHourlyChart,
+    prepareDataStructureForCalendarChart, prepareDataStructureForHourlyChart, prepareDataStructureForLineChart,
     prepareDataStructureForSunburstChart,
 } from './services/chartService';
 import HourlyChart from './components/charts/HourlyChart';
+import LineChart from './components/charts/LineChart';
 
 
 class App extends Component {
@@ -85,30 +86,51 @@ class App extends Component {
     };
 
     handleEntriesChange = (entry, operationType) => {
-        console.log('APP handleEntriesChange, ' + operationType + ": ", entry);
-        if (operationType === 'add') {
-            const filteredEntry = filterEntryByDate(processEntry(entry), this.state.selectionSpec);
-            const { entries: currentEntries, filteredEntries: currentFilteredEntries } = this.state;
-            const entries = filteredEntry ? [...currentEntries, filteredEntry] : currentEntries;
-            const filteredEntries = filteredEntry ? [...currentFilteredEntries, filteredEntry] : currentFilteredEntries;
-            this.setState({ entries, filteredEntries });
-        } else if (operationType === 'edit') {
-            // remove from entries and filtered entries
-            const oldEntries = [...this.state.entries];
-            const oldFilteredEntries = [...this.state.filteredEntries];
-            const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
-            const filteredEntries = oldFilteredEntries.filter(e => e.idEntry !== entry.idEntry);
-            const filteredEntry = filterEntryByDate(processEntry(entry), this.state.selectionSpec);
-            if (filteredEntry) entries.push(filteredEntry);
-            if (filteredEntry) filteredEntries.push(filteredEntry);
-            this.setState({ entries, filteredEntries });
-        } else if (operationType === 'delete') {
-            const oldEntries = [...this.state.entries];
-            const oldFilteredEntries = [...this.state.filteredEntries];
-            const entries = oldEntries.filter(e => e.idEntry !== entry.idEntry);
-            const filteredEntries = oldFilteredEntries.filter(e => e.idEntry !== entry.idEntry);
-            this.setState({ entries, filteredEntries });
-        }
+        const addEntry = (entry, entries, filteredEntries, selectionSpec) => {
+            const processed = processEntry(entry);
+            const filteredByDate = filterEntryByDate(processed, selectionSpec);
+            const filteredByCategory = filterEntryByCategory(filteredByDate, selectionSpec);
+            return ({
+                entries: filteredByDate ? [...entries, filteredByDate] : entries,
+                filteredEntries: filteredByCategory ? [...filteredEntries, filteredByCategory] : filteredEntries,
+            });
+        };
+        const deleteEntry = (entry, entries, filteredEntries) => {
+            return ({
+                entries: entries.filter(e => e.idEntry !== entry.idEntry),
+                filteredEntries: filteredEntries.filter(e => e.idEntry !== entry.idEntry),
+            });
+        };
+
+        const operations = [
+            {
+                operation: 'add',
+                process: (entry, currentEntries, currentFilteredEntries, selectionSpec) => {
+                    return addEntry(entry, currentEntries, currentFilteredEntries, selectionSpec);
+                },
+            },
+            {
+                operation: 'edit',
+                process: (entry, currentEntries, currentFilteredEntries, selectionSpec) => {
+                    const { entries, filteredEntries } = deleteEntry(entry, currentEntries, currentFilteredEntries);
+                    return addEntry(entry, entries, filteredEntries, selectionSpec);
+                },
+            },
+            {
+                operation: 'delete',
+                process: (entry, currentEntries, currentFilteredEntries) => {
+                    return deleteEntry(entry, currentEntries, currentFilteredEntries);
+                },
+            },
+        ];
+
+        const { entries: currentEntries, filteredEntries: currentFilteredEntries, selectionSpec } = this.state;
+        const operation = operations.find(o => o.operation === operationType);
+        if (!operation) return;
+
+        const newState = operation.process(entry, currentEntries, currentFilteredEntries, selectionSpec);
+
+        this.setState(newState);
         this.fetchRecentEntries(this.state.user);
     };
 
@@ -123,7 +145,7 @@ class App extends Component {
                 const { from: currentFrom, to: currentTo } = currentSelectionSpec;
                 if (+currentFrom === +from && +currentTo === +to) {
                     console.log('APP only filter entries by new selected categories', this.state);
-                    filteredEntries = filterEntriesByByCategory(currentEntries, selectionSpec);
+                    filteredEntries = filterEntriesByCategory(currentEntries, selectionSpec);
                     this.setState({ selectionSpec, filteredEntries });
                     return;
                 }
@@ -132,7 +154,7 @@ class App extends Component {
             console.log('APP fetch entries from server and filter them', this.state);
             const { data: rawEntries } = await getEntriesBetween(from, to);
             const entries = processEntriesDate(rawEntries);
-            filteredEntries = filterEntriesByCategoryAndDate(entries, selectionSpec);
+            filteredEntries = filterEntriesByCategory(entries, selectionSpec);
             this.setState({ entries, selectionSpec, filteredEntries });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
@@ -204,6 +226,15 @@ class App extends Component {
                                 <ProtectedRoute exact path="/barChart" render={props => (
                                     <BarChart
                                         dataStructure={prepareDataStructureForBarChart(filteredEntries, selectionSpec)}
+                                        currency={user && user.currency}
+                                        groupMode={false}
+                                        {...props}
+                                    />
+                                )} />
+
+                                <ProtectedRoute exact path="/lineChart" render={props => (
+                                    <LineChart
+                                        dataStructure={prepareDataStructureForLineChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
                                         groupMode={false}
                                         {...props}

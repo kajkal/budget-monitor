@@ -26,16 +26,19 @@
         'value value';
 }
 
-.hourly-chart-tooltip .date {
-    grid-area: date;
+.hourly-chart-tooltip .date { grid-area: date; }
+.hourly-chart-tooltip .category { grid-area: category; margin-left: 1em; }
+.hourly-chart-tooltip .description { grid-area: description; }
+.hourly-chart-tooltip .value { grid-area: value; }
+
+
+
+.line-chart-tooltip {
 }
-.hourly-chart-tooltip .category {
-    grid-area: category;
-    margin-left: 1em;
+
+.line-chart-tooltip .data-summary {
+    display: grid !important;
+    grid-template-columns: minmax(10px, 1fr) auto;
 }
-.hourly-chart-tooltip .description {
-    grid-area: description;
-}
-.hourly-chart-tooltip .value {
-    grid-area: value;
-}
+
+.line-chart-tooltip .data-summary .category { margin-left: 1em; }

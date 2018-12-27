@@ -12,6 +12,7 @@ const BarChart = ({ dataStructure, currency, groupMode }) => {
     const { timePeriod, keys, data } = dataStructure;
     if (keys.length === 0 || data.length === 0) return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
 
+    console.log('data', dataStructure);
     return (
         <div className='chart-area'>
             <ChartWrapper>
@@ -21,10 +22,10 @@ const BarChart = ({ dataStructure, currency, groupMode }) => {
                     keys={keys}
                     indexBy='timePeriod'
                     margin={{
-                        'top': 20,
-                        'right': 130,
-                        'bottom': 55,
-                        'left': 90,
+                        top: 20,
+                        right: 130,
+                        bottom: 55,
+                        left: 90,
                     }}
                     padding={0.3}
                     groupMode={groupMode ? 'grouped' : 'stacked'}
@@ -34,21 +35,21 @@ const BarChart = ({ dataStructure, currency, groupMode }) => {
                     axisTop={null}
                     axisRight={null}
                     axisBottom={{
-                        'tickSize': 5,
-                        'tickPadding': 5,
-                        'tickRotation': 0,
-                        'legend': timePeriod,
-                        'legendPosition': 'middle',
-                        'legendOffset': 36,
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: timePeriod,
+                        legendPosition: 'middle',
+                        legendOffset: 36,
                     }}
                     axisLeft={{
-                        'tickSize': 5,
-                        'tickPadding': 5,
-                        'tickRotation': 0,
-                        'legend': currency,
-                        'legendPosition': 'middle',
-                        'legendOffset': -70,
-                        'format': x => x.toFixed(2),
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: currency,
+                        legendPosition: 'middle',
+                        legendOffset: -70,
+                        format: x => x.toFixed(2),
                     }}
                     labelSkipWidth={12}
                     labelSkipHeight={12}
@@ -58,23 +59,23 @@ const BarChart = ({ dataStructure, currency, groupMode }) => {
                     motionDamping={15}
                     legends={[
                         {
-                            'dataFrom': 'keys',
-                            'anchor': 'bottom-right',
-                            'direction': 'column',
-                            'justify': false,
-                            'translateX': 120,
-                            'translateY': 0,
-                            'itemsSpacing': 2,
-                            'itemWidth': 100,
-                            'itemHeight': 20,
-                            'itemDirection': 'left-to-right',
-                            'itemOpacity': 0.85,
-                            'symbolSize': 20,
-                            'effects': [
+                            dataFrom: 'keys',
+                            anchor: 'bottom-right',
+                            direction: 'column',
+                            justify: false,
+                            translateX: 120,
+                            translateY: 0,
+                            itemsSpacing: 2,
+                            itemWidth: 100,
+                            itemHeight: 20,
+                            itemDirection: 'left-to-right',
+                            itemOpacity: 0.85,
+                            symbolSize: 20,
+                            effects: [
                                 {
-                                    'on': 'hover',
-                                    'style': {
-                                        'itemOpacity': 1,
+                                    on: 'hover',
+                                    style: {
+                                        itemOpacity: 1,
                                     },
                                 },
                             ],

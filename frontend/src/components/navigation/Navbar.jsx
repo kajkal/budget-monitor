@@ -13,7 +13,9 @@ import {
     Settings,
     ShowChart,
     Info,
-    AccessTime
+    AccessTime,
+    Today,
+    ViewComfy
 } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
@@ -235,7 +237,7 @@ class Navbar extends PureComponent {
                             />
 
                             < NavigationLink
-                                icon={<CalendarToday />}
+                                icon={<Today />}
                                 label={'Entries by day'}
                                 to={'/daily'}
                             />
@@ -244,6 +246,12 @@ class Navbar extends PureComponent {
                                 icon={<BarChart />}
                                 label={'Bar chart'}
                                 to={'/barChart'}
+                            />
+
+                            <NavigationLink
+                                icon={<ShowChart />}
+                                label={'Line chart'}
+                                to={'/lineChart'}
                             />
 
                             <NavigationLink
@@ -259,7 +267,7 @@ class Navbar extends PureComponent {
                             />
 
                             <NavigationLink
-                                icon={<ShowChart />}
+                                icon={<ViewComfy />}
                                 label={'Calendar chart'}
                                 to={'/calendarChart'}
                             />

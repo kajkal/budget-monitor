@@ -36,10 +36,10 @@ const CalendarChart = ({ dataStructure, currency }) => {
                         '#12f419',
                     ]}
                     margin={{
-                        'top': 30,
-                        'right': 30,
-                        'bottom': 60,
-                        'left': 30,
+                        top: 30,
+                        right: 30,
+                        bottom: 60,
+                        left: 30,
                     }}
                     // direction='vertical'
                     yearSpacing={40}
@@ -50,13 +50,13 @@ const CalendarChart = ({ dataStructure, currency }) => {
                     dayBorderColor='#ffffff'
                     legends={[
                         {
-                            'anchor': 'bottom-right',
-                            'direction': 'row',
-                            'translateY': 36,
-                            'itemCount': 4,
-                            'itemWidth': 34,
-                            'itemHeight': 36,
-                            'itemDirection': 'top-to-bottom',
+                            anchor: 'bottom-right',
+                            direction: 'row',
+                            translateY: 36,
+                            itemCount: 4,
+                            itemWidth: 34,
+                            itemHeight: 36,
+                            itemDirection: 'top-to-bottom',
                         },
                     ]}
                 />
@@ -80,10 +80,10 @@ const CalendarChart = ({ dataStructure, currency }) => {
                         '#f40c11',
                     ]}
                     margin={{
-                        'top': 30,
-                        'right': 30,
-                        'bottom': 60,
-                        'left': 30,
+                        top: 30,
+                        right: 30,
+                        bottom: 60,
+                        left: 30,
                     }}
                     // direction='vertical'
                     yearSpacing={40}
@@ -94,13 +94,13 @@ const CalendarChart = ({ dataStructure, currency }) => {
                     dayBorderColor='#ffffff'
                     legends={[
                         {
-                            'anchor': 'bottom-right',
-                            'direction': 'row',
-                            'translateY': 36,
-                            'itemCount': 4,
-                            'itemWidth': 34,
-                            'itemHeight': 36,
-                            'itemDirection': 'top-to-bottom',
+                            anchor: 'bottom-right',
+                            direction: 'row',
+                            translateY: 36,
+                            itemCount: 4,
+                            itemWidth: 34,
+                            itemHeight: 36,
+                            itemDirection: 'top-to-bottom',
                         },
                     ]}
                 />

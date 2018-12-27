@@ -22,10 +22,10 @@ const SunburstChart = ({ dataStructure, currency }) => {
                 <ResponsiveSunburst
                     data={incomeTree}
                     margin={{
-                        'top': 0,
-                        'right': 0,
-                        'bottom': 0,
-                        'left': 0,
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
                     }}
                     identity='name'
                     value='value'
@@ -51,10 +51,10 @@ const SunburstChart = ({ dataStructure, currency }) => {
                 <ResponsiveSunburst
                     data={expenseTree}
                     margin={{
-                        'top': 0,
-                        'right': 0,
-                        'bottom': 0,
-                        'left': 0,
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
                     }}
                     identity='name'
                     value='value'

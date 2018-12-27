@@ -3,42 +3,31 @@ import PropTypes from 'prop-types';
 import { DateTime } from 'luxon';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import Typography from '@material-ui/core/es/Typography/Typography';
-import { ResponsiveScatterPlot } from '@nivo/scatterplot';
+import { ResponsiveLine } from '@nivo/line';
 import ChartWrapper from './ChartWrapper';
 
 
-class HourlyChart extends PureComponent {
-    state = {
-        pointId: null,
-    };
+class LineChart extends PureComponent {
 
-    handleMouseMove = point => {
-        this.setState({ pointId: point.id });
-    };
-
-    handleMouseLeave = () => {
-        this.setState({ pointId: null });
-    };
-
-    getSymbolSize = point => {
-        const { pointId } = this.state;
-        if (pointId !== null && pointId === point.id) return 16;
-        return 8;
-    };
-
-    tooltip = ({ serie: { id }, date, description, value }) => {
+    tooltip = ({ id, data }) => {
         const { currency } = this.props;
-        const formattedDate = date.setLocale('local').toFormat('dd MMMM yyyy HH:mm');
+        const formattedDate = DateTime.fromJSDate(id).setLocale('local').toFormat('dd MMMM yyyy');
         return (
-            <Typography variant='caption' className='hourly-chart-tooltip'>
+            <Typography variant='caption' className='line-chart-tooltip'>
                 <div className='date'>{formattedDate}</div>
-                <div className='category'>{id}</div>
-                <div className='description'>{description}</div>
-                <div className='value'>{`${value.toFixed(2)} ${currency}`}</div>
+                <div className='data-summary'>
+                    {
+                        data.map(({ data: { y: value }, serie: { id: category } }, index) => (
+                            <React.Fragment key={index}>
+                                <div className='value'>{`${value.toFixed(2)} ${currency}`}</div>
+                                <div className='category'>{category}</div>
+                            </React.Fragment>
+                        ))
+                    }
+                </div>
             </Typography>
         );
     };
-
 
     render() {
         const { dataStructure, currency } = this.props;
@@ -50,12 +39,12 @@ class HourlyChart extends PureComponent {
             <div className='chart-area'>
                 <ChartWrapper>
 
-                    <ResponsiveScatterPlot
+                    <ResponsiveLine
                         data={dataStructure}
                         margin={{
-                            top: 20,
-                            right: 140,
-                            bottom: 70,
+                            top: 50,
+                            right: 110,
+                            bottom: 50,
                             left: 90,
                         }}
                         xScale={{
@@ -64,9 +53,10 @@ class HourlyChart extends PureComponent {
                             precision: 'day',
                         }}
                         yScale={{
-                            type: 'time',
-                            format: '%H:%M:%S',
-                            precision: 'minute',
+                            type: 'linear',
+                            stacked: false,
+                            min: 'auto',
+                            max: 'auto',
                         }}
                         axisTop={null}
                         axisRight={null}
@@ -76,22 +66,28 @@ class HourlyChart extends PureComponent {
                             tickPadding: 5,
                             tickRotation: 0,
                             legend: 'day',
+                            legendOffset: 36,
                             legendPosition: 'middle',
-                            legendOffset: 46,
                             format: d => DateTime.fromJSDate(d).setLocale('local').toFormat('dd MMM'),
-
                         }}
                         axisLeft={{
                             orient: 'left',
                             tickSize: 5,
                             tickPadding: 5,
                             tickRotation: 0,
-                            legend: 'time',
+                            legend: currency,
+                            legendOffset: -70,
                             legendPosition: 'middle',
-                            legendOffset: -60,
-                            format: '%H:%M',
+                            format: x => x.toFixed(2),
                         }}
-                        colors='category10'
+                        dotSize={10}
+                        dotColor='inherit:darker(0.3)'
+                        dotBorderWidth={2}
+                        dotBorderColor='#ffffff'
+                        curve='monotoneX'
+                        enableDotLabel={true}
+                        dotLabel='y'
+                        dotLabelYOffset={-12}
                         animate={true}
                         motionStiffness={90}
                         motionDamping={15}
@@ -99,26 +95,28 @@ class HourlyChart extends PureComponent {
                             {
                                 anchor: 'bottom-right',
                                 direction: 'column',
-                                translateX: 130,
-                                itemWidth: 100,
-                                itemHeight: 12,
-                                itemsSpacing: 5,
-                                itemTextColor: '#999',
+                                justify: false,
+                                translateX: 100,
+                                translateY: 0,
+                                itemsSpacing: 0,
+                                itemDirection: 'left-to-right',
+                                itemWidth: 80,
+                                itemHeight: 20,
+                                itemOpacity: 0.75,
                                 symbolSize: 12,
                                 symbolShape: 'circle',
+                                symbolBorderColor: 'rgba(0, 0, 0, .5)',
                                 effects: [
                                     {
                                         on: 'hover',
                                         style: {
-                                            itemTextColor: '#000',
+                                            itemBackground: 'rgba(0, 0, 0, .03)',
+                                            itemOpacity: 1,
                                         },
                                     },
                                 ],
                             },
                         ]}
-                        symbolSize={this.getSymbolSize}
-                        onMouseMove={this.handleMouseMove}
-                        onMouseLeave={this.handleMouseLeave}
                         tooltip={this.tooltip}
                     />
 
@@ -128,14 +126,14 @@ class HourlyChart extends PureComponent {
     }
 }
 
-HourlyChart.propTypes = {
+LineChart.propTypes = {
     dataStructure: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired, // category name
             data: PropTypes.arrayOf(
                 PropTypes.shape({
                     x: PropTypes.string.isRequired, // day
-                    y: PropTypes.string.isRequired, // time
+                    y: PropTypes.number.isRequired, // value for day
                 }),
             ).isRequired,
         }),
@@ -143,4 +141,4 @@ HourlyChart.propTypes = {
     currency: PropTypes.string,
 };
 
-export default HourlyChart;
+export default LineChart;

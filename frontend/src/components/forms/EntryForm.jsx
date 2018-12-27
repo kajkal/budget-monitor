@@ -105,13 +105,14 @@ class EntryForm extends Form {
             if (entry) {
                 const { data: response } = await updateEntry(entry.idEntry, data, type);
                 alertService.success('Entry successfully updated.');
+                onClose();
                 onEntriesChange(response, 'edit');
             } else {
                 const { data: response } = await addEntry(data, type);
                 alertService.success('Entry successfully added.');
+                onClose();
                 onEntriesChange(response, 'add');
             }
-            onClose();
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 console.log('messageKey: ', e.response.data.message);

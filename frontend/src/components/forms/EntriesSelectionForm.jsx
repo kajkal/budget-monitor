@@ -60,10 +60,16 @@ class EntriesSelectionForm extends Form {
     };
 
     getSelectionSpec = (fromISO, toISO, selectedCategories) => {
+        const categoriesType = selectedCategories.length > 0 ? (selectedCategories[0].path[1] === 2 ? 1 : -1) : 0;
+        // -1 => expense categories selected
+        // 0 => no category selected
+        // 1 => income categories selected
+
         return {
             from: DateTime.fromISO(fromISO),
             to: DateTime.fromISO(toISO),
             selectedCategories: selectedCategories,
+            selectedCategoriesType: categoriesType,
             selectedCategoriesIds: getCategoriesIds(selectedCategories),
         };
     };
