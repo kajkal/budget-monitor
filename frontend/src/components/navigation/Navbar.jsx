@@ -12,7 +12,8 @@ import {
     Restore,
     Settings,
     ShowChart,
-    Info
+    Info,
+    AccessTime
 } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
@@ -249,6 +250,12 @@ class Navbar extends PureComponent {
                                 icon={<PieChart />}
                                 label={'Sunburst chart'}
                                 to={'/sunburstChart'}
+                            />
+
+                            <NavigationLink
+                                icon={<AccessTime />}
+                                label={'Hourly chart'}
+                                to={'/hourlyChart'}
                             />
 
                             <NavigationLink

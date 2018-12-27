@@ -1,0 +1,41 @@
+@import '_constants.css';
+
+.chart-area {
+    flex-grow: 1;
+
+    height: 100%;
+    min-height: 300px;
+    max-height: 600px;
+
+    width: 100%;
+    max-width: 960px;
+
+    margin-top: 12px;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hourly-chart-tooltip {
+    display: grid !important;
+    grid-template-columns: auto minmax(10px, 1fr);
+
+    grid-template-areas:
+        'date category'
+        'description description'
+        'value value';
+}
+
+.hourly-chart-tooltip .date {
+    grid-area: date;
+}
+.hourly-chart-tooltip .category {
+    grid-area: category;
+    margin-left: 1em;
+}
+.hourly-chart-tooltip .description {
+    grid-area: description;
+}
+.hourly-chart-tooltip .value {
+    grid-area: value;
+}

@@ -31,9 +31,10 @@ import CalendarChart from './components/charts/CalendarChart';
 import SunburstChart from './components/charts/SunburstChart';
 import {
     prepareDataStructureForBarChart,
-    prepareDataStructureForCalendarChart,
+    prepareDataStructureForCalendarChart, prepareDataStructureForHourlyChart,
     prepareDataStructureForSunburstChart,
 } from './services/chartService';
+import HourlyChart from './components/charts/HourlyChart';
 
 
 class App extends Component {
@@ -212,6 +213,14 @@ class App extends Component {
                                 <ProtectedRoute exact path="/sunburstChart" render={props => (
                                     <SunburstChart
                                         dataStructure={prepareDataStructureForSunburstChart(entries, rootCategory)}
+                                        currency={user && user.currency}
+                                        {...props}
+                                    />
+                                )} />
+
+                                <ProtectedRoute exact path="/hourlyChart" render={props => (
+                                    <HourlyChart
+                                        dataStructure={prepareDataStructureForHourlyChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
                                         {...props}
                                     />

@@ -1,6 +1,7 @@
 @import '_constants.css';
 @import 'forms.css';
 @import 'home.css';
+@import 'charts.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 
 
@@ -44,21 +45,3 @@ body {
     color: var(--negative-color);
 }
 
-
-/*CHARTS*/
-
-.chart-area {
-    flex-grow: 1;
-
-    height: 100%;
-    min-height: 300px;
-    max-height: 600px;
-
-    width: 100%;
-    max-width: 960px;
-
-    margin-top: 12px;
-
-    display: flex;
-    flex-wrap: wrap;
-}

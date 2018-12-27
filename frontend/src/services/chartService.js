@@ -1,15 +1,15 @@
-import { Interval } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import { getCategoryIds } from './entities-services/categoryService';
 
 function sumCategoryValuesInEntry(entry, categoryIds) {
-    const totalEntryValue = Math.abs(entry.value);
+    const totalEntryValue = entry.value;
 
     if (categoryIds.includes(entry.idCategory)) {
         return totalEntryValue;
     } else {
         return entry.subEntries
             .filter(subEntry => categoryIds.includes(subEntry.idCategory))
-            .reduce((sum, subEntry) => sum + Math.abs(subEntry.value), 0);
+            .reduce((sum, subEntry) => sum + subEntry.value, 0);
     }
 }
 
@@ -19,7 +19,7 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
 
     const { from, to, selectedCategories } = selectionSpec;
     const durationInWeeks = Interval.fromDateTimes(from, to).length('weeks');
-    const timePeriodUnit = (durationInWeeks > 5) ? 'Month' : 'Week';
+    const timePeriodUnit = (durationInWeeks > 5) ? 'month' : 'week';
     const format = (timePeriodUnit === 'Month') ? 'yyyy-MM' : 'kkkk-WW';
 
     const timePeriodEntriesMap = new Map();
@@ -42,7 +42,7 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
         const dataSetForTimePeriod = {};
         selectedCategoryCategoryIdsMap.forEach((categoryIds, category) => {
             const value = entriesForTimePeriod
-                .reduce((sum, entry) => sum + sumCategoryValuesInEntry(entry, categoryIds), 0);
+                .reduce((sum, entry) => sum + Math.abs(sumCategoryValuesInEntry(entry, categoryIds)), 0);
             if (value > 0)
                 dataSetForTimePeriod[category.name] = value / 100;
         });
@@ -140,7 +140,7 @@ export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
     const incomeDataArray = [];
     const expenseDataArray = [];
 
-    incomeDataArray.forEach((value, day) => incomeDataArray.push({ day, value }));
+    incomeDayValueMap.forEach((value, day) => incomeDataArray.push({ day, value }));
     expenseDayValueMap.forEach((value, day) => expenseDataArray.push({ day, value }));
 
     console.log('INCOME:', incomeDataArray);
@@ -152,4 +152,50 @@ export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
         incomeData: incomeDataArray,
         expenseData: expenseDataArray,
     }
+}
+
+export function prepareDataStructureForHourlyChart(entries, selectionSpec) {
+    if (!entries || !selectionSpec) return null;
+    if (entries.length === 0) return [];
+
+    const { selectedCategories } = selectionSpec;
+
+    const categoryDataMap = new Map();
+    const selectedCategoryCategoryIdsMap = new Map();
+
+    selectedCategories.forEach(category => {
+        categoryDataMap.set(category, []);
+        selectedCategoryCategoryIdsMap.set(category, getCategoryIds(category));
+    });
+
+    entries.forEach(entry => {
+        selectedCategoryCategoryIdsMap.forEach((categoryIds, category) => {
+            const categoryValue = sumCategoryValuesInEntry(entry, categoryIds);
+
+            if (categoryValue !== 0) {
+                const data = categoryDataMap.get(category);
+                data.push({
+                    x: entry.date.toISODate(),
+                    y: entry.date.toLocaleString(DateTime.TIME_WITH_SECONDS),
+                    date: entry.date,
+                    description: entry.description,
+                    value: categoryValue / 100,
+                });
+            }
+        });
+    });
+
+    const dataStructure = [];
+    categoryDataMap.forEach((data, category) => {
+        if (data.length > 0) {
+            dataStructure.push({
+                id: category.name,
+                data: data,
+            });
+        }
+    });
+
+    console.log('prepareDataStructureForHourlyChart', dataStructure);
+
+    return dataStructure;
 }
