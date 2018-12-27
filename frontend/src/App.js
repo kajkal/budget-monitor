@@ -236,7 +236,6 @@ class App extends Component {
                                     <LineChart
                                         dataStructure={prepareDataStructureForLineChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
-                                        groupMode={false}
                                         {...props}
                                     />
                                 )} />

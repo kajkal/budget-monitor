@@ -20,11 +20,10 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
     const { from, to, selectedCategories } = selectionSpec;
     const durationInWeeks = Interval.fromDateTimes(from, to).length('weeks');
     const timePeriodUnit = (durationInWeeks > 5) ? 'month' : 'week';
-    const format = (timePeriodUnit === 'month') ? 'yyyy-MM' : 'kkkk-WW';
+    const format = (timePeriodUnit === 'month') ? 'yyyy-MM' : 'yyyy\'W\'WW';
 
     const timePeriodEntriesMap = new Map();
 
-    // assign entries to times periods
     entries.forEach(entry => {
         const timePeriod = entry.date.toFormat(format);
         const entriesByTimePeriod = timePeriodEntriesMap.get(timePeriod) || [];
@@ -32,11 +31,9 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
         timePeriodEntriesMap.set(timePeriod, entriesByTimePeriod);
     });
 
-
     const selectedCategoryCategoryIdsMap = new Map();
     selectedCategories.forEach(category => selectedCategoryCategoryIdsMap.set(category, getCategoryIds(category)));
 
-    // create data structure: array of object with all data needed to display chart
     const data = [];
     timePeriodEntriesMap.forEach((entriesForTimePeriod, timePeriod) => {
         const dataSetForTimePeriod = {};
@@ -82,17 +79,10 @@ export function prepareDataStructureForLineChart(entries, selectionSpec) {
                 const day = entry.date.toISODate();
                 const dayValueMap = categoryDataMap.get(category);
                 const valueForDay = dayValueMap.get(day) || 0;
-
-                console.log('    valueForDay', valueForDay);
-                console.log('    new value', Number((valueForDay + (categoryValue / 100)).toFixed(2)) );
-                console.log('\n\n');
-
                 dayValueMap.set(day, Number((valueForDay + (categoryValue / 100)).toFixed(2)));
             }
         });
     });
-
-    console.log('categoryDataMap', categoryDataMap);
 
     const dataStructure = [];
     categoryDataMap.forEach((dataForCategory, category) => {
@@ -105,6 +95,8 @@ export function prepareDataStructureForLineChart(entries, selectionSpec) {
             });
         }
     });
+
+    console.log('dataStructure', dataStructure);
 
     return dataStructure;
 }
@@ -160,12 +152,10 @@ export function prepareDataStructureForSunburstChart(entries, rootCategory) {
     return {
         incomeTree: removeZeros(incomeTree),
         expenseTree: removeZeros(expenseTree),
-    }
+    };
 }
 
 export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
-    console.log('prepareDataStructureForCalendarChart', selectionSpec);
-
     if (!entries || !selectionSpec) return null;
     const { from, to } = selectionSpec;
     if (entries.length === 0) return { from: from.toISODate(), to: to.toISODate(), incomeData: [], expenseData: [] };
@@ -195,7 +185,7 @@ export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
         to: to.toISODate(),
         incomeData: incomeDataArray,
         expenseData: expenseDataArray,
-    }
+    };
 }
 
 export function prepareDataStructureForHourlyChart(entries, selectionSpec) {
