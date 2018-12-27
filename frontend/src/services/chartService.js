@@ -112,9 +112,6 @@ export function prepareDataStructureForLineChart(entries, selectionSpec) {
 export function prepareDataStructureForSunburstChart(entries, rootCategory) {
     if (!entries || !rootCategory) return null;
 
-    console.log('prepareDataStructureForSunburstChart', entries);
-    console.log('prepareDataStructureForSunburstChart', rootCategory);
-
     const incomeIdCategoryNodeMap = new Map();
     const expenseIdCategoryNodeMap = new Map();
 
@@ -129,10 +126,8 @@ export function prepareDataStructureForSunburstChart(entries, rootCategory) {
         return node;
     };
 
-    // INCOME PART
     const incomeTree = mapCategoryToNode(rootCategory.subCategories.find(c => c.name === 'INCOME_CATEGORY'), incomeIdCategoryNodeMap);
     const expenseTree = mapCategoryToNode(rootCategory.subCategories.find(c => c.name === 'EXPENSE_CATEGORY'), expenseIdCategoryNodeMap);
-
 
     const mapValueToNode = entry => {
         const map = (entry.value > 0) ? incomeIdCategoryNodeMap : expenseIdCategoryNodeMap;
@@ -147,22 +142,24 @@ export function prepareDataStructureForSunburstChart(entries, rootCategory) {
 
 
     delete incomeTree.value;
+    delete expenseTree.value;
     incomeTree.totalValue = incomeTree.children.reduce((sum, node) => sum + node.value, 0);
     expenseTree.totalValue = expenseTree.children.reduce((sum, node) => sum + node.value, 0);
 
-    console.log('INCOME');
-    console.log('    tree', incomeTree);
-    console.log('    map ', incomeIdCategoryNodeMap);
+    console.log('INCOME tree', incomeTree);
+    console.log('EXPENSE tree', expenseTree);
 
-
-    console.log('EXPENSE');
-    console.log('    tree', expenseTree);
-    console.log('    map ', expenseIdCategoryNodeMap);
-
+    const removeZeros = node => {
+        if (node.totalValue || node.value !== 0) {
+            const oldChildren = node.children;
+            node.children = oldChildren.map(n => removeZeros(n)).filter(n => n);
+            return node;
+        }
+    };
 
     return {
-        incomeTree,
-        expenseTree,
+        incomeTree: removeZeros(incomeTree),
+        expenseTree: removeZeros(expenseTree),
     }
 }
 

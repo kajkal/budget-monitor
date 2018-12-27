@@ -9,7 +9,8 @@ const SunburstChart = ({ dataStructure, currency }) => {
     if (!dataStructure || !currency) return <LinearProgress style={{ width: '100%' }} />;
 
     const { incomeTree, expenseTree } = dataStructure;
-    if (incomeTree.totalValue === 0 && expenseTree.totalValue === 0) return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
+    if (incomeTree.totalValue === 0 && expenseTree.totalValue === 0)
+        return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
 
     return (
         <div className='chart-area'>
@@ -33,8 +34,7 @@ const SunburstChart = ({ dataStructure, currency }) => {
                     borderWidth={2}
                     borderColor='white'
                     colors='nivo'
-                    colorBy='value'
-                    childColor='inherit:darker(1.1)'
+                    childColor='inherit:brighter(0.13)'
                     animate={true}
                     motionStiffness={90}
                     motionDamping={15}
@@ -59,11 +59,10 @@ const SunburstChart = ({ dataStructure, currency }) => {
                     identity='name'
                     value='value'
                     cornerRadius={2}
-                    borderWidth={1}
+                    borderWidth={2}
                     borderColor='white'
                     colors='nivo'
-                    colorBy='value'
-                    childColor='inherit:darker(1.1)'
+                    childColor='inherit:brighter(0.13)'
                     animate={true}
                     motionStiffness={90}
                     motionDamping={15}
