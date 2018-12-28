@@ -1,7 +1,7 @@
-export const USERNAME = "username";
-export const PASSWORD = "password";
-export const EMAIL = "email";
-export const CURRENCY = "currency";
+export const USERNAME = 'username';
+export const PASSWORD = 'password';
+export const EMAIL = 'email';
+export const CURRENCY = 'currency';
 
 
 export const ID_ENTRY = 'idEntry';
@@ -14,4 +14,3 @@ export const SUB_ENTRIES = 'subEntries';
 export const CATEGORY = 'category';
 export const ID_CATEGORY = 'idCategory';
 export const NAME = 'name';
-// export const COLOR = 'color';

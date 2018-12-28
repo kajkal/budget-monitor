@@ -64,7 +64,6 @@ export function getRootCategory(categories) {
             idCategory: 0,
             path: [1, category.idCategory],
             name: 'Uncategorized',
-            color: 0,
             subCategories: [],
             lodashPath: [ ...category.lodashPath, 'subCategories', category.subCategories.length],
         });

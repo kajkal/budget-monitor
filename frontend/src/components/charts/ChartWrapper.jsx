@@ -9,13 +9,11 @@ const styles = {
         flexGrow: 1,
         minWidth: '300px',
         position: 'relative',
-        // backgroundColor: 'red',
     },
     chartWrapper: {
         height: 'calc(100% - 4px)',
         width: '100%',
         position: 'absolute',
-        // border: '1px solid black',
     },
     withTitle: {
         height: 'calc(100% - 36px)',

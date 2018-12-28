@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
     Add,
     BarChart,
-    CalendarToday,
     CallMade,
     Menu,
     PieChart,
@@ -216,12 +215,6 @@ class Navbar extends PureComponent {
                                 icon={<Info />}
                                 label={'About Budget Monitor'}
                                 to={'/about'}
-                            />
-
-                            < NavigationLink
-                                icon={<CalendarToday />}
-                                label={'Entries by day'}
-                                to={'/register'}
                             />
                         </List>
                     </React.Fragment>

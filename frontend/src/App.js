@@ -3,8 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import auth from './services/authService';
 import AlertServiceComponent, { alertService } from './services/alertService';
-import AlertDemo from './components/___archive/AlertDemo';
-import Playground from './components/___develop/Playground';
 import LoginForm from './components/forms/LoginForm';
 import Logout from './components/Logout';
 import NotFound from './components/NotFound';
@@ -195,13 +193,6 @@ class App extends Component {
                         (user && !rootCategory) ? <LinearProgress style={{width: '100%'}} /> : (
                             <Switch>
 
-                                <Route exact path="/dev" render={props => (
-                                    <Playground
-                                        rootCategory={rootCategory}
-                                        {...props}
-                                    />
-                                )} />
-
                                 <ProtectedRoute exact path="/daily" render={props => (
                                     <EntryRegister
                                         rootCategory={rootCategory}
@@ -267,8 +258,6 @@ class App extends Component {
                                 <Route exact path="/register" component={RegisterForm} />
                                 <Route exact path="/login" component={LoginForm} />
                                 <Route exact path="/logout" component={Logout} />
-
-                                <ProtectedRoute exact path="/prot" component={AlertDemo} />
 
                                 <Route exact path="/not-found" component={NotFound} />
                                 <Redirect from="/" exact to="/recent" />

@@ -13,7 +13,6 @@ export const categoryShape = PropTypes.shape({
     path: PropTypes.arrayOf(PropTypes.number).isRequired,
     lodashPath: lodashPath,
     name: PropTypes.string.isRequired,
-    color: PropTypes.number.isRequired,
 });
 categoryShape.subCategories = PropTypes.arrayOf(categoryShape).isRequired;
 
