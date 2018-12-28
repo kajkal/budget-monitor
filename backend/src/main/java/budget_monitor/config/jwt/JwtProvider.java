@@ -7,8 +7,6 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,8 +21,6 @@ import java.util.stream.Collectors;
 
 @Component("jwtProvider")
 public class JwtProvider {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Value("${security.jwt.token.secret-key}")
     private String jwtSecretKey;
@@ -41,9 +37,6 @@ public class JwtProvider {
 
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
-//        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-//            claims.put("isAdmin", true);
-//        }
         claims.put("currency", user.getCurrency());
 
         return Jwts.builder()
@@ -58,35 +51,9 @@ public class JwtProvider {
         try {
             Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException e) {
-            log.warn("Expired JWT token");
-        } catch (UnsupportedJwtException e) {
-            log.warn("JWT claims does not represent an Claims JWS [" + token + "]");
-        } catch (MalformedJwtException e) {
-            log.warn("Provided token is not a valid JWS [" + token + "]");
-        } catch (SignatureException e) {
-            log.warn("JWT signature does not match locally computed signature [" + token + "]");
-        } catch (IllegalArgumentException e) {
-            log.warn("JWT claims string is empty [" + token + "]");
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException ignored) {
         }
         return false;
-    }
-
-    public String getUsernameFromJwtToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-    public String getRolesFromJwtToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("roles")
-                .toString();
     }
 
     public UserDetails getUserDetailsFromJwtToken(String token) {

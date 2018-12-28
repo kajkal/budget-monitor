@@ -7,6 +7,8 @@ import budget_monitor.exception.type.UserException;
 import budget_monitor.model.User;
 import budget_monitor.service.AuthenticationService;
 import budget_monitor.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class UserController {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private AuthenticationService authenticationService;
     private UserService userService;
@@ -41,17 +45,22 @@ public class UserController {
     public ResponseEntity<JwtTokenDTO> createUser(@Valid @RequestBody RegisterFormDTO registerFormDTO) throws UserException {
 
         List<User> users = userService.findByUsernameOrEmail(registerFormDTO.getUsername(), registerFormDTO.getEmail());
-        users.stream().filter(user -> user.getUsername().equals(registerFormDTO.getUsername())).findAny().ifPresent(
-                user -> { throw new UserException("register.error.usernameExists"); }
-        );
-        users.stream().filter(user -> user.getEmail().equals(registerFormDTO.getEmail())).findAny().ifPresent(
-                user -> { throw new UserException("register.error.emailExists"); }
-        );
+
+        users.stream()
+                .filter(user -> user.getUsername().toLowerCase().equals(registerFormDTO.getUsername().toLowerCase()))
+                .findAny()
+                .ifPresent(user -> { throw new UserException("register.error.usernameExists"); });
+
+        users.stream()
+                .filter(user -> user.getEmail().equals(registerFormDTO.getEmail()))
+                .findAny()
+                .ifPresent(user -> { throw new UserException("register.error.emailExists"); });
 
         userService.createUser(registerFormDTO);
 
         JwtTokenDTO jwt = authenticationService.login(registerFormDTO.getUsername(), registerFormDTO.getPassword());
 
+        log.info("user '{}' registered and authenticated.", registerFormDTO.getUsername());
         return ResponseEntity.ok(jwt);
     }
 
@@ -59,10 +68,9 @@ public class UserController {
 //    @RequestMapping(method = PUT, path = "/api/users")
 //    @ResponseBody
 //    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserFormDTO userFormDTO,
-//                                                 HttpSession session) throws UserException {
+//                                                 @CurrentUser UserDetails user) throws UserException {
 //
-//        String loggedUser = SessionUtility.getLoggedUser(session);
-//        User userToUpdate = userService.findByUsername(loggedUser).orElseThrow(
+//        User userToUpdate = userService.findByUsername(user.getUsername()).orElseThrow(
 //                () -> new UserException("updateUser.error.userNotFound"));
 //
 //        userService.updateUser(userToUpdate, userFormDTO);

@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-// TODO add exception hander for this controller
 @RestController
 public class AccessController {
 
@@ -41,7 +40,7 @@ public class AccessController {
 
         JwtTokenDTO jwt = authenticationService.login(credentialsFormDTO.getUsername(), credentialsFormDTO.getPassword());
 
-        log.info("User '{}' logged in.", credentialsFormDTO.getUsername());
+        log.info("user '{}' authenticated.", credentialsFormDTO.getUsername());
         return ResponseEntity.ok(jwt);
     }
 

@@ -60,10 +60,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsernameOrEmail(username, email);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findById(username);
-    }
-
     public void createUser(RegisterFormDTO registerFormDTO) {
         User userToSave = new User();
         userToSave.setUsername(registerFormDTO.getUsername());

@@ -64,9 +64,9 @@ public class CategoryController {
                                                       @CurrentUser UserDetails user) throws CategoryException {
 
         Category categoryToUpdate = categoryService.findById(idCategory).orElseThrow(
-                () -> new CategoryException("updateCategory.error.categoryNotFound"));
+                () -> new CategoryException("categoryData.error.categoryNotFound"));
         if (!categoryToUpdate.getOwner().equals(user.getUsername()))
-            throw new CategoryException("updateCategory.error.unauthorised");
+            throw new CategoryException("categoryData.error.unauthorised");
 
         CategoryDTO updatedCategory = categoryService.updateCategory(categoryToUpdate, categoryFormDTO);
         return ResponseEntity.ok(updatedCategory);
@@ -79,9 +79,9 @@ public class CategoryController {
                                                      @CurrentUser UserDetails user) throws CategoryException {
 
         Category categoryToDelete = categoryService.findById(idCategory).orElseThrow(
-                () -> new CategoryException("deleteCategory.error.categoryNotFound"));
+                () -> new CategoryException("categoryData.error.categoryNotFound"));
         if (!categoryToDelete.getOwner().equals(user.getUsername()))
-            throw new CategoryException("deleteCategory.error.unauthorised");
+            throw new CategoryException("categoryData.error.unauthorised");
 
         categoryService.deleteCategory(categoryToDelete);
         return ResponseEntity.ok(HttpStatus.OK);

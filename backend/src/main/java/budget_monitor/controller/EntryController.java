@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +72,7 @@ public class EntryController {
             Timestamp to = new Timestamp(df.parse(toInString).getTime());
             return entryService.findAllByUsernameBetweenDates(user.getUsername(), from, to);
         } catch (ParseException e) {
-            throw new EntryException("getEntries.error.badFormat");
+            throw new EntryException("entryData.error.badRequest");
         }
     }
 
@@ -96,9 +95,9 @@ public class EntryController {
                                                 @CurrentUser UserDetails user) throws EntryException {
 
         Entry entryToUpdate = entryService.findByIdEntry(idEntry).orElseThrow(
-                () -> new EntryException("updateEntry.error.entryNotFound"));
+                () -> new EntryException("entryData.error.entryNotFound"));
         if (!entryToUpdate.getOwner().equals(user.getUsername()))
-            throw new EntryException("updateEntry.error.unauthorised");
+            throw new EntryException("entryData.error.unauthorised");
 
         EntryDTO updatedEntry = entryService.updateEntry(entryToUpdate, entryFormDTO);
         updatedEntry.setSubEntries(subEntryService.createSubEntries(entryFormDTO.getSubEntries(), updatedEntry));
@@ -112,9 +111,9 @@ public class EntryController {
                                                   @CurrentUser UserDetails user) throws EntryException {
 
         Entry entryToDelete = entryService.findByIdEntry(idEntry).orElseThrow(
-                () -> new EntryException("deleteEntry.error.entryNotFound"));
+                () -> new EntryException("entryData.error.entryNotFound"));
         if (!entryToDelete.getOwner().equals(user.getUsername()))
-            throw new EntryException("deleteEntry.error.unauthorised");
+            throw new EntryException("entryData.error.unauthorised");
 
         entryService.deleteEntry(entryToDelete);
         return ResponseEntity.ok(HttpStatus.OK);

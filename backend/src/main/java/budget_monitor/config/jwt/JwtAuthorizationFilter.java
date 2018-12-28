@@ -35,11 +35,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                logger.info("token is valid, authorized context added to request");
             }
-        } catch (RuntimeException e) {
-            logger.warn("token is not valid: " + e.getMessage());
+        } catch (RuntimeException ignored) {
         }
 
         filterChain.doFilter(request, response);
