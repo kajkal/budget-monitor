@@ -13,7 +13,6 @@ public class JwtUser implements UserDetails, CredentialsContainer {
 
     private String username;
     private Set<GrantedAuthority> authorities;
-    private String email;
     private String currency;
     private String password;
 
@@ -72,14 +71,6 @@ public class JwtUser implements UserDetails, CredentialsContainer {
         password = null;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -96,13 +87,12 @@ public class JwtUser implements UserDetails, CredentialsContainer {
         return Objects.equals(password, jwtUser.password) &&
                 Objects.equals(username, jwtUser.username) &&
                 Objects.equals(authorities, jwtUser.authorities) &&
-                Objects.equals(email, jwtUser.email) &&
                 Objects.equals(currency, jwtUser.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(password, username, authorities, email, currency);
+        return Objects.hash(password, username, authorities, currency);
     }
 
     @Override
@@ -111,7 +101,6 @@ public class JwtUser implements UserDetails, CredentialsContainer {
         sb.append(super.toString()).append(": ");
         sb.append("Username: ").append(this.username).append("; ");
         sb.append("Password: [PROTECTED]; ");
-        sb.append("Email: ").append(this.email).append("; ");
         sb.append("Currency: ").append(this.currency).append("; ");
 
         if (!authorities.isEmpty()) {

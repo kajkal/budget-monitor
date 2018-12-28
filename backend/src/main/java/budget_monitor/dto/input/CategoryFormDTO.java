@@ -12,10 +12,6 @@ public class CategoryFormDTO {
     @NotBlank
     private String name;
 
-    // TODO default color = null
-    @Nullable
-    private Integer color = 0;
-
 
     public Long getIdSuperCategory() {
         return idSuperCategory;
@@ -23,10 +19,6 @@ public class CategoryFormDTO {
 
     public String getName() {
         return name;
-    }
-
-    public Integer getColor() {
-        return color;
     }
 
 }

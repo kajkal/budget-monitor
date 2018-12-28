@@ -13,7 +13,6 @@ public class CategoryDTO {
     @JsonIgnore
     private Long idSuperCategory;
     private String name;
-    private Integer color;
     private List<CategoryDTO> subCategories;
 
 
@@ -25,7 +24,6 @@ public class CategoryDTO {
         this.path = new ArrayList<>();
         this.idSuperCategory = category.getIdSuperCategory();
         this.name = category.getName();
-        this.color = category.getColor();
         this.subCategories = new ArrayList<>();
     }
 
@@ -59,14 +57,6 @@ public class CategoryDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getColor() {
-        return color;
-    }
-
-    public void setColor(Integer color) {
-        this.color = color;
     }
 
     public List<CategoryDTO> getSubCategories() {

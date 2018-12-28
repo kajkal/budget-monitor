@@ -25,9 +25,6 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "color")
-    private Integer color;
-
 
     public Long getIdCategory() {
         return idCategory;
@@ -59,14 +56,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getColor() {
-        return color;
-    }
-
-    public void setColor(Integer color) {
-        this.color = color;
     }
 
 }

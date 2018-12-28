@@ -47,7 +47,6 @@ public class CategoryService {
         categoryToSave.setIdSuperCategory(categoryFormDTO.getIdSuperCategory());
         categoryToSave.setOwner(username);
         categoryToSave.setName(categoryFormDTO.getName());
-        categoryToSave.setColor(categoryFormDTO.getColor());
 
         Category savedCategory = categoryRepository.save(categoryToSave);
         return new CategoryDTO(savedCategory);
@@ -56,7 +55,6 @@ public class CategoryService {
     public CategoryDTO updateCategory(Category categoryToUpdate, CategoryFormDTO categoryFormDTO) {
         categoryToUpdate.setIdSuperCategory(categoryFormDTO.getIdSuperCategory());
         categoryToUpdate.setName(categoryFormDTO.getName());
-        categoryToUpdate.setColor(categoryFormDTO.getColor());
 
         Category updatedCategory = categoryRepository.save(categoryToUpdate);
         return new CategoryDTO(updatedCategory);

@@ -25,7 +25,6 @@ public class JwtUserExtractor implements ResultSetExtractor<Optional<JwtUser>> {
                 JwtUser user = new JwtUser();
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
                 user.setCurrency(rs.getString("currency"));
                 userDetails = Optional.of(user);
             }

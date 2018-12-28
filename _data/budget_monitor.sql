@@ -39,7 +39,6 @@ CREATE TABLE categories (
   idSuperCategory            INTEGER(30)    DEFAULT NULL,
   owner                      VARCHAR(30)    DEFAULT NULL,
   name                       VARCHAR(60)    NOT NULL,
-  color                      INTEGER(2)     DEFAULT NULL,
   PRIMARY KEY (idCategory),
   FOREIGN KEY (idSuperCategory) REFERENCES categories(idCategory) ON DELETE CASCADE,
   FOREIGN KEY (owner) REFERENCES users(username) ON DELETE CASCADE
@@ -118,24 +117,24 @@ CREATE TRIGGER newUserSetup
     # create role:
     INSERT INTO userRoles (username, rolename) VALUE (NEW.username, 'USER');
     # create default category structure:
-    INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (2, NEW.username, 'Salary', 0),
-           (2, NEW.username, 'Presents', 0);
+    INSERT INTO categories (idSuperCategory, owner, name)
+    VALUES (2, NEW.username, 'Salary'),
+           (2, NEW.username, 'Presents');
 
-    INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (3, NEW.username, 'Maintenance', 0),
-           (3, NEW.username, 'Communication', 0),
-           (3, NEW.username, 'Entertainment', 0);
+    INSERT INTO categories (idSuperCategory, owner, name)
+    VALUES (3, NEW.username, 'Maintenance'),
+           (3, NEW.username, 'Communication'),
+           (3, NEW.username, 'Entertainment');
     SET id = LAST_INSERT_ID();
 
-    INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (id, NEW.username, 'Home', 0),
-           (id, NEW.username, 'Food', 0);
+    INSERT INTO categories (idSuperCategory, owner, name)
+    VALUES (id, NEW.username, 'Home'),
+           (id, NEW.username, 'Food');
     SET id = LAST_INSERT_ID();
 
-    INSERT INTO categories (idSuperCategory, owner, name, color)
-    VALUES (id, NEW.username, 'Rent', 0),
-           (id, NEW.username, 'Cleaning', 0);
+    INSERT INTO categories (idSuperCategory, owner, name)
+    VALUES (id, NEW.username, 'Rent'),
+           (id, NEW.username, 'Cleaning');
   END;
 
 -- ----------------------------------------------------------------------------------------------------
@@ -146,33 +145,33 @@ INSERT INTO roles (rolename)
 VALUES ('USER'),
        ('ADMIN');
 
-INSERT INTO categories (idCategory, idSuperCategory, owner, name, color)
-VALUES (1, NULL, NULL, 'ROOT_CATEGORY', NULL),
-       (2, 1, NULL, 'INCOME_CATEGORY', NULL),
-       (3, 1, NULL, 'EXPENSE_CATEGORY', NULL);
+INSERT INTO categories (idCategory, idSuperCategory, owner, name)
+VALUES (1, NULL, NULL, 'ROOT_CATEGORY'),
+       (2, 1, NULL, 'INCOME_CATEGORY'),
+       (3, 1, NULL, 'EXPENSE_CATEGORY');
 
 -- pass: 'Qwer1234'
 INSERT INTO users (username, password, email, currency)
 VALUES ('budget_monitor', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'budget_monitor@domain.com', 'EUR'),
-       ('user', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user@gmail.com', 'PLN'),
-       ('user1', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user1@gmail.com', 'PLN'),
-       ('user2', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user2@gmail.com', 'PLN');
+       ('user', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user@domain.com', 'PLN'),
+       ('user1', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user1@domain.com', 'PLN'),
+       ('user2', '$2a$08$FxcmICkQlv76d..24pGsu.ojwTrOYk4tmcRu4OFwK63lnYBvhprWm', 'user2@domain.com', 'PLN');
 
 INSERT INTO userRoles (username, rolename)
 VALUES ('budget_monitor', 'ADMIN');
 
 
-INSERT INTO categories (idCategory, idSuperCategory, owner, name, color)
-VALUES (100, 17, 'user', 'Insurance', 0),
-       (101, 15, 'user', 'Car maintenance', 0),
-       (102, 15, 'user', 'Public transport', 0),
-       (103, 16, 'user', 'Alcohol', 0),
-       (104, 16, 'user', 'Cinema', 0),
-       (105, 3, 'user', 'Sport', 5),
-       (106, 3, 'user', 'Equipment', 5),
-          (107, 106, 'user', 'Clothes', 5),
-          (108, 106, 'user', 'Footwear', 5),
-          (109, 106, 'user', 'Accessories', 5);
+INSERT INTO categories (idCategory, idSuperCategory, owner, name)
+VALUES (100, 17, 'user', 'Insurance'),
+       (101, 15, 'user', 'Car maintenance'),
+       (102, 15, 'user', 'Public transport'),
+       (103, 16, 'user', 'Alcohol'),
+       (104, 16, 'user', 'Cinema'),
+       (105, 3, 'user', 'Sport'),
+       (106, 3, 'user', 'Equipment'),
+          (107, 106, 'user', 'Clothes'),
+          (108, 106, 'user', 'Footwear'),
+          (109, 106, 'user', 'Accessories');
 
 
 INSERT INTO entries (idEntry, owner, idCategory, description, value, date, dateOfAddition, dateOfLastModification)

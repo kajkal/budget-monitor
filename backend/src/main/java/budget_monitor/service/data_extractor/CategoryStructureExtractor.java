@@ -21,7 +21,6 @@ public class CategoryStructureExtractor implements ResultSetExtractor<CategoryDT
         incomeCategory.setIdCategory(2L);
         incomeCategory.setIdSuperCategory(1L);
         incomeCategory.setName("INCOME_CATEGORY");
-        incomeCategory.setColor(0);
         incomeCategory.setSubCategories(new ArrayList<>());
         incomeCategory.setPath(Collections.singletonList(1L));
 
@@ -29,7 +28,6 @@ public class CategoryStructureExtractor implements ResultSetExtractor<CategoryDT
         expenseCategory.setIdCategory(3L);
         expenseCategory.setIdSuperCategory(1L);
         expenseCategory.setName("EXPENSE_CATEGORY");
-        expenseCategory.setColor(0);
         expenseCategory.setSubCategories(new ArrayList<>());
         expenseCategory.setPath(Collections.singletonList(1L));
 
@@ -37,7 +35,6 @@ public class CategoryStructureExtractor implements ResultSetExtractor<CategoryDT
         rootCategory.setIdCategory(1L);
         rootCategory.setIdSuperCategory(0L);
         rootCategory.setName("ROOT_CATEGORY");
-        rootCategory.setColor(0);
         rootCategory.setSubCategories(Arrays.asList(incomeCategory, expenseCategory));
         rootCategory.setPath(new ArrayList<>());
 
@@ -58,7 +55,6 @@ public class CategoryStructureExtractor implements ResultSetExtractor<CategoryDT
             category.setIdCategory(idCategory);
             category.setIdSuperCategory(idSuperCategory);
             category.setName(rs.getString("name"));
-            category.setColor(rs.getInt("color"));
             category.setSubCategories(new ArrayList<>());
 
             listOfSubCategories

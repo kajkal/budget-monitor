@@ -44,7 +44,6 @@ public class JwtProvider {
 //        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
 //            claims.put("isAdmin", true);
 //        }
-        claims.put("email", user.getEmail());
         claims.put("currency", user.getCurrency());
 
         return Jwts.builder()
