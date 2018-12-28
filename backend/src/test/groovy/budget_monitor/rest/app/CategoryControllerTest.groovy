@@ -9,8 +9,6 @@ import spock.lang.Stepwise
 @Stepwise
 class CategoryControllerTest extends AbstractMvcSpec {
 
-    // TODO: fix categories tests
-
     @Shared
     String testUserToken
 
@@ -44,17 +42,47 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.OK
-        println(response.json)
-        response.json.idCategory == 1
-        response.json.name == 'ROOT_CATEGORY'
+        response.json == [
+                idCategory: 1,
+                path: [],
+                name: 'ROOT_CATEGORY',
+                subCategories: [
+                        [idCategory: 2, path: [1], name: 'INCOME_CATEGORY', subCategories: [
+                                [idCategory: 13, path: [1, 2], name: 'Salary', subCategories: []],
+                                [idCategory: 14, path: [1, 2], name: 'Presents', subCategories: []]
+                        ]],
+                        [idCategory: 3, path: [1], name: 'EXPENSE_CATEGORY', subCategories: [
+                                [idCategory: 15, path: [1, 3], name: 'Communication', subCategories: [
+                                        [idCategory: 18, path: [1, 3, 15], name: 'Food', subCategories: [
+                                                [idCategory: 20, path: [1, 3, 15, 18], name: 'Rent', subCategories: []],
+                                                [idCategory: 21, path: [1, 3, 15, 18], name: 'Cleaning', subCategories: []]
+                                        ]],
+                                        [idCategory: 19, path: [1, 3, 15], name: 'Home', subCategories: []],
+                                        [idCategory: 101, path: [1, 3, 15], name: 'Car maintenance', subCategories: []],
+                                        [idCategory: 102, path: [1, 3, 15], name: 'Public transport', subCategories: []]
+                                ]],
+                                [idCategory: 16, path: [1, 3], name: 'Entertainment', subCategories: [
+                                        [idCategory: 103, path: [1, 3, 16], name: 'Alcohol', subCategories: []],
+                                        [idCategory: 104, path: [1, 3, 16], name: 'Cinema', subCategories: []]]],
+                                [idCategory: 17, path: [1, 3], name: 'Maintenance', subCategories: [
+                                        [idCategory: 100, path: [1, 3, 17], name: 'Insurance', subCategories: []]
+                                ]],
+                                [idCategory: 105, path: [1, 3], name: 'Sport', subCategories: []],
+                                [idCategory: 106, path: [1, 3], name: 'Equipment', subCategories: [
+                                        [idCategory: 107, path: [1, 3, 106], name: 'Clothes', subCategories: []],
+                                        [idCategory: 108, path: [1, 3, 106], name: 'Footwear', subCategories: []],
+                                        [idCategory: 109, path: [1, 3, 106], name: 'Accessories', subCategories: []]
+                                ]]
+                        ]]
+                ]
+        ]
     }
 
     def 'user adds new category'() {
         given:
         def newCategory = [
                 idSuperCategory: null,
-                name           : 'travels',
-                color          : 1
+                name: 'travels'
         ]
 
         when:
@@ -63,18 +91,19 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.OK
-        response.json.idCategory > 0
-        response.json.idSuperCategory == null
-        response.json.name == 'travels'
-        response.json.color == 1
-        response.json.subCategories.size == 0
+        response.json == [
+                idCategory: travelCategoryId,
+                path: [],
+                name: 'travels',
+                subCategories: []
+        ]
     }
 
-    def 'user adds new category with no specific color'() {
+    def 'user adds new category as subcategory'() {
         given:
         def newCategory = [
                 idSuperCategory: travelCategoryId,
-                name           : 'souvenirs'
+                name: 'souvenirs'
         ]
 
         when:
@@ -83,19 +112,19 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.OK
-        response.json.idCategory > 0
-        response.json.idSuperCategory == travelCategoryId
-        response.json.name == 'souvenirs'
-        response.json.color == 0
-        response.json.subCategories.size == 0
+        response.json == [
+                idCategory: souvenirCategoryId,
+                path: [],
+                name: 'souvenirs',
+                subCategories: []
+        ]
     }
 
     def 'user adds new category with invalid data'() {
         given:
         def newCategory = [
                 idSuperCategory: souvenirCategoryId,
-                name           : '   ',
-                color          : 1
+                name: '   '
         ]
 
         when:
@@ -103,14 +132,13 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey.contains('categoryData.error.notValid')
+        response.json.message.contains('categoryData.error.notValid')
     }
 
     def 'user update category'() {
         given:
         def updatedCategory = [
-                name : 'travels',
-                color: 9
+                name: 'Travels'
         ]
 
         when:
@@ -118,37 +146,19 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.OK
-        response.json.idCategory == travelCategoryId
-        response.json.idSuperCategory == null
-        response.json.name == 'travels'
-        response.json.color == 9
-        response.json.subCategories.size == 0
-    }
-
-    def 'user update category with no specific color'() {
-        given:
-        def updatedCategory = [
-                name: 'travels'
+        response.json == [
+                idCategory: 110,
+                path: [],
+                name: 'Travels',
+                subCategories: []
         ]
-
-        when:
-        def response = put('/api/categories/' + travelCategoryId, updatedCategory, new RequestParams(authToken: testUserToken))
-
-        then:
-        response.status == HttpStatus.OK
-        response.json.idCategory == travelCategoryId
-        response.json.idSuperCategory == null
-        response.json.name == 'travels'
-        response.json.color == 0
-        response.json.subCategories.size == 0
     }
 
     def 'user update category with invalid data'() {
         given:
         def updatedCategory = [
                 idSuperCategory: travelCategoryId,
-                name           : '   ',
-                color          : 1
+                name: '   '
         ]
 
         when:
@@ -156,39 +166,37 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey.contains('categoryData.error.notValid')
+        response.json.message.contains('categoryData.error.notValid')
     }
 
     def 'user update non-existing category'() {
         given:
         def updatedCategory = [
                 idSuperCategory: travelCategoryId,
-                name           : 'Food',
-                color          : '1'
+                name: 'Food'
         ]
 
         when:
-        def response = put('/api/categories/100', updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/categories/1000', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateCategory.error.categoryNotFound'
+        response.json.message == 'categoryData.error.categoryNotFound'
     }
 
     def 'user update not owned category'() {
         given:
         def updatedCategory = [
                 idSuperCategory: travelCategoryId,
-                name           : 'Food',
-                color          : '1'
+                name: 'Food'
         ]
 
         when:
-        def response = put('/api/categories/20', updatedCategory, new RequestParams(authToken: testUserToken))
+        def response = put('/api/categories/30', updatedCategory, new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'updateCategory.error.unauthorised'
+        response.json.message == 'categoryData.error.unauthorised'
     }
 
     def 'user removes category'() {
@@ -205,16 +213,16 @@ class CategoryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteCategory.error.categoryNotFound'
+        response.json.message == 'categoryData.error.categoryNotFound'
     }
 
     def 'user removes not owned category'() {
         when:
-        def response = delete('/api/categories/20', new RequestParams(authToken: testUserToken))
+        def response = delete('/api/categories/30', new RequestParams(authToken: testUserToken))
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.messageKey == 'deleteCategory.error.unauthorised'
+        response.json.message == 'categoryData.error.unauthorised'
     }
 
 }

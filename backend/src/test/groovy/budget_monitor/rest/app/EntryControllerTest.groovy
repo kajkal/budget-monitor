@@ -78,7 +78,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         response.json.idCategory == foodCategoryIdForUser
         response.json.description == 'Bakery'
         response.json.value == -450
-        response.json.date == '2018-11-03T12:24:01.137+0000'
+        response.json.date == 1541247841137
         response.json.dateOfAddition != null
         response.json.dateOfLastModification != null
         response.json.photo == null
@@ -111,7 +111,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         response.json.idCategory == null
         response.json.description == 'Grocery'
         response.json.value == -850
-        response.json.date == '2018-11-03T12:24:01.137+0000'
+        response.json.date == 1541247841137
         response.json.dateOfAddition != null
         response.json.dateOfLastModification != null
         response.json.photo == null
@@ -189,7 +189,7 @@ class EntryControllerTest extends AbstractMvcSpec {
         response.json.idCategory == foodCategoryIdForUser
         response.json.description == 'Updated Bakery'
         response.json.value == -650
-        response.json.date == '2018-11-03T12:24:01.137+0000'
+        response.json.date == 1541247841137
         response.json.dateOfAddition != null
         response.json.dateOfLastModification != null
         response.json.photo == null
@@ -240,7 +240,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.message == 'updateEntry.error.entryNotFound'
+        response.json.message == 'entryData.error.entryNotFound'
     }
 
     def 'user update not owned entry'() {
@@ -258,7 +258,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.message == 'updateEntry.error.unauthorised'
+        response.json.message == 'entryData.error.unauthorised'
     }
 
     def 'user removes entry'() {
@@ -275,7 +275,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.message == 'deleteEntry.error.entryNotFound'
+        response.json.message == 'entryData.error.entryNotFound'
     }
 
     def 'user removes not owned entry'() {
@@ -284,7 +284,7 @@ class EntryControllerTest extends AbstractMvcSpec {
 
         then:
         response.status == HttpStatus.BAD_REQUEST
-        response.json.message == 'deleteEntry.error.unauthorised'
+        response.json.message == 'entryData.error.unauthorised'
     }
 
 }
