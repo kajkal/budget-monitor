@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
     Add,
     BarChart,
-    CallMade,
     Menu,
     PieChart,
     PlaylistAdd,
@@ -14,7 +13,9 @@ import {
     Info,
     AccessTime,
     Today,
-    ViewComfy
+    ViewComfy,
+    TrendingDown,
+    TrendingUp,
 } from '@material-ui/icons';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
@@ -99,12 +100,12 @@ class Navbar extends PureComponent {
     newEntryOptions = [
         {
             label: 'Income',
-            icon: <CallMade className='positive' />,
+            icon: <TrendingUp className='positive' />,
             onClick: () => this.setState({ incomeFormDialogOpen: true }),
         },
         {
             label: 'Expense',
-            icon: <CallMade className='negative mirrorY' />,
+            icon: <TrendingDown className='negative' />,
             onClick: () => this.setState({ expenseFormDialogOpen: true }),
         },
     ];

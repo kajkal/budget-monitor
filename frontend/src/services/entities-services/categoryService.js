@@ -12,7 +12,7 @@ function entryUrl(categoryId) {
 function parseCategory(category) {
     return ({
         idSuperCategory: category[CATEGORY][ID_CATEGORY],
-        name: category[NAME],
+        name: category[NAME].trim(),
     });
 }
 

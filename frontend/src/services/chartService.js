@@ -1,5 +1,6 @@
 import { DateTime, Interval } from 'luxon';
 import { getCategoryIds } from './entities-services/categoryService';
+import { sort } from './entities-services/entryService';
 
 function sumCategoryValuesInEntry(entry, categoryIds) {
     const totalEntryValue = entry.value;
@@ -53,7 +54,7 @@ export function prepareDataStructureForBarChart(entries, selectionSpec) {
     return {
         timePeriod: timePeriodUnit,
         keys: selectedCategories.map(c => c.name),
-        data,
+        data: sort(data, 'timePeriod'),
     };
 }
 
@@ -91,7 +92,7 @@ export function prepareDataStructureForLineChart(entries, selectionSpec) {
             dataForCategory.forEach((value, day) => data.push({ x: day, y: Number(value.toFixed(2)) }));
             dataStructure.push({
                 id: category.name,
-                data: data,
+                data: sort(data, 'x'),
             });
         }
     });
@@ -132,17 +133,17 @@ export function prepareDataStructureForSunburstChart(entries, rootCategory) {
         entry.subEntries.forEach(subEntry => mapValueToNode(subEntry));
     });
 
+    const computeTotalNodeValue = node => {
+        const totalValue = node.value + node.children.reduce((sum, node) => sum + computeTotalNodeValue(node), 0);
+        node.totalValue = totalValue;
+        return totalValue;
+    };
 
-    delete incomeTree.value;
-    delete expenseTree.value;
-    incomeTree.totalValue = incomeTree.children.reduce((sum, node) => sum + node.value, 0);
-    expenseTree.totalValue = expenseTree.children.reduce((sum, node) => sum + node.value, 0);
-
-    console.log('INCOME tree', incomeTree);
-    console.log('EXPENSE tree', expenseTree);
+    computeTotalNodeValue(incomeTree);
+    computeTotalNodeValue(expenseTree);
 
     const removeZeros = node => {
-        if (node.totalValue || node.value !== 0) {
+        if (node.totalValue !== 0 || [2, 3].includes(node.idCategory)) {
             const oldChildren = node.children;
             node.children = oldChildren.map(n => removeZeros(n)).filter(n => n);
             return node;

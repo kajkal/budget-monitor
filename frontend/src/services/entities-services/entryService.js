@@ -13,20 +13,15 @@ function parseEntry(entry, type) {
     const factor = type === 'income' ? 100 : -100;
     return ({
         value: (entry[VALUE] * factor).toFixed(0),
-        description: entry[[DESCRIPTION]],
+        description: entry[DESCRIPTION].trim(),
         date: DateTime.fromISO(entry[DATE]).valueOf(),
         idCategory: _.get(entry, [CATEGORY, ID_CATEGORY]),
         subEntries: Object.values(entry[SUB_ENTRIES]).map(subEntry => ({
             value: (subEntry[VALUE] * factor).toFixed(0),
-            description: subEntry[DESCRIPTION],
+            description: subEntry[DESCRIPTION].trim(),
             idCategory: _.get(subEntry, [CATEGORY, ID_CATEGORY]),
         })),
     });
-}
-
-
-export function getEntries() {
-    return http.get(apiEndpoint);
 }
 
 export function getRecentEntries() {

@@ -27,6 +27,7 @@ public class DevController {
     @RequestMapping(method = GET, path = "/dev/users")
     @ResponseBody
     public List<User> getUsers() {
+        System.out.println("get users called");
         return userService.findAll();
     }
 

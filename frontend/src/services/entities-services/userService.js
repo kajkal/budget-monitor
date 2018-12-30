@@ -9,9 +9,9 @@ const apiEndpoint = '/users';
 
 function parseUser(user) {
     return ({
-        username: user[USERNAME],
-        email: user[EMAIL],
-        password: user[PASSWORD],
+        username: user[USERNAME].trim(),
+        email: user[EMAIL].trim(),
+        password: user[PASSWORD].trim(),
         currency: user[CURRENCY],
     });
 }

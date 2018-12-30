@@ -85,7 +85,7 @@ class LineChart extends PureComponent {
                         dotBorderWidth={2}
                         dotBorderColor='#ffffff'
                         curve='monotoneX'
-                        enableDotLabel={true}
+                        enableDotLabel={false}
                         dotLabel='y'
                         dotLabelYOffset={-12}
                         animate={true}
