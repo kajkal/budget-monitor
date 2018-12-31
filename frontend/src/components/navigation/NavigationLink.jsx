@@ -21,7 +21,7 @@ const NavigationLink = ({ icon, label, to, classes }) => {
             activeClassName={classes.active}
         >
 
-            <ListItemIcon>
+            <ListItemIcon className='m-0'>
                 {icon}
             </ListItemIcon>
 

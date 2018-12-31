@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntryDataRow from './EntryDataRow';
+import EntryListItem from './EntryListItem';
 import Typography from '@material-ui/core/es/Typography/Typography';
 import { categoryShape, entryShape } from '../../config/propTypesCommon';
 
 
-const EntryRegister = ({ entriesByDay, rootCategory, currency, onEntriesChange }) => {
+const EntryList = ({ entriesByDay, rootCategory, currency, onEntriesChange }) => {
 
     if (!entriesByDay || entriesByDay.length === 0 || !rootCategory || !currency)
         return <h1 style={{ margin: '64px' }}>No data to display</h1>;
     return (
-        <div className='entry-register'>
+        <div className='entry-list'>
             {
                 entriesByDay.map(({day, entries}) => (
                     <Typography component={'div'} key={day}>
@@ -21,7 +21,7 @@ const EntryRegister = ({ entriesByDay, rootCategory, currency, onEntriesChange }
 
                         {
                             entries.map(entry => (
-                                <EntryDataRow
+                                <EntryListItem
                                     key={entry.idEntry}
                                     entry={entry}
                                     rootCategory={rootCategory}
@@ -37,7 +37,7 @@ const EntryRegister = ({ entriesByDay, rootCategory, currency, onEntriesChange }
     );
 };
 
-EntryRegister.propTypes = {
+EntryList.propTypes = {
     entriesByDay: PropTypes.arrayOf(
         PropTypes.shape({
             day: PropTypes.object.isRequired,
@@ -49,4 +49,4 @@ EntryRegister.propTypes = {
     onEntriesChange: PropTypes.func.isRequired,
 };
 
-export default EntryRegister;
+export default EntryList;

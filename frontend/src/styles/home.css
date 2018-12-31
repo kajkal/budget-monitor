@@ -1,13 +1,9 @@
 @import '_constants.css';
 
 
-@media screen and (min-width: 600px) {
-
-    .entry-register {
-        width: 100%;
-        max-width: 960px;
-    }
-
+.entry-list {
+    width: 100%;
+    max-width: 960px;
 }
 
 .entries-for-day.header {
@@ -98,4 +94,3 @@
 .sub-entries-area .value  {
     justify-self: end;
 }
-

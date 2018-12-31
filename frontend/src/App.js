@@ -20,9 +20,9 @@ import {
     processEntry,
     splitByDays,
 } from './services/entities-services/entryService';
-import EntryRegister from './components/entry-register/EntryRegister';
+import EntryList from './components/entry-list/EntryList';
 import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
-import EntryRecent from './components/entry-register/EntryRecent';
+import EntryListRecent from './components/entry-list/EntryListRecent';
 import Navbar from './components/navigation/Navbar';
 import BarChart from './components/charts/BarChart';
 import CalendarChart from './components/charts/CalendarChart';
@@ -194,7 +194,7 @@ class App extends Component {
                             <Switch>
 
                                 <ProtectedRoute exact path="/daily" render={props => (
-                                    <EntryRegister
+                                    <EntryList
                                         rootCategory={rootCategory}
                                         entriesByDay={splitByDays(filteredEntries)}
                                         currency={user && user.currency}
@@ -204,7 +204,7 @@ class App extends Component {
                                 )} />
 
                                 <ProtectedRoute exact path="/recent" render={props => (
-                                    <EntryRecent
+                                    <EntryListRecent
                                         rootCategory={rootCategory}
                                         recentEntries={recentEntries}
                                         currency={user && user.currency}

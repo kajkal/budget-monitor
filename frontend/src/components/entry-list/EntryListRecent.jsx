@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/es/Typography/Typography';
-import EntryDataRow from './EntryDataRow';
+import EntryListItem from './EntryListItem';
 import { sort } from '../../services/entities-services/entryService';
 import { categoryShape, entryShape } from '../../config/propTypesCommon';
 
 
-class EntryRecent extends PureComponent {
+class EntryListRecent extends PureComponent {
 
     componentDidMount() {
         console.log('componentDidMount, fetch recent data');
@@ -21,7 +21,7 @@ class EntryRecent extends PureComponent {
 
         const sortedRecentEntries = sort(recentEntries, 'dateOfLastModification', 'desc');
         return (
-            <div className='entry-register recent'>
+            <div className='entry-list recent'>
                 {
                     <Typography component={'div'}>
 
@@ -31,7 +31,7 @@ class EntryRecent extends PureComponent {
 
                         {
                             sortedRecentEntries.map(entry => (
-                                <EntryDataRow
+                                <EntryListItem
                                     key={entry.idEntry}
                                     entry={entry}
                                     fullDate={true}
@@ -48,7 +48,7 @@ class EntryRecent extends PureComponent {
     }
 }
 
-EntryRecent.propTypes = {
+EntryListRecent.propTypes = {
     recentEntries: PropTypes.arrayOf(entryShape),
     rootCategory: categoryShape,
     currency: PropTypes.string,
@@ -56,4 +56,4 @@ EntryRecent.propTypes = {
     onEntriesChange: PropTypes.func.isRequired,
 };
 
-export default EntryRecent;
+export default EntryListRecent;

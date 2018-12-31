@@ -14,7 +14,7 @@ import EntryDeleteForm from '../forms/EntryDeleteForm';
 import EntryForm from '../forms/EntryForm';
 
 
-class EntryDataRow extends PureComponent {
+class EntryListItem extends PureComponent {
     state = {
         open: false,
         operationType: null,
@@ -165,7 +165,7 @@ class EntryDataRow extends PureComponent {
     }
 }
 
-EntryDataRow.propTypes = {
+EntryListItem.propTypes = {
     entry: entryShape.isRequired,
     fullDate: PropTypes.bool,
     rootCategory: categoryShape,
@@ -173,4 +173,4 @@ EntryDataRow.propTypes = {
     onEntriesChange: PropTypes.func.isRequired,
 };
 
-export default EntryDataRow;
+export default EntryListItem;

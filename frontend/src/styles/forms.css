@@ -1,25 +1,9 @@
 @import '_constants.css';
 
 
-
-@media screen and (max-width: 600px) {
-
-    /*#root > main > div {*/
-        /*flex-grow: 1;*/
-
-        /*display: flex;*/
-        /*flex-direction: column;*/
-    /*}*/
-
-    /*#root > main > div > form {*/
-        /*flex-grow: 1;*/
-    /*}*/
-
-}
-
-
 .form-container {
     width: 100%;
+    max-width: 600px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -30,13 +14,10 @@
 }
 
 @media screen and (min-width: 600px) {
-
     .form-container {
-        width: 600px;
         margin-top: 64px;
         flex-grow: 0;
     }
-
 }
 
 
@@ -51,13 +32,10 @@ form {
     text-align: center;
 }
 
+
+
 .form-container > form > .form-header {
     padding: 24px 24px 20px 24px;
-}
-
-.form-container > form > .form-content {
-    padding: 0 24px 24px 24px;
-    flex-grow: 1;
 }
 
 .form-container > form > .form-content {
@@ -71,14 +49,10 @@ form {
     justify-content: flex-end;
 }
 
-form footer * {
-}
-
-
 
 /*LOGIN FORM*/
 
-form div.form-content.login-form {
+.login-form {
     display: flex;
     flex-direction: column;
 }
@@ -86,7 +60,7 @@ form div.form-content.login-form {
 
 /*REGISTER FORM*/
 
-form div.form-content.register-form {
+.register-form {
     display: flex;
     flex-direction: column;
 }
@@ -94,7 +68,7 @@ form div.form-content.register-form {
 
 /*ENTRY FORM*/
 
-form div.form-content.new-entry-form {
+.new-entry-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 1em;
@@ -107,30 +81,14 @@ form div.form-content.new-entry-form {
         'newSubEntry newSubEntry';
 }
 
-form div.form-content.new-entry-form .currency-input {
-    grid-area: value;
-}
-form div.form-content.new-entry-form .category-input {
-    grid-area: category;
-}
-form div.form-content.new-entry-form .description-input {
-    grid-area: description;
-}
-form div.form-content.new-entry-form .date-input {
-    grid-area: date;
-}
-form div.form-content.new-entry-form .subEntry-area {
-    grid-area: subEntries;
-}
-form div.form-content.new-entry-form .new-subEntry-btn {
-    grid-area: newSubEntry;
-}
-form div.form-content.new-entry-form .remove-subEntry-btn {
-    grid-area: removeSubEntry;
-    align-self: end;
-}
-
-form div.form-content.new-entry-form .subEntry-area .subEntry-row {
+.new-entry-form .currency-input { grid-area: value; }
+.new-entry-form .category-input { grid-area: category; }
+.new-entry-form .description-input { grid-area: description; }
+.new-entry-form .date-input { grid-area: date; }
+.new-entry-form .subEntry-area { grid-area: subEntries; }
+.new-entry-form .new-subEntry-btn { grid-area: newSubEntry; }
+.new-entry-form .remove-subEntry-btn { grid-area: removeSubEntry; align-self: end; }
+.new-entry-form .subEntry-area .subEntry-row {
     display: grid;
     grid-template-columns: 1fr 1fr 48px;
     grid-column-gap: 1em;
@@ -143,7 +101,7 @@ form div.form-content.new-entry-form .subEntry-area .subEntry-row {
 }
 
 @media screen and (min-width: 600px) {
-    form div.form-content.new-entry-form .subEntry-area .subEntry-row {
+    .new-entry-form .subEntry-area .subEntry-row {
         grid-template-columns: 1fr 1fr 1fr 48px;
 
         grid-template-areas:
@@ -153,8 +111,7 @@ form div.form-content.new-entry-form .subEntry-area .subEntry-row {
 
 /*CATEGORY FORM*/
 
-
-form div.form-content.category-form {
+.category-form {
     display: flex;
     flex-direction: column;
 }
@@ -162,27 +119,25 @@ form div.form-content.category-form {
 
 /*ENTRIES SELECTION FORM*/
 
-form.selection-entries-form {
-    margin-top: 16px;
-
+.selection-entries-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 1em;
 
     grid-template-areas:
-            'from to'
-            'categories categories';
+        'from to'
+        'categories categories';
 }
-form.selection-entries-form .from-input {
+.selection-entries-form .from-input {
     grid-area: from;
     margin-left: 16px;
     margin-right: 8px;
 }
-form.selection-entries-form .to-input {
+.selection-entries-form .to-input {
     grid-area: to;
     margin-left: 8px;
     margin-right: 16px;
 }
-form.selection-entries-form .categories-input {
+.selection-entries-form .categories-input {
     grid-area: categories;
 }
