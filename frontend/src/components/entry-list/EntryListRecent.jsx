@@ -9,7 +9,6 @@ import { categoryShape, entryShape } from '../../config/propTypesCommon';
 class EntryListRecent extends PureComponent {
 
     componentDidMount() {
-        console.log('componentDidMount, fetch recent data');
         this.props.getRecentEntries();
     }
 

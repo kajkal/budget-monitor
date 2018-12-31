@@ -37,7 +37,6 @@ class EntriesSelectionForm extends Form {
 
         const { rootCategory, selectedCategories, onSelectionSpecChange } = this.props;
         if (selectedCategories.length === 0) {
-            console.log('EntriesSelectionForm set default selected categories');
             const defaultSelectedCategories = [];
             rootCategory.subCategories[1].subCategories.forEach(c => defaultSelectedCategories.push(c));
             onSelectionSpecChange(this.getSelectionSpec(data.from, data.to, defaultSelectedCategories));

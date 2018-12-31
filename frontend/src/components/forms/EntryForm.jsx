@@ -115,9 +115,7 @@ class EntryForm extends Form {
             }
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
-                console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
                 this.setState({ errors });
             }
         }

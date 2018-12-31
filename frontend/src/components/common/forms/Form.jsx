@@ -118,22 +118,12 @@ class Form extends PureComponent {
         )
     }
 
-    _getInfo(path, value, error) {
-        // console.log('path: ', path);
-        // console.log('    data: ', this.state.data);
-        // console.log('    error: ', this.state.error);
-        // console.log(`value: '${JSON.stringify(value)}', error: '${JSON.stringify(error)}'`);
-        // console.log('--------------------------------------------------------------------------------');
-    }
-
     renderTextInput(path, label, inputDetails, inputOptions) {
         const value = _.get(this.state.data, path);
         const error = _.get(this.state.errors, path);
 
         // const {} = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
-
-        this._getInfo(path, value, error);
 
         return (
             <TextInput
@@ -156,8 +146,6 @@ class Form extends PureComponent {
         // const {} = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
 
-        this._getInfo(path, value, error);
-
         return (
             <PasswordInput
                 name={_.last(path)}
@@ -178,8 +166,6 @@ class Form extends PureComponent {
 
         const { options } = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
-
-        this._getInfo(path, value, error);
 
         return (
             <SelectInput
@@ -203,8 +189,6 @@ class Form extends PureComponent {
         const { currency } = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
 
-        this._getInfo(path, value, error);
-
         return (
             <CurrencyInput
                 name={_.last(path)}
@@ -227,8 +211,6 @@ class Form extends PureComponent {
         // const {} = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
 
-        this._getInfo(path, value, error);
-
         return (
             <DateTimeInput
                 name={_.last(path)}
@@ -250,8 +232,6 @@ class Form extends PureComponent {
         // const {} = inputDetails;
         const {className, margin = formInputMargin} = inputOptions;
 
-        this._getInfo(path, value, error);
-
         return (
             <DateInput
                 name={_.last(path)}
@@ -271,8 +251,6 @@ class Form extends PureComponent {
 
         const {rootCategory, onlySubCategories, header, categoryDisabled, resetDisabled } = inputDetails;
         const {className, focus = false, margin = formInputMargin} = inputOptions;
-
-        this._getInfo(path, value, error);
 
         return (
             <CategoryInput

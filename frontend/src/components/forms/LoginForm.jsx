@@ -37,9 +37,7 @@ class LoginForm extends Form {
             window.location = state ? state.from.pathname : '/';
         } catch (e) {
             if (e.response && [400, 401].includes(e.response.status)) {
-                console.log('messageKey: ', e.response.data.message);
                 const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
                 this.setState({ errors });
             }
         }

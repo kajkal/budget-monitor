@@ -97,8 +97,6 @@ export function prepareDataStructureForLineChart(entries, selectionSpec) {
         }
     });
 
-    console.log('dataStructure', dataStructure);
-
     return dataStructure;
 }
 
@@ -178,9 +176,6 @@ export function prepareDataStructureForCalendarChart(entries, selectionSpec) {
     incomeDayValueMap.forEach((value, day) => incomeDataArray.push({ day, value }));
     expenseDayValueMap.forEach((value, day) => expenseDataArray.push({ day, value }));
 
-    console.log('INCOME:', incomeDataArray);
-    console.log('EXPENSE:', expenseDataArray);
-
     return {
         from: from.toISODate(),
         to: to.toISODate(),
@@ -229,8 +224,6 @@ export function prepareDataStructureForHourlyChart(entries, selectionSpec) {
             });
         }
     });
-
-    console.log('prepareDataStructureForHourlyChart', dataStructure);
 
     return dataStructure;
 }

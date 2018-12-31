@@ -29,7 +29,6 @@ const displayAlert = (message, variant, duration = 4000) => {
 class AlertServiceComponent extends Component {
     constructor(props) {
         super(props);
-        // console.log('Alert service initialized.');
         enqueueAlertFunction = this.props.enqueueSnackbar;
     }
 

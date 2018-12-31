@@ -57,10 +57,8 @@ class App extends Component {
             this.setState({ rootCategory });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
-                console.log('error while fetching categories: ', e);
-                console.log('messageKey: ', e.response.data.message);
-                const errors = translateErrorMessage(e.response.data.message);
-                console.log('translated errors: ', errors);
+                alertService.warning('Error occured, please refresh page.');
+                translateErrorMessage(e.response.data.message);
             }
         }
     };
@@ -73,8 +71,7 @@ class App extends Component {
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
                 alertService.warning('Error occured, please refresh page.');
-                const errors = translateErrorMessage(e.response.data.message);
-                console.log('error while fetching recent entries: ', errors);
+                translateErrorMessage(e.response.data.message);
             }
         }
     };
@@ -142,14 +139,12 @@ class App extends Component {
             if (currentSelectionSpec) {
                 const { from: currentFrom, to: currentTo } = currentSelectionSpec;
                 if (+currentFrom === +from && +currentTo === +to) {
-                    console.log('APP only filter entries by new selected categories', this.state);
                     filteredEntries = filterEntriesByCategory(currentEntries, selectionSpec);
                     this.setState({ selectionSpec, filteredEntries });
                     return;
                 }
             }
 
-            console.log('APP fetch entries from server and filter them', this.state);
             const { data: rawEntries } = await getEntriesBetween(from, to);
             const entries = processEntriesDate(rawEntries);
             filteredEntries = filterEntriesByCategory(entries, selectionSpec);
