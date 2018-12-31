@@ -4,8 +4,6 @@ import { SnackbarProvider } from 'notistack';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import './styles/index.css';
-import 'font-awesome/css/font-awesome.css';
-// import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import LuxonUtils from '@date-io/luxon';
