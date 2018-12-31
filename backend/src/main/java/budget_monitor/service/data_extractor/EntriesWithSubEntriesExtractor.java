@@ -28,9 +28,9 @@ public class EntriesWithSubEntriesExtractor implements ResultSetExtractor<List<E
                 entry.setIdCategory(rs.getLong("idCategory"));
                 entry.setDescription(rs.getString("description"));
                 entry.setValue(rs.getInt("value"));
-                entry.setDate(rs.getTimestamp("date"));
-                entry.setDateOfAddition(rs.getTimestamp("dateOfAddition"));
-                entry.setDateOfLastModification(rs.getTimestamp("dateOfLastModification"));
+                entry.setDate(rs.getTimestamp("date").getTime());
+                entry.setDateOfAddition(rs.getTimestamp("dateOfAddition").getTime());
+                entry.setDateOfLastModification(rs.getTimestamp("dateOfLastModification").getTime());
                 entry.setPhoto(rs.getBytes("photo"));
                 entry.setSubEntries(new ArrayList<>());
 

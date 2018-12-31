@@ -2,7 +2,6 @@ package budget_monitor.dto.output;
 
 import budget_monitor.model.Entry;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +11,9 @@ public class EntryDTO {
     private Long idCategory;
     private String description;
     private Integer value;
-    private Timestamp date;
-    private Timestamp dateOfAddition;
-    private Timestamp dateOfLastModification;
+    private Long date;
+    private Long dateOfAddition;
+    private Long dateOfLastModification;
     private byte[] photo;
     private List<SubEntryDTO> subEntries;
 
@@ -27,9 +26,9 @@ public class EntryDTO {
         idCategory = entry.getIdCategory();
         description = entry.getDescription();
         value = entry.getValue();
-        date = entry.getDate();
-        dateOfAddition = entry.getDateOfAddition();
-        dateOfLastModification = entry.getDateOfLastModification();
+        date = entry.getDate().getTime();
+        dateOfAddition = entry.getDateOfAddition().getTime();
+        dateOfLastModification = entry.getDateOfLastModification().getTime();
         photo = entry.getPhoto();
         subEntries = new ArrayList<>();
     }
@@ -66,27 +65,27 @@ public class EntryDTO {
         this.value = value;
     }
 
-    public Timestamp getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
-    public Timestamp getDateOfAddition() {
+    public Long getDateOfAddition() {
         return dateOfAddition;
     }
 
-    public void setDateOfAddition(Timestamp dateOfAddition) {
+    public void setDateOfAddition(Long dateOfAddition) {
         this.dateOfAddition = dateOfAddition;
     }
 
-    public Timestamp getDateOfLastModification() {
+    public Long getDateOfLastModification() {
         return dateOfLastModification;
     }
 
-    public void setDateOfLastModification(Timestamp dateOfLastModification) {
+    public void setDateOfLastModification(Long dateOfLastModification) {
         this.dateOfLastModification = dateOfLastModification;
     }
 

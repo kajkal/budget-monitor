@@ -8,7 +8,7 @@ class AuthenticationTest extends AbstractMvcSpec {
 
     def 'unauthenticated users cannot get resource'() {
         when:
-        def res = get('/dev/users')
+        def res = get('/api/users')
 
         then:
         res.status == HttpStatus.FORBIDDEN
@@ -17,7 +17,7 @@ class AuthenticationTest extends AbstractMvcSpec {
     @WithMockUser
     def 'authenticated users can get resource'() {
         when:
-        def res = get('/dev/users')
+        def res = get('/api/users')
 
         then:
         res.status == HttpStatus.OK

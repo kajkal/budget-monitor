@@ -24,7 +24,7 @@ public class DevController {
     }
 
 
-    @RequestMapping(method = GET, path = "/dev/users")
+    @RequestMapping(method = GET, path = "/api/users")
     @ResponseBody
     public List<User> getUsers() {
         System.out.println("get users called");
