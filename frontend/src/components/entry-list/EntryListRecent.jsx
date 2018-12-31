@@ -17,7 +17,7 @@ class EntryListRecent extends PureComponent {
         const { recentEntries, rootCategory, currency, onEntriesChange } = this.props;
 
         if (!recentEntries || recentEntries.length === 0 || !rootCategory || !currency)
-            return <h1 style={{ margin: '64px' }}>No data to display</h1>;
+            return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
 
         const sortedRecentEntries = sort(recentEntries, 'dateOfLastModification', 'desc');
         return (

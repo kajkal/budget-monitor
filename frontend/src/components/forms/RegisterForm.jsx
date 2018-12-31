@@ -27,7 +27,7 @@ class RegisterForm extends Form {
             .required()
             .min(3)
             .max(30)
-            .regex(/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/, 'alphanumeric characters with exception of \'-\' and \'_\'')
+            .regex(/^[a-zA-Z0-9]+([_-]?[a-zA-Z0-9])*$/, 'alphanumeric characters with exception of \'-\' and \'_\'')
             .label('Username'),
         [EMAIL]: Joi.string()
             .required()
@@ -37,6 +37,8 @@ class RegisterForm extends Form {
             .required()
             .min(6)
             .max(30)
+            .regex(/(?=.*?[A-Z])/, 'at least one upper case letter')
+            // .regex(/(?=.*?[#?!@$%^&*-])/, 'at least one special character')
             .label('Password'),
         [CURRENCY]: Joi.string()
             .required()

@@ -8,7 +8,7 @@ import { categoryShape, entryShape } from '../../config/propTypesCommon';
 const EntryList = ({ entriesByDay, rootCategory, currency, onEntriesChange }) => {
 
     if (!entriesByDay || entriesByDay.length === 0 || !rootCategory || !currency)
-        return <h1 style={{ margin: '64px' }}>No data to display</h1>;
+        return <h1 style={{ marginTop: '64px' }}>No data to display</h1>;
     return (
         <div className='entry-list'>
             {
