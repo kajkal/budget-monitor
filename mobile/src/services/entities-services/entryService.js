@@ -50,13 +50,6 @@ export function processEntry(entry) {
     return entry;
 }
 
-export function processEntries(entries) {
-    entries.forEach(entry => {
-        entry.date = DateTime.fromMillis(entry.date);
-    });
-    return entries;
-}
-
 export function processEntryDate(entry) {
     entry.date = DateTime.fromMillis(entry.date);
     return entry;

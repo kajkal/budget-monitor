@@ -66,7 +66,7 @@ class EntryCard extends PureComponent {
     render() {
         const { entry, rootCategory, currency, onEntriesChange, navigation } = this.props;
         const { idCategory, description, value, date, dateOfAddition, dateOfLastModification, subEntries } = entry;
-        const time = date.toLocaleString(DateTime.DATETIME_MED);
+        const time = DateTime.fromMillis(date).toLocaleString(DateTime.DATETIME_MED);
 
         return (
             <Card>

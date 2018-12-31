@@ -1,24 +1,19 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { View, Button, Content, Footer, FooterTab, Form, Text, Fab, Icon, Container } from 'native-base';
+import { View, Content, Container } from 'native-base';
 import { getCategories, getRootCategory } from '../services/entities-services/categoryService';
 import { translateErrorMessage } from '../services/errorMessageService';
-import { getRecentEntries, processEntries, sort } from '../services/entities-services/entryService';
+import { getRecentEntries, sort } from '../services/entities-services/entryService';
 import { someAreFalsy } from './loading/LoadingScreen';
 import LoadingScreen from './loading/LoadingScreen';
 import EntryCard from './entries/EntryCard';
-import { Alert, ScrollView } from 'react-native';
-import { headerFontColor, negativeColor, neutralColor, positiveColor, primaryColor } from '../config/theme';
-import authService from '../services/authService';
 import UserOptionsMenu from './navigation/UserOptionsMenu';
 import NewEntryOptions from './navigation/NewEntryOptions';
 
 
 class HomeScreen extends PureComponent {
-    static navigationOptions = ({ navigation }) => {
-        return ({
-            title: 'Recent entries'
-        });
+    static navigationOptions = {
+        title: 'Recent entries',
     };
 
     state = {
@@ -50,7 +45,7 @@ class HomeScreen extends PureComponent {
     fetchRecentEntries = async () => {
         try {
             const { data: rawRecentEntries } = await getRecentEntries();
-            const recentEntries = sort(processEntries(rawRecentEntries), 'dateOfLastModification', 'desc');
+            const recentEntries = sort(rawRecentEntries, 'dateOfLastModification', 'desc');
             this.setState({ recentEntries });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
@@ -74,17 +69,23 @@ class HomeScreen extends PureComponent {
         this.setState({ user });
         this.fetchCategories();
         this.fetchRecentEntries();
+
+        navigation.addListener('didFocus', this.handleScreenFocus);
     }
 
+    handleScreenFocus = ({ state }) => {
+        const { params: { fetchRecentEntries } } = state;
+
+        if (fetchRecentEntries) {
+            const { navigation } = this.props;
+            navigation.setParams({ fetchRecentEntries : null });
+            this.fetchRecentEntries();
+        }
+    };
 
     render() {
         const { user, rootCategory, recentEntries } = this.state;
         const { navigation } = this.props;
-
-        console.log('HomeScreen: is USER present', Boolean(user));
-        console.log('               ROOT CATEGORY present', Boolean(rootCategory));
-        console.log('               RECENT ENTRIES present', Boolean(recentEntries));
-
 
         if (someAreFalsy(user, rootCategory, recentEntries)) return <LoadingScreen />;
         return (
@@ -126,7 +127,8 @@ HomeScreen.propTypes = {
     navigation: PropTypes.shape({
         state: PropTypes.shape({
             params: PropTypes.shape({
-                user: PropTypes.string.isRequired,
+                user: PropTypes.string,
+                fetchRecentEntries: PropTypes.bool,
             }).isRequired
         }).isRequired,
         navigate: PropTypes.func.isRequired,

@@ -8,6 +8,7 @@ class EntryEditButton extends PureComponent {
 
     handleEditEntry = () => {
         const { navigation, entry, rootCategory, currency } = this.props;
+        const type = (entry.value > 0) ? 'income' : 'expense';
         navigation.navigate('EntryForm', {
             type: type,
             currency: currency,

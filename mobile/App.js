@@ -6,6 +6,7 @@ import material from './src/native-base-theme/variables/material';
 import LoginScreen from './src/components/LoginScreen';
 import HomeScreen from './src/components/HomeScreen';
 import EntryFormScreen from './src/components/EntryFormScreen';
+import CategoryScreen from './src/components/CategoryScreen';
 
 
 const AppNavigator = createStackNavigator({
@@ -17,6 +18,9 @@ const AppNavigator = createStackNavigator({
     },
     EntryForm: {
         screen: EntryFormScreen,
+    },
+    CategoryScreen: {
+        screen: CategoryScreen,
     }
 }, {
     initialRouteName: 'Login',

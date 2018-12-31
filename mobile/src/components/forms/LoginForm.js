@@ -79,7 +79,7 @@ class LoginForm extends PureComponent {
     render() {
         const { requestSend } = this.state;
         const { username, password } = this.state.data;
-        const { username: usernameErr, password: PasswordErr } = this.state.errors;
+        const { username: usernameErr, password: passwordErr } = this.state.errors;
         const errors = this.validate();
 
         if (allAreTruthy(requestSend)) return <LoadingScreen />;
@@ -101,7 +101,7 @@ class LoginForm extends PureComponent {
                             label='Password'
                             value={password}
                             onChange={this.handleChange('password')}
-                            error={PasswordErr}
+                            error={passwordErr}
                         />
 
                     </Form>

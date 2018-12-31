@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 
-export const lodashPath = PropTypes.arrayOf(
+export const lodashPathShape = PropTypes.arrayOf(
     PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
@@ -11,15 +11,10 @@ export const lodashPath = PropTypes.arrayOf(
 export const categoryShape = PropTypes.shape({
     idCategory: PropTypes.number.isRequired,
     path: PropTypes.arrayOf(PropTypes.number).isRequired,
-    lodashPath: lodashPath,
+    lodashPath: lodashPathShape,
     name: PropTypes.string.isRequired,
 });
 categoryShape.subCategories = PropTypes.arrayOf(categoryShape).isRequired;
-
-export const dateShape = PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.number,
-]);
 
 export const subEntryShape = PropTypes.shape({
     idSubEntry: PropTypes.number.isRequired,
@@ -33,8 +28,8 @@ export const entryShape = PropTypes.shape({
     idCategory: PropTypes.number,
     description: PropTypes.string.isRequired,
     value: PropTypes.number.isRequired,
-    date: dateShape.isRequired,
-    dateOfAddition: dateShape.isRequired,
-    dateOfLastModification: dateShape.isRequired,
+    date: PropTypes.number.isRequired,
+    dateOfAddition: PropTypes.number.isRequired,
+    dateOfLastModification: PropTypes.number.isRequired,
     subEntries: PropTypes.arrayOf(subEntryShape).isRequired,
 });
