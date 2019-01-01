@@ -5,6 +5,7 @@ import LinearProgress from '@material-ui/core/es/LinearProgress/LinearProgress';
 import Typography from '@material-ui/core/es/Typography/Typography';
 import { ResponsiveScatterPlot } from '@nivo/scatterplot';
 import ChartWrapper from './ChartWrapper';
+import ErrorBoundary from '../error-boundaries/ErrorBoundary';
 
 
 class HourlyChart extends PureComponent {
@@ -28,7 +29,7 @@ class HourlyChart extends PureComponent {
 
     tooltip = ({ serie: { id }, date, description, value }) => {
         const { currency } = this.props;
-        const formattedDate = date.setLocale('local').toFormat('dd MMMM yyyy HH:mm');
+        const formattedDate = date.toFormat('dd MMMM yyyy HH:mm');
         return (
             <Typography variant='caption' className='hourly-chart-tooltip'>
                 <div className='date'>{formattedDate}</div>
@@ -48,81 +49,85 @@ class HourlyChart extends PureComponent {
 
         return (
             <div className='chart-area'>
-                <ChartWrapper>
 
-                    <ResponsiveScatterPlot
-                        data={dataStructure}
-                        margin={{
-                            top: 20,
-                            right: 140,
-                            bottom: 70,
-                            left: 90,
-                        }}
-                        xScale={{
-                            type: 'time',
-                            format: '%Y-%m-%d',
-                            precision: 'day',
-                        }}
-                        yScale={{
-                            type: 'time',
-                            format: '%H:%M:%S',
-                            precision: 'minute',
-                        }}
-                        axisTop={null}
-                        axisRight={null}
-                        axisBottom={{
-                            orient: 'bottom',
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'day',
-                            legendPosition: 'middle',
-                            legendOffset: 46,
-                            format: d => DateTime.fromJSDate(d).setLocale('local').toFormat('dd MMM'),
+                <ErrorBoundary>
+                    <ChartWrapper>
 
-                        }}
-                        axisLeft={{
-                            orient: 'left',
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'time',
-                            legendPosition: 'middle',
-                            legendOffset: -60,
-                            format: '%H:%M',
-                        }}
-                        colors='category10'
-                        animate={true}
-                        motionStiffness={90}
-                        motionDamping={15}
-                        legends={[
-                            {
-                                anchor: 'bottom-right',
-                                direction: 'column',
-                                translateX: 130,
-                                itemWidth: 100,
-                                itemHeight: 12,
-                                itemsSpacing: 5,
-                                itemTextColor: '#999',
-                                symbolSize: 12,
-                                symbolShape: 'circle',
-                                effects: [
-                                    {
-                                        on: 'hover',
-                                        style: {
-                                            itemTextColor: '#000',
+                        <ResponsiveScatterPlot
+                            data={dataStructure}
+                            margin={{
+                                top: 20,
+                                right: 140,
+                                bottom: 70,
+                                left: 90,
+                            }}
+                            xScale={{
+                                type: 'time',
+                                format: '%Y-%m-%d',
+                                precision: 'day',
+                            }}
+                            yScale={{
+                                type: 'time',
+                                format: '%H:%M:%S',
+                                precision: 'minute',
+                            }}
+                            axisTop={null}
+                            axisRight={null}
+                            axisBottom={{
+                                orient: 'bottom',
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: 'day',
+                                legendPosition: 'middle',
+                                legendOffset: 46,
+                                format: d => DateTime.fromJSDate(d).toFormat('dd MMM'),
+
+                            }}
+                            axisLeft={{
+                                orient: 'left',
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: 'time',
+                                legendPosition: 'middle',
+                                legendOffset: -60,
+                                format: '%H:%M',
+                            }}
+                            colors='category10'
+                            animate={true}
+                            motionStiffness={90}
+                            motionDamping={15}
+                            legends={[
+                                {
+                                    anchor: 'bottom-right',
+                                    direction: 'column',
+                                    translateX: 130,
+                                    itemWidth: 100,
+                                    itemHeight: 12,
+                                    itemsSpacing: 5,
+                                    itemTextColor: '#999',
+                                    symbolSize: 12,
+                                    symbolShape: 'circle',
+                                    effects: [
+                                        {
+                                            on: 'hover',
+                                            style: {
+                                                itemTextColor: '#000',
+                                            },
                                         },
-                                    },
-                                ],
-                            },
-                        ]}
-                        symbolSize={this.getSymbolSize}
-                        onMouseMove={this.handleMouseMove}
-                        onMouseLeave={this.handleMouseLeave}
-                        tooltip={this.tooltip}
-                    />
+                                    ],
+                                },
+                            ]}
+                            symbolSize={this.getSymbolSize}
+                            onMouseMove={this.handleMouseMove}
+                            onMouseLeave={this.handleMouseLeave}
+                            tooltip={this.tooltip}
+                        />
 
-                </ChartWrapper>
+                    </ChartWrapper>
+                </ErrorBoundary>
+
             </div>
         );
     }

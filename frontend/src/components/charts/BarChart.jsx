@@ -14,11 +14,11 @@ class BarChart extends PureComponent {
         const date = DateTime.fromISO(indexValue);
         let formattedDate;
         if (indexValue.includes('W')) {
-            const from = date.setLocale('local').toFormat('dd');
-            const to = date.plus({ days: 6 }).setLocale('local').toFormat('dd LLL yyyy');
+            const from = date.toFormat('dd');
+            const to = date.plus({ days: 6 }).toFormat('dd LLL yyyy');
             formattedDate = `${from} - ${to}`;
         } else {
-            formattedDate = date.setLocale('local').toFormat('LLLL yyyy');
+            formattedDate = date.toFormat('LLLL yyyy');
         }
         return (
             <Typography variant='caption' className='bar-chart-tooltip'>

@@ -11,7 +11,7 @@ class LineChart extends PureComponent {
 
     tooltip = ({ id, data }) => {
         const { currency } = this.props;
-        const formattedDate = DateTime.fromJSDate(id).setLocale('local').toFormat('dd MMMM yyyy');
+        const formattedDate = DateTime.fromJSDate(id).toFormat('dd MMMM yyyy');
         return (
             <Typography variant='caption' className='line-chart-tooltip'>
                 <div className='date'>{formattedDate}</div>
@@ -68,7 +68,7 @@ class LineChart extends PureComponent {
                             legend: 'day',
                             legendOffset: 36,
                             legendPosition: 'middle',
-                            format: d => DateTime.fromJSDate(d).setLocale('local').toFormat('dd MMM'),
+                            format: d => DateTime.fromJSDate(d).toFormat('dd MMM'),
                         }}
                         axisLeft={{
                             orient: 'left',

@@ -97,7 +97,7 @@ export function splitByDays(entries) {
     const dataStructure = [];
     dayEntriesMap.forEach((value, key) => {
         dataStructure.push({
-            day: DateTime.fromISO(key).setLocale('local'),
+            day: DateTime.fromISO(key),
             entries: sort(value, 'date', 'desc'),
         })
     });

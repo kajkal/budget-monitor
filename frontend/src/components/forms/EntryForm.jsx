@@ -42,10 +42,8 @@ class EntryForm extends Form {
         [DESCRIPTION]: Joi.string()
             .required()
             .label('Description'),
-        [DATE]: Joi.date()
+        [DATE]: Joi.string()
             .required()
-            .min('1-1-2010')
-            .raw()
             .label('Date'),
         [CATEGORY]: Joi.object()
             .label('Category'),

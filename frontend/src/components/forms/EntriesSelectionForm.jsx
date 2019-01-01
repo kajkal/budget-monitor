@@ -1,31 +1,20 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Joi from 'joi-browser';
 import { DateTime } from 'luxon';
-import Form from '../common/forms/Form';
 import CategoryCheckboxList from '../common/lists/CategoryCheckboxList';
 import { categoryShape } from '../../config/propTypesCommon';
 import { getCategoriesIds } from '../../services/entities-services/categoryService';
+import DateInput from '../common/forms/inputs/DateInput';
+import { formInputMargin } from '../../config/theme';
 
 
-class EntriesSelectionForm extends Form {
+class EntriesSelectionForm extends PureComponent {
     state = {
         data: {
             from: '',
             to: '',
         },
         errors: {},
-    };
-
-    schema = {
-        from: Joi.date()
-            .required()
-            .min('1-1-2010')
-            .label('From'),
-        to: Joi.date()
-            .required()
-            .min('1-1-2010')
-            .label('To'),
     };
 
     componentDidMount() {
@@ -45,19 +34,6 @@ class EntriesSelectionForm extends Form {
         this.setState({ data });
     }
 
-    extendedOnInputChange = (_, data, errors) => {
-        const { from, to } = data;
-        if (DateTime.fromISO(from) > DateTime.fromISO(to)) {
-            errors.from = '';
-            errors.to = 'Should be after \'From\' date.';
-        } else {
-            delete errors.from;
-            delete errors.to;
-            const getSelectionSpec = this.getSelectionSpec(from, to, this.props.selectedCategories);
-            this.props.onSelectionSpecChange(getSelectionSpec);
-        }
-    };
-
     getSelectionSpec = (fromISO, toISO, selectedCategories) => {
         const categoriesType = selectedCategories.length > 0 ? (selectedCategories[0].path[1] === 2 ? 1 : -1) : 0;
         // -1 => expense categories selected
@@ -73,6 +49,38 @@ class EntriesSelectionForm extends Form {
         };
     };
 
+    handleFromDateChange = newFrom => {
+        const errors = { ...this.state.errors };
+        const { to } = this.state.data;
+
+        if (DateTime.fromISO(newFrom) > DateTime.fromISO(to)) {
+            errors.from = 'Should be before \'To\' date.';
+            errors.to = '';
+        } else {
+            delete errors.from;
+            delete errors.to;
+            const getSelectionSpec = this.getSelectionSpec(newFrom, to, this.props.selectedCategories);
+            this.props.onSelectionSpecChange(getSelectionSpec);
+        }
+        this.setState({ data: { from: newFrom, to: to }, errors });
+    };
+
+    handleToDateChange = newTo => {
+        const errors = { ...this.state.errors };
+        const { from } = this.state.data;
+
+        if (DateTime.fromISO(from) > DateTime.fromISO(newTo)) {
+            errors.from = '';
+            errors.to = 'Should be after \'From\' date.';
+        } else {
+            delete errors.from;
+            delete errors.to;
+            const getSelectionSpec = this.getSelectionSpec(from, newTo, this.props.selectedCategories);
+            this.props.onSelectionSpecChange(getSelectionSpec);
+        }
+        this.setState({ data: { from: from, to: newTo }, errors });
+    };
+
     handleSelectedCategoriesChange = selectedCategories => {
         const { from, to} = this.state.data;
         const selectionSpec = this.getSelectionSpec(from, to, selectedCategories);
@@ -80,15 +88,34 @@ class EntriesSelectionForm extends Form {
         this.setState({ selectedCategories });
     };
 
-    doSubmit = () => null;
-
     render() {
         const { rootCategory, expandedCategories, selectedCategories, onCategoryExpandToggle } = this.props;
+        const { from, to } = this.state.data;
+        const { from: fromErrors, to: toErrors } = this.state.errors;
 
         return (
-            <form className='selection-entries-form' autoComplete='on' onKeyDown={this.onEnterDown}>
-                {this.renderDateInput(['from'], 'From', {}, { className: 'from-input' })}
-                {this.renderDateInput(['to'], 'To', {}, { className: 'to-input' })}
+            <form className='selection-entries-form'>
+
+                <DateInput
+                    name='from'
+                    label='From'
+                    value={from}
+                    onChange={this.handleFromDateChange}
+                    className='from-input'
+                    error={fromErrors}
+                    margin={formInputMargin}
+                />
+
+                <DateInput
+                    name='to'
+                    label='To'
+                    value={to}
+                    onChange={this.handleToDateChange}
+                    className='to-input'
+                    error={toErrors}
+                    margin={formInputMargin}
+                />
+
                 <CategoryCheckboxList
                     expandedCategories={expandedCategories}
                     selectedCategories={selectedCategories}
@@ -99,6 +126,7 @@ class EntriesSelectionForm extends Form {
                     className='categories-input'
                     dense={true}
                 />
+
             </form>
         );
     }

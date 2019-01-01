@@ -11,7 +11,7 @@ class CalendarChart extends PureComponent {
 
     tooltip = ({ date, value }) => {
         const { currency } = this.props;
-        const formattedDate = DateTime.fromJSDate(date).setLocale('local').toFormat('dd MMMM, cccc');
+        const formattedDate = DateTime.fromJSDate(date).toFormat('dd MMMM, cccc');
         return (
             <Typography variant='caption' className='calendar-chart-tooltip'>
                 <div className='date'>{formattedDate}</div>
@@ -38,7 +38,7 @@ class CalendarChart extends PureComponent {
                 monthBorderWidth={2}
                 monthBorderColor='#000000'
                 monthLegendOffset={10}
-                monthLegend={(year, month) => DateTime.local(year, month + 1).setLocale('local').toFormat('LLL')}
+                monthLegend={(year, month) => DateTime.local(year, month + 1).toFormat('LLL')}
                 dayBorderWidth={2}
                 dayBorderColor='#ffffff'
                 legends={[

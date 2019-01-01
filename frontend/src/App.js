@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Settings } from 'luxon';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import auth from './services/authService';
@@ -34,6 +35,7 @@ import {
 } from './services/chartService';
 import HourlyChart from './components/charts/HourlyChart';
 import LineChart from './components/charts/LineChart';
+import { getNavigatorLanguage } from './services/languageService';
 
 
 class App extends Component {
@@ -53,7 +55,7 @@ class App extends Component {
             if (!user) return;
             const { data } = await getCategories();
             const rootCategory = getRootCategory(data);
-            // alertService.info("Categories fetched.");
+            // alertService.info('Categories fetched.');
             this.setState({ rootCategory });
         } catch (e) {
             if (e.response && [400, 401, 403].includes(e.response.status)) {
@@ -159,13 +161,12 @@ class App extends Component {
     };
 
     componentDidMount() {
+        Settings.defaultLocale = getNavigatorLanguage();
+
         const user = auth.getCurrentUser();
         this.setState({ user });
 
         this.fetchCategories(user);
-        // setTimeout(() => {
-        //     this.fetchCategories(user);
-        // }, 3000);
     }
 
     render() {
@@ -188,7 +189,7 @@ class App extends Component {
                         (user && !rootCategory) ? <LinearProgress style={{width: '100%'}} /> : (
                             <Switch>
 
-                                <ProtectedRoute exact path="/daily" render={props => (
+                                <ProtectedRoute exact path='/daily' render={props => (
                                     <EntryList
                                         rootCategory={rootCategory}
                                         entriesByDay={splitByDays(filteredEntries)}
@@ -198,7 +199,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/recent" render={props => (
+                                <ProtectedRoute exact path='/recent' render={props => (
                                     <EntryListRecent
                                         rootCategory={rootCategory}
                                         recentEntries={recentEntries}
@@ -209,7 +210,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/barChart" render={props => (
+                                <ProtectedRoute exact path='/barChart' render={props => (
                                     <BarChart
                                         dataStructure={prepareDataStructureForBarChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
@@ -218,7 +219,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/lineChart" render={props => (
+                                <ProtectedRoute exact path='/lineChart' render={props => (
                                     <LineChart
                                         dataStructure={prepareDataStructureForLineChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
@@ -226,7 +227,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/sunburstChart" render={props => (
+                                <ProtectedRoute exact path='/sunburstChart' render={props => (
                                     <SunburstChart
                                         dataStructure={prepareDataStructureForSunburstChart(entries, rootCategory)}
                                         currency={user && user.currency}
@@ -234,7 +235,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/hourlyChart" render={props => (
+                                <ProtectedRoute exact path='/hourlyChart' render={props => (
                                     <HourlyChart
                                         dataStructure={prepareDataStructureForHourlyChart(filteredEntries, selectionSpec)}
                                         currency={user && user.currency}
@@ -242,7 +243,7 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <ProtectedRoute exact path="/calendarChart" render={props => (
+                                <ProtectedRoute exact path='/calendarChart' render={props => (
                                     <CalendarChart
                                         dataStructure={prepareDataStructureForCalendarChart(entries, selectionSpec)}
                                         currency={user && user.currency}
@@ -250,13 +251,13 @@ class App extends Component {
                                     />
                                 )} />
 
-                                <Route exact path="/register" component={RegisterForm} />
-                                <Route exact path="/login" component={LoginForm} />
-                                <Route exact path="/logout" component={Logout} />
+                                <Route exact path='/register' component={RegisterForm} />
+                                <Route exact path='/login' component={LoginForm} />
+                                <Route exact path='/logout' component={Logout} />
 
-                                <Route exact path="/not-found" component={NotFound} />
-                                <Redirect from="/" exact to="/recent" />
-                                <Redirect to="/not-found" />
+                                <Route exact path='/not-found' component={NotFound} />
+                                <Redirect from='/' exact to='/recent' />
+                                <Redirect to='/not-found' />
                             </Switch>
                         )
                     }
