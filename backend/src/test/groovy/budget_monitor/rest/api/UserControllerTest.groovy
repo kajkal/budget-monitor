@@ -1,4 +1,4 @@
-package budget_monitor.rest.app
+package budget_monitor.rest.api
 
 import budget_monitor.AbstractMvcSpec
 import org.springframework.http.HttpStatus
