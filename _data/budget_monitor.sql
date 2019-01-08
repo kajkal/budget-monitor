@@ -8,7 +8,7 @@ USE budget_monitor;
 DROP TABLE IF EXISTS subEntries, userRoles CASCADE;
 DROP TABLE IF EXISTS roles, entries, categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
-DROP VIEW IF EXISTS entriesWithSubEntriesView CASCADE;
+DROP VIEW IF EXISTS usersWithRoles, entriesWithSubEntriesView CASCADE;
 
 -- USERS:
 CREATE TABLE users (
@@ -97,7 +97,7 @@ CREATE VIEW usersWithRoles AS
          email,
          currency,
          rolename
-  FROM users NATURAL JOIN userroles;
+  FROM users NATURAL JOIN userRoles;
 
 -- ----------------------------------------------------------------------------------------------------
 

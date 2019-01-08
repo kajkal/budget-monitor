@@ -1,6 +1,6 @@
 BEGIN;
 INSERT INTO budget_monitor.users (username, password, email, currency) VALUES ('user', '$2a$08$mpzkObqUlVQ5OW1i8AyceecW5hhbtEfwGV61W3wa4i/yJQ3Mf/78y', 'user@domain.com', 'PLN');
-INSERT INTO budget_monitor.userroles (username, rolename) VALUES ('user', 'USER');
+INSERT INTO budget_monitor.userRoles (username, rolename) VALUES ('user', 'USER');
 
 INSERT INTO budget_monitor.categories (idCategory, idSuperCategory, owner, name)
 VALUES (4, 2, 'user', 'Wynagrodzenie'),
@@ -116,7 +116,7 @@ VALUES (1, 'user', 16, 'Pizza Dominos: Double Bacon Burger, Quattro Cheese', -42
        (74, 'user', 30, 'Whiskey', -5600, '2018-10-12 18:00:00', '2018-12-28 19:46:05', '2018-12-28 19:46:05', null),
        (75, 'user', 17, 'Buczek', -600, '2018-10-12 08:50:00', '2018-12-28 19:46:42', '2018-12-28 19:46:42', null);
 
-INSERT INTO budget_monitor.subentries (idSubEntry, idEntry, idCategory, description, value)
+INSERT INTO budget_monitor.subEntries (idSubEntry, idEntry, idCategory, description, value)
 VALUES (2, 9, 16, 'Chicken & Spinach Wrap', -1698),
        (3, 50, 22, 'Pączek', -1200),
        (4, 50, 17, 'Chleb', -290),
